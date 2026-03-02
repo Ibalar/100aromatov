@@ -24,6 +24,7 @@ class Category extends Model
         'seo_description_by',
         'seo_text_ru',
         'seo_text_by',
+        'sort_order',
         'is_active',
     ];
 
@@ -58,5 +59,13 @@ class Category extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope('sorted', function ($query) {
+            $query->orderBy('sort_order')
+                ->orderBy('id');
+        });
     }
 }

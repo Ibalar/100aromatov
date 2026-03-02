@@ -9,7 +9,11 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "moonshine/moonshine": "^4.8"
+        "lee-to/moonshine-tree-resource": "^4.0",
+        "moonshine/import-export": "^2.1",
+        "moonshine/moonshine": "^4.8",
+        "moonshine/ru": "^1.0",
+        "moonshine/tinymce": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
