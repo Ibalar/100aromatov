@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Wishlist\Pages;
 
+use App\Models\Product;
+use App\MoonShine\Resources\Product\ProductResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use MoonShine\Laravel\Models\MoonshineUser;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FormBuilderContract;
+use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\UI\Components\FormBuilder;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
@@ -30,6 +35,7 @@ class WishlistFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
+                BelongsTo::make('Товар', 'product', resource: ProductResource::class),
             ]),
         ];
     }

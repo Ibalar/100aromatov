@@ -20,8 +20,11 @@ class AttributeValueResource extends ModelResource
 {
     protected string $model = AttributeValue::class;
 
-    protected string $title = 'AttributeValues';
-    
+    protected string $title = 'Значения характеристик';
+
+    protected string $column = 'value_ru';
+
+
     /**
      * @return list<class-string<PageContract>>
      */

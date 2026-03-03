@@ -20,8 +20,8 @@ class WishlistResource extends ModelResource
 {
     protected string $model = Wishlist::class;
 
-    protected string $title = 'Wishlists';
-    
+    protected string $title = 'Избранное';
+
     /**
      * @return list<class-string<PageContract>>
      */

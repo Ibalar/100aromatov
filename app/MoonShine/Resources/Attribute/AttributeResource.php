@@ -20,8 +20,10 @@ class AttributeResource extends ModelResource
 {
     protected string $model = Attribute::class;
 
-    protected string $title = 'Attributes';
-    
+    protected string $title = 'Характеристики';
+
+    protected string $column = 'name_ru';
+
     /**
      * @return list<class-string<PageContract>>
      */

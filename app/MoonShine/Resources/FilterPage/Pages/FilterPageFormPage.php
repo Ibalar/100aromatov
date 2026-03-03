@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\FilterPage\Pages;
 
+use App\MoonShine\Resources\Category\CategoryResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FormBuilderContract;
@@ -14,6 +16,10 @@ use App\MoonShine\Resources\FilterPage\FilterPageResource;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Json;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 use Throwable;
 
 
@@ -30,6 +36,22 @@ class FilterPageFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
+                BelongsTo::make('Категория', 'category', resource: CategoryResource::class),
+
+                Text::make('Slug'),
+
+                Json::make('Filter Data', 'filter_data'),
+
+                Text::make('H1 RU', 'h1_ru'),
+                Text::make('H1 BY', 'h1_by'),
+                Text::make('SEO Title RU', 'seo_title_ru'),
+                Text::make('SEO Title BY', 'seo_title_by'),
+                Textarea::make('SEO Desc RU', 'seo_description_ru'),
+                Textarea::make('SEO Desc BY', 'seo_description_by'),
+                Textarea::make('SEO Text RU', 'seo_text_ru'),
+                Textarea::make('SEO Text BY', 'seo_text_by'),
+
+                Switcher::make('Индексируемая', 'is_indexable'),
             ]),
         ];
     }

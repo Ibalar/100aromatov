@@ -20,8 +20,10 @@ class FilterPageResource extends ModelResource
 {
     protected string $model = FilterPage::class;
 
-    protected string $title = 'FilterPages';
-    
+    protected string $title = 'Страницы для фильтра';
+
+    protected string $column = 'h1_ru';
+
     /**
      * @return list<class-string<PageContract>>
      */

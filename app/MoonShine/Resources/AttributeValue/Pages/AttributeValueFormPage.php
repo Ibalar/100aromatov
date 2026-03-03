@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\AttributeValue\Pages;
 
+use App\MoonShine\Resources\Attribute\AttributeResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FormBuilderContract;
+use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\FormBuilder;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
@@ -14,6 +17,7 @@ use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Text;
 use Throwable;
 
 
@@ -30,6 +34,10 @@ class AttributeValueFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
+                BelongsTo::make('Атрибут', 'attribute', resource: AttributeResource::class),
+                Text::make('Slug'),
+                Text::make('Значение RU', 'value_ru'),
+                Text::make('Значение BY', 'value_by'),
             ]),
         ];
     }

@@ -45,10 +45,10 @@ final class MoonShineLayout extends AppLayout
             ])->icon('shopping-bag'),
             MenuItem::make(CategoryResource::class, 'Категории')->icon('document-duplicate'),
             MenuItem::make(BrandResource::class, 'Бренды')->icon('rectangle-group'),
-            MenuItem::make(AttributeResource::class, 'Attributes'),
-            MenuItem::make(AttributeValueResource::class, 'AttributeValues'),
-            MenuItem::make(FilterPageResource::class, 'FilterPages'),
-            MenuItem::make(WishlistResource::class, 'Wishlists'),
+            MenuItem::make(AttributeResource::class, 'Характеристики'),
+            MenuItem::make(AttributeValueResource::class, 'Значения характеристик'),
+            MenuItem::make(FilterPageResource::class, 'Страницы для фильтра'),
+            MenuItem::make(WishlistResource::class, 'Избранное'),
             ...parent::menu(),
         ];
     }
