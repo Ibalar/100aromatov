@@ -60,4 +60,36 @@ class PromoCode extends Model
 
         return min($this->value, $amount);
     }
+
+    public function usages()
+    {
+        return $this->hasMany(PromoCodeUsage::class);
+    }
+
+    public function canBeUsedBy(?int $userId, float $orderAmount): bool
+    {
+        if (!$this->is_active) {
+            return false;
+        }
+
+        if ($this->min_order_usd && $orderAmount < $this->min_order_usd) {
+            return false;
+        }
+
+        if ($this->usage_limit && $this->used_count >= $this->usage_limit) {
+            return false;
+        }
+
+        if ($this->usage_per_user && $userId) {
+            $userCount = $this->usages()
+                ->where('user_id', $userId)
+                ->count();
+
+            if ($userCount >= $this->usage_per_user) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

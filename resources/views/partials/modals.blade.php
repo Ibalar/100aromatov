@@ -1,0 +1,5 @@
+@include('partials.modals.forgot-password')
+@include('partials.modals.size-guide')
+@include('partials.modals.share')
+@include('partials.modals.shopping-сart')
+@include('partials.modals.sing')
