@@ -3,101 +3,77 @@
 @section('title', 'Главная')
 
 @section('content')
-    <!-- Slide Show -->
-    <div class="tf-slideshow tf-btn-swiper-main hover-sw-nav">
-        <div dir="ltr" class="swiper tf-swiper sw-slide-show slider_effect_fade" data-effect="fade"
-             data-delay="3000" data-auto="true" data-loop="true">
-            <div class="swiper-wrapper">
-                <!-- item 1 -->
-                <div class="swiper-slide">
-                    <div class="slideshow-wrap">
-                        <div class="sld_image">
-                            <img loading="lazy" width="1920" height="860" src="assets/images/slider/slider-16.jpg"
+    <!-- Banner Collection -->
+    <section class="section-banner-cls">
+        <div class="container-full">
+            <div class="main-section">
+                <div class="col-left">
+                    <div class="banner-image-text type-abs style-14 h-100">
+                        <a href="shop-default.html" class="bn-image img-style radius-20">
+                            <img loading="lazy" width="1170" height="794" src="assets/images/section/banner-15.jpg"
                                  alt="Image">
-                        </div>
-                        <div class="sld_content pst-2">
-                            <div class="container">
-                                <div class="content-sld_wrap text-center">
-                                    <div class="heading">
-                                        <p class="sub-text_sld text-body-1 cl-text-2 fade-item fade-item-1 mb-15">
-                                            Where science meets nature for your finest skin.
-                                        </p>
-                                        <p class="title_sld text-display fw-medium fade-item fade-item-2">
-                                            Reveal Your <br class="d-none d-sm-block">
-                                            Timeless Beauty
-                                        </p>
-                                    </div>
-                                    <div class="fade-item fade-item-3">
-                                        <a href="shop-default.html" class="tf-btn btn-white">
-                                            Shop Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                        </a>
+                        <div class="bn-content">
+                            <a href="shop-default.html"
+                               class="title text-display fw-medium text-white link-underline-white text-decoration-thickness_3">
+                                Everything <br>
+                                Your Pet <br>
+                                Deserves
+                            </a>
+                            <h6 class="desc text-body-1 text-white letter-space--1">
+                                Experience true wireless sound with deep bass, <br class="d-none d-sm-block">
+                                crystal clarity.
+                            </h6>
+                            <a href="shop-default.html" class="btn-action tf-btn btn-white">
+                                Shop Now
+                            </a>
                         </div>
                     </div>
                 </div>
-                <!-- item 2 -->
-                <div class="swiper-slide">
-                    <div class="slideshow-wrap">
-                        <div class="sld_image">
-                            <img loading="lazy" width="1920" height="860" src="assets/images/slider/slider-17.jpg"
+                <div class="col-right tf-grid-layout md-col-2 lg-col-1 gap-20">
+                    <div class="box-image_v04 type-2">
+                        <a href="shop-default.html" class="box-image_img img-style">
+                            <img loading="lazy" width="580" height="387" src="assets/images/collection/cls-18.jpg"
                                  alt="Image">
-                        </div>
-                        <div class="sld_content pst-2">
-                            <div class="container">
-                                <div class="content-sld_wrap text-center">
-                                    <div class="heading">
-                                        <p class="sub-text_sld text-body-1 cl-text-2 fade-item fade-item-1 mb-15">
-                                            Skincare that reveals your timeless glow
-                                        </p>
-                                        <p class="title_sld text-display fw-medium fade-item fade-item-2">
-                                            Where Science <br class="d-none d-sm-block">
-                                            Meets Beauty
-                                        </p>
-                                    </div>
-                                    <div class="fade-item fade-item-3">
-                                        <a href="shop-default.html" class="tf-btn btn-white">
-                                            Shop Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                        </a>
+                        <div class="box-image_content wow fadeInUp">
+                            <a href="shop-default.html"
+                               class="title h3 fw-medium link-underline-text text-decoration-thickness_3">
+                                Cat Feast
+                            </a>
+                            <p class="desc cl-text-2">
+                                Healthy, tasty meals for cats
+                            </p>
+                            <a href="shop-default.html" class="btn-action tf-btn-line-2 style-primary">
+                                    <span class="fw-semibold">
+                                        Shop Now
+                                    </span>
+                            </a>
                         </div>
                     </div>
-                </div>
-                <!-- item 3 -->
-                <div class="swiper-slide">
-                    <div class="slideshow-wrap">
-                        <div class="sld_image">
-                            <img loading="lazy" width="1920" height="860" src="assets/images/slider/slider-18.jpg"
+                    <div class="box-image_v04 type-2">
+                        <a href="shop-default.html" class="box-image_img img-style">
+                            <img loading="lazy" width="580" height="387" src="assets/images/collection/cls-17.jpg"
                                  alt="Image">
-                        </div>
-                        <div class="sld_content pst-2">
-                            <div class="container">
-                                <div class="content-sld_wrap">
-                                    <div class="heading">
-                                        <p class="sub-text_sld text-body-1 cl-text-2 fade-item fade-item-1 mb-15">
-                                            Cosmetics that enhance your confidence.
-                                        </p>
-                                        <p class="title_sld text-display fw-medium fade-item fade-item-2">
-                                            Beauty That Empowers <br class="d-none d-sm-block">
-                                            Every Moment
-                                        </p>
-                                    </div>
-                                    <div class="fade-item fade-item-3">
-                                        <a href="shop-default.html" class="tf-btn btn-white">
-                                            Shop Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                        </a>
+                        <div class="box-image_content wow fadeInUp">
+                            <a href="shop-default.html"
+                               class="title h3 fw-medium link-underline-text text-decoration-thickness_3">
+                                Pet Fashion
+                            </a>
+                            <p class="desc cl-text-2">
+                                Cute outfits for every pet
+                            </p>
+                            <a href="shop-default.html" class="btn-action tf-btn-line-2 style-primary">
+                                    <span class="fw-semibold">
+                                        Shop Now
+                                    </span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="sw-line-default style-2 tf-sw-pagination"></div>
         </div>
-    </div>
-    <!-- /Slide Show -->
+    </section>
+    <!-- /Banner Collection -->
 @endsection
