@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Product\Pages;
 
-use App\MoonShine\Resources\Attribute\AttributeResource;
+use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
 use App\MoonShine\Resources\Brand\BrandResource;
 use App\MoonShine\Resources\Category\CategoryResource;
 use App\MoonShine\Resources\ProductImage\ProductImageResource;
 use App\MoonShine\Resources\ProductVariant\ProductVariantResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
@@ -106,7 +107,7 @@ class ProductFormPage extends FormPage
                     button: ActionButton::make('Добавить вариант', '')
                 ),
 
-            HasMany::make('Характеристики', 'attributes', resource: AttributeResource::class)
+            BelongsToMany::make('Характеристики', 'attributeValues', resource: AttributeValueResource::class)
                 ->creatable(
                     button: ActionButton::make('Добавить характеристику', '')
                 ),
