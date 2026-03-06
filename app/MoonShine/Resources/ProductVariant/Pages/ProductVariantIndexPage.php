@@ -13,6 +13,8 @@ use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Fields\ID;
 use App\MoonShine\Resources\ProductVariant\ProductVariantResource;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Text;
 use Throwable;
 
 
@@ -30,6 +32,9 @@ class ProductVariantIndexPage extends IndexPage
     {
         return [
             ID::make(),
+            Text::make('SKU', 'sku'),
+            Number::make('Объем ML', 'volume_ml'),
+            Number::make('Цена USD', 'price_usd'),
         ];
     }
 

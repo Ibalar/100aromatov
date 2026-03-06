@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Product\Pages;
 
+use App\MoonShine\Resources\ProductImage\ProductImageResource;
+use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\UI\Components\Table\TableBuilder;
@@ -13,6 +15,7 @@ use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Fields\ID;
 use App\MoonShine\Resources\Product\ProductResource;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Fields\Text;
 use Throwable;
 
 
@@ -30,6 +33,7 @@ class ProductIndexPage extends IndexPage
     {
         return [
             ID::make(),
+            Text::make('Название', 'name_ru'),
         ];
     }
 

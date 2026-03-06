@@ -14,12 +14,18 @@ use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FormBuilderContract;
+use MoonShine\TinyMce\Fields\TinyMce;
 use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\FormBuilder;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use App\MoonShine\Resources\Product\ProductResource;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\Layout\Div;
+use MoonShine\UI\Components\Layout\Flex;
+use MoonShine\UI\Components\Layout\Html;
+use MoonShine\UI\Components\Tabs;
+use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Switcher;
@@ -39,48 +45,65 @@ class ProductFormPage extends FormPage
     protected function fields(): iterable
     {
         return [
-            Box::make([
-                ID::make(),
-                BelongsTo::make('Бренд', 'brand', resource: BrandResource::class)
-                    ->searchable()
-                    ->creatable(
-                        button: ActionButton::make('Добавить бренд', '')
-                    ),
-                BelongsTo::make('Категория', 'category', resource: CategoryResource::class),
+            Tabs::make([
+                Tab::make('Основное', [
+                    ID::make(),
+                    Flex::make([
+                        Text::make('Название RU', 'name_ru')
+                            ->when(
+                                fn() => $this->getResource()->isCreateFormPage(),
+                                fn(Text $field) => $field->reactive(),
+                                fn(Text $field) => $field
+                            )
+                            ->required(),
+                        Text::make('Назва BY', 'name_by')->required(),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
+                    Flex::make([
+                        Slug::make('Slug')
+                            ->unique()
+                            ->locked()
+                            ->when(
+                                fn() => $this->getResource()->isCreateFormPage(),
+                                fn(Slug $field) => $field->from('name_ru')->live(),
+                                fn(Slug $field) => $field->readonly()
+                            ),
+                        BelongsTo::make('Категория', 'category', resource: CategoryResource::class),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
+                    Switcher::make('Активен', 'is_active'),
+                    Switcher::make('В избранных (Featured)', 'is_featured'),
 
-                Slug::make('Slug')
-                    ->unique()
-                    ->locked()
-                    ->when(
-                        fn() => $this->getResource()->isCreateFormPage(),
-                        fn(Slug $field) => $field->from('name_ru')->live(),
-                        fn(Slug $field) => $field->readonly()
-                    ),
-                Text::make('Название RU', 'name_ru')
-                    ->when(
-                        fn() => $this->getResource()->isCreateFormPage(),
-                        fn(Text $field) => $field->reactive(),
-                        fn(Text $field) => $field
-                    )
-                    ->required(),
-                Text::make('Назва BY', 'name_by'),
+                    BelongsTo::make('Бренд', 'brand', resource: BrandResource::class)
+                        ->searchable()
+                        ->creatable(
+                            button: ActionButton::make('Добавить бренд', '')
+                        ),
+                ]),
+                Tab::make('Описание', [
+                    TinyMce::make('Описание RU', 'description_ru'),
+                    TinyMce::make('Описание BY', 'description_by'),
+                ]),
+                Tab::make('Характеристики', [
+                    Text::make('Страна', 'country'),
+                    Text::make('Концентрация', 'concentration'),
+                    Text::make('Пол', 'gender'),
+                ]),
+            ])->vertical(),
 
-                Textarea::make('Описание RU', 'description_ru'),
-                Textarea::make('Описание BY', 'description_by'),
+            HasMany::make('Изображения', 'images', resource: ProductImageResource::class)
+                ->creatable(
+                    button: ActionButton::make('Добавить изображение', '')
+                ),
 
-                Text::make('Страна', 'country'),
-                Text::make('Концентрация', 'concentration'),
-                Text::make('Пол', 'gender'),
-
-                Switcher::make('Активен', 'is_active'),
-                Switcher::make('В избранных (Featured)', 'is_featured'),
-
-                HasMany::make('Варианты', 'variants', resource: ProductVariantResource::class)
-                    ->creatable(
-                        button: ActionButton::make('Добавить вариант', '')
-                    ),
-                HasMany::make('Изображения', 'images', resource: ProductImageResource::class),
-            ]),
+            HasMany::make('Варианты', 'variants', resource: ProductVariantResource::class)
+                ->creatable(
+                    button: ActionButton::make('Добавить вариант', '')
+                ),
         ];
     }
 

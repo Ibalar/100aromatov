@@ -22,6 +22,8 @@ class ProductResource extends ModelResource
 
     protected string $title = 'Товары';
 
+    protected string $column = 'name_ru';
+
     /**
      * @return list<class-string<PageContract>>
      */
