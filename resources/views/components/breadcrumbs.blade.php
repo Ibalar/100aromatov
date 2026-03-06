@@ -1,4 +1,4 @@
-<section class="section-page-title text-center flat-spacing-2 pb-0">
+<section class="section-page-title text-center flat-spacing-3 pb-0">
     <div class="container">
         <div class="main-page-title">
 

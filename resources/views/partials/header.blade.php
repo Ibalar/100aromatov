@@ -74,6 +74,49 @@
                                         </span>
                             </a>
                         </li>
+
+                        <li class="menu-item position-relative">
+                            <a href="{{ route('brands.index') }}" class="item-link">
+                                <span class="text cus-text">
+                                    Бренды
+                                </span>
+                                <i class="icon icon-CaretDown"></i>
+                            </a>
+
+                            <div class="sub-menu mega-menu_home_v2 home-type_3">
+
+                                @foreach($brandColumns as $column)
+                                    <ul class="sub-menu_list">
+                                        @foreach($column as $brand)
+                                            <li>
+                                                <a href="{{ route('brand.show', $brand->slug) }}"
+                                                   class="sub-menu_link has-text">
+                                                    <span class="cus-text">
+                                                        {{ $brand->name }}
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        @endforeach
+
+                                        @if($loop->last)
+                                            <li>
+                                                <a href="{{ route('brands.index') }}"
+                                                   class="sub-menu_link tf-btn-line-2 py-4 style-primary">
+                                                        <span class="fw-semibold">
+                                                            Смотреть все
+                                                        </span>
+                                                </a>
+                                            </li>
+                                        @endif
+
+                                    </ul>
+                                @endforeach
+
+
+
+                            </div>
+                        </li>
+
                         <li class="menu-item">
                             <a href="#" class="item-link">
                                         <span class="text cus-text">
@@ -89,13 +132,9 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="menu-item position-relative">
-                            <a href="{{ route('brands.index') }}" class="item-link">
-                                <span class="text cus-text">
-                                    Бренды
-                                </span>
-                            </a>
-                        </li>
+
+
+
                     </ul>
                 </nav>
             </div>
