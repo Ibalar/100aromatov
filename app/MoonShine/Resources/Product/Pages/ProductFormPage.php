@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Product\Pages;
 
+use App\MoonShine\Resources\Attribute\AttributeResource;
 use App\MoonShine\Resources\Brand\BrandResource;
 use App\MoonShine\Resources\Category\CategoryResource;
 use App\MoonShine\Resources\ProductImage\ProductImageResource;
@@ -103,6 +104,11 @@ class ProductFormPage extends FormPage
             HasMany::make('Варианты', 'variants', resource: ProductVariantResource::class)
                 ->creatable(
                     button: ActionButton::make('Добавить вариант', '')
+                ),
+
+            HasMany::make('Характеристики', 'attributes', resource: AttributeResource::class)
+                ->creatable(
+                    button: ActionButton::make('Добавить характеристику', '')
                 ),
         ];
     }
