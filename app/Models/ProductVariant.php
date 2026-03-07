@@ -17,6 +17,7 @@ class ProductVariant extends Model
         'is_raspiv',
         'is_unboxed',
         'is_gift_wrapped',
+        'is_exclusive',
         'is_active',
     ];
 
@@ -27,6 +28,7 @@ class ProductVariant extends Model
         'is_raspiv' => 'boolean',
         'is_unboxed' => 'boolean',
         'is_gift_wrapped' => 'boolean',
+        'is_exclusive' => 'boolean',
         'is_active' => 'boolean',
     ];
 
