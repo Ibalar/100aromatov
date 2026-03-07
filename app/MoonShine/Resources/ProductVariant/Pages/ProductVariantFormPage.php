@@ -47,6 +47,7 @@ class ProductVariantFormPage extends FormPage
                 Switcher::make('Распив', 'is_raspiv'),
                 Switcher::make('Уценка', 'is_unboxed'),
                 Switcher::make('Подарок', 'is_gift_wrapped'),
+                Switcher::make('Отливант', 'is_exclusive'),
                 Switcher::make('Активен', 'is_active'),
             ]),
         ];
