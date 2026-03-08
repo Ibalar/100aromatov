@@ -5,80 +5,34 @@
     $absoluteMax = $priceRange->max_price ?? 1000;
 @endphp
 
-<div class="price-filter">
-    <h6 class="title-filter">{{ __('Цена') }}</h6>
-    <div class="price-range-wrapper">
-        <div class="price-inputs">
-            <div class="input-group">
-                <span class="input-group-text">$</span>
-                <input type="number"
-                       name="min_price"
-                       class="form-control"
-                       placeholder="{{ __('От') }}"
-                       value="{{ request('min_price') }}"
-                       min="{{ $absoluteMin }}"
-                       max="{{ $absoluteMax }}">
+<div class="widget-facet">
+    <div class="facet-title" data-bs-target="#filter-price" role="button"
+        data-bs-toggle="collapse" aria-expanded="true" aria-controls="filter-price">
+        <h6>{{ __('Цена') }}</h6>
+        <span class="icon icon-CaretDown"></span>
+    </div>
+    <div id="filter-price" class="collapse show">
+        <div class="collapse-body widget-price filter-price">
+            <div class="price-val-range" id="price-value-range" data-min="{{ $absoluteMin }}" data-max="{{ $absoluteMax }}"></div>
+            <div class="price-box tf-grid-layout tf-col-2">
+                <div class="box-wrap">
+                    <div class="price-val_wrap">
+                        <span class="cl-text-2 text-body-1">$</span>
+                        <div class="price-val" id="price-min-value">
+                            <input type="number" name="min_price" class="form-control" placeholder="{{ $absoluteMin }}" value="{{ request('min_price', $absoluteMin) }}" min="{{ $absoluteMin }}" max="{{ $absoluteMax }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-wrap">
+                    <div class="price-val_wrap">
+                        <span class="cl-text-2 text-body-1">$</span>
+                        <div class="price-val" id="price-max-value">
+                            <input type="number" name="max_price" class="form-control" placeholder="{{ $absoluteMax }}" value="{{ request('max_price', $absoluteMax) }}" min="{{ $absoluteMin }}" max="{{ $absoluteMax }}">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <span class="separator">-</span>
-            <div class="input-group">
-                <span class="input-group-text">$</span>
-                <input type="number"
-                       name="max_price"
-                       class="form-control"
-                       placeholder="{{ __('До') }}"
-                       value="{{ request('max_price') }}"
-                       min="{{ $absoluteMin }}"
-                       max="{{ $absoluteMax }}">
-            </div>
-        </div>
-        <div class="price-range-slider mt-3">
-            <input type="range"
-                   class="form-range"
-                   id="min-price-range"
-                   min="{{ $absoluteMin }}"
-                   max="{{ $absoluteMax }}"
-                   value="{{ request('min_price', $absoluteMin) }}"
-                   oninput="document.querySelector('input[name=min_price]').value = this.value">
-            <input type="range"
-                   class="form-range"
-                   id="max-price-range"
-                   min="{{ $absoluteMin }}"
-                   max="{{ $absoluteMax }}"
-                   value="{{ request('max_price', $absoluteMax) }}"
-                   oninput="document.querySelector('input[name=max_price]').value = this.value">
-        </div>
-        <div class="price-labels">
-            <span>${{ number_format($absoluteMin, 0) }}</span>
-            <span>${{ number_format($absoluteMax, 0) }}</span>
         </div>
     </div>
 </div>
-
-@push('styles')
-<style>
-    .price-filter {
-        margin-bottom: 1.5rem;
-    }
-    .price-inputs {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .price-inputs .input-group {
-        flex: 1;
-    }
-    .price-inputs .separator {
-        font-weight: bold;
-    }
-    .price-range-slider {
-        position: relative;
-    }
-    .price-labels {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.875rem;
-        color: #666;
-        margin-top: 0.5rem;
-    }
-</style>
-@endpush
+<div class="br-line"></div>

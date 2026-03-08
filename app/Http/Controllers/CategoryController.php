@@ -29,7 +29,7 @@ class CategoryController extends Controller
 
         $query = Product::active()
             ->where('category_id', $category->id)
-            ->with('brand', 'variants', 'images', 'attributeValues.attribute')
+            ->with('brand', 'variants', 'images', 'attributeValues.attribute', 'reviews')
             ->whereHas('variants', fn($q) => $q->where('is_active', true));
 
         if ($minPrice) {
