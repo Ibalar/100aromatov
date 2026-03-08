@@ -3,10 +3,10 @@
 @section('content')
 
     <x-breadcrumbs
-        :title="$brand->name"
+        :title="localizedField($brand, 'name')"
         :items="[
         ['title' => 'Бренды', 'url' => route('brands.index')],
-        ['title' => $brand->name]
+        ['title' => localizedField($brand, 'name')]
     ]"
     />
 
@@ -18,13 +18,13 @@
                     <div class="brand-info d-flex flex-column align-items-center text-center">
                         @if($brand->logo)
                             <div class="brand-logo mb-4">
-                                <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="img-fluid" style="max-height: 120px;">
+                                <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ localizedField($brand, 'name') }}" class="img-fluid" style="max-height: 120px;">
                             </div>
                         @endif
 
-                        @if($brand->description_ru || $brand->description_by)
+                        @if(localizedField($brand, 'description'))
                             <div class="brand-description text-body-1 cl-text-2 mb-4" style="max-width: 800px;">
-                                {{ $brand->description_ru ?? $brand->description_by }}
+                                {!! localizedField($brand, 'description') !!}
                             </div>
                         @endif
                     </div>
