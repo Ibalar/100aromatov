@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title', 'Бренды - ' . config('app.name'))
+@section('meta_description', 'Список брендов парфюмерии в нашем интернет-магазине')
+
 @section('content')
 
     <x-breadcrumbs

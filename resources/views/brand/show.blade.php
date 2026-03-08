@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('title', localizedField($brand, 'seo_title') ?: $brand->name . ' - ' . config('app.name'))
+@section('meta_description', localizedField($brand, 'seo_description') ?: $brand->name)
+
 @section('content')
 
     @php
