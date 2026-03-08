@@ -76,7 +76,6 @@ class Category extends Model
         $categoryIds = $this->getDescendantIds();
         return Product::whereIn('category_id', $categoryIds)
             ->where('is_active', true)
-            ->whereHas('variants', fn($q) => $q->where('product_variants.is_active', true))
             ->count();
     }
 

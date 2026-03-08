@@ -32,8 +32,7 @@ class CategoryController extends Controller
 
         $query = Product::active()
             ->whereIn('category_id', $categoryIds)
-            ->with('brand', 'variants', 'images', 'attributeValues.attribute', 'reviews')
-            ->whereHas('variants', fn($q) => $q->where('product_variants.is_active', true));
+            ->with('brand', 'variants', 'images', 'attributeValues.attribute', 'reviews');
 
         if ($minPrice) {
             $query->whereHas('variants', fn($q) => $q->where('price_usd', '>=', $minPrice));
@@ -43,6 +42,10 @@ class CategoryController extends Controller
         }
 
         foreach ($attributeFilters as $attributeId => $values) {
+            // Skip filtering if 'all' or empty value is selected
+            if (in_array('all', $values) || in_array('', $values)) {
+                continue;
+            }
             $query->whereHas('attributeValues', fn($q) =>
                 $q->where('attribute_id', $attributeId)->whereIn('id', $values)
             );
