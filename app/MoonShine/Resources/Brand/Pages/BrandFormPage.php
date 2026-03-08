@@ -104,6 +104,13 @@ class BrandFormPage extends FormPage
                         ->justifyAlign('between')
                         ->itemsAlign('start'),
                     Flex::make([
+                        Text::make('H1 Title RU', 'h1_title_ru'),
+                        Text::make('H1 Title BY', 'h1_title_by'),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
+                    Flex::make([
                         Textarea::make('SEO Description RU', 'seo_description_ru'),
                         Textarea::make('SEO Description BY', 'seo_description_by'),
                     ])

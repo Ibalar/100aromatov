@@ -3,6 +3,29 @@
 @section('title', localizedField($brand, 'seo_title') ?: $brand->name . ' - ' . config('app.name'))
 @section('meta_description', localizedField($brand, 'seo_description') ?: $brand->name)
 
+@push('styles')
+    <x-seo-meta
+        :title="localizedField($brand, 'seo_title') ?: $brand->name"
+        :description="localizedField($brand, 'seo_description') ?: $brand->name"
+        :image="$brand->logo ? asset('storage/' . $brand->logo) : null"
+        :type="'brand'"
+    />
+@endpush
+
+@push('schema_org')
+    <x-schema-org
+        type="brand"
+        :entity="$brand"
+    />
+    <x-schema-org
+        type="brand_products"
+        :entity="$brand"
+        :title="$brand->name"
+        :description="localizedField($brand, 'seo_description') ?: $brand->name"
+        :products="$products"
+    />
+@endpush
+
 @section('content')
 
     @php
@@ -23,6 +46,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="brand-info d-flex flex-column align-items-center text-center">
+                        <h1>{{ localizedField($brand, 'h1_title') ?: $brand->name }}</h1>
                         @if($brand->logo)
                             <div class="brand-logo mb-4">
                                 <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brandName }}" class="img-fluid" style="max-height: 120px;">
