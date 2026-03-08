@@ -56,11 +56,6 @@ class Product extends Model
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
     }
 
-    public function attributes(): HasMany
-    {
-        return $this->hasMany(Attribute::class);
-    }
-
     public function attributeValues(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -79,6 +74,11 @@ class Product extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopeWithActiveVariants($query)
+    {
+        return $query->with(['variants' => fn($q) => $q->where('is_active', true)]);
     }
 
     /* ================= ACCESSORS ================= */
