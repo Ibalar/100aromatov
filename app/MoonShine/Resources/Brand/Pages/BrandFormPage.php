@@ -82,7 +82,7 @@ class BrandFormPage extends FormPage
                                 Image::make('Логотип', 'logo')
                                     ->dir('brand/logo')
                                     ->disk('public')
-                                    ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'svg'])
+                                    ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'svg', 'avif'])
                                     ->removable()
                                     ->nullable(),
                             ],

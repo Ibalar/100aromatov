@@ -59,6 +59,7 @@
 <!-- /Topbar -->
 <!-- Header -->
 <header class="tf-header header-s7 scr-box-shadow">
+    <div class="br-line fake-class bottom-0"></div>
     <div class="container-full">
         <div class="header-inner">
             <div class="box-open-menu-mobile d-xl-none">
