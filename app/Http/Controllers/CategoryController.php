@@ -30,7 +30,7 @@ class CategoryController extends Controller
         $query = Product::active()
             ->where('category_id', $category->id)
             ->with('brand', 'variants', 'images', 'attributeValues.attribute', 'reviews')
-            ->whereHas('variants', fn($q) => $q->where('is_active', true));
+            ->whereHas('variants', fn($q) => $q->where('product_variants.is_active', true));
 
         if ($minPrice) {
             $query->whereHas('variants', fn($q) => $q->where('price_usd', '>=', $minPrice));
@@ -54,11 +54,12 @@ class CategoryController extends Controller
             ->get();
 
         // Get min/max price for products in category
-        $priceRange = Product::active()
+        $priceRange = Product::query()
             ->where('category_id', $category->id)
-            ->whereHas('variants')
+            ->where('products.is_active', true)
             ->selectRaw('MIN(variants.price_usd) as min_price, MAX(variants.price_usd) as max_price')
             ->join('product_variants as variants', 'products.id', '=', 'variants.product_id')
+            ->where('variants.is_active', true)
             ->first();
 
         return view('categories.show', compact(
