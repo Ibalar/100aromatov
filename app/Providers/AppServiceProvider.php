@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        require_once app_path('Support/helpers.php');
+
         View::composer('*', function ($view) {
 
             $brands = Cache::remember('menu_brands', 3600, function () {

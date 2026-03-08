@@ -2,11 +2,15 @@
 
 @section('content')
 
+    @php
+        $brandName = localizedField($brand, 'name');
+    @endphp
+
     <x-breadcrumbs
-        :title="$brand->name"
+        :title="$brandName"
         :items="[
         ['title' => 'Бренды', 'url' => route('brands.index')],
-        ['title' => $brand->name]
+        ['title' => $brandName]
     ]"
     />
 
@@ -18,13 +22,17 @@
                     <div class="brand-info d-flex flex-column align-items-center text-center">
                         @if($brand->logo)
                             <div class="brand-logo mb-4">
-                                <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="img-fluid" style="max-height: 120px;">
+                                <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brandName }}" class="img-fluid" style="max-height: 120px;">
                             </div>
                         @endif
 
-                        @if($brand->description_ru || $brand->description_by)
+                        @php
+                            $brandDescription = localizedField($brand, 'description');
+                        @endphp
+
+                        @if($brandDescription)
                             <div class="brand-description text-body-1 cl-text-2 mb-4" style="max-width: 800px;">
-                                {{ $brand->description_ru ?? $brand->description_by }}
+                                {!! $brandDescription !!}
                             </div>
                         @endif
                     </div>
@@ -49,16 +57,19 @@
             @if($products->count() > 0)
                 <div class="row tf-grid-layout lg-col-4 md-col-3 sm-col-2">
                     @foreach($products as $product)
+                        @php
+                            $productName = localizedField($product, 'name');
+                        @endphp
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <div class="card-product wow fadeInUp">
                                 <div class="card-product_wrapper">
                                     <a href="{{ url('/product/' . $product->slug) }}" class="product-img">
                                         @if($product->images->first())
                                             <img class="img-product" loading="lazy" width="330" height="440"
-                                                 src="{{ asset('storage/' . $product->images->first()->path) }}" alt="{{ $product->name_ru }}">
+                                                 src="{{ asset('storage/' . $product->images->first()->path) }}" alt="{{ $productName }}">
                                         @else
                                             <img class="img-product" loading="lazy" width="330" height="440"
-                                                 src="{{ asset('assets/images/product/placeholder.jpg') }}" alt="{{ $product->name_ru }}">
+                                                 src="{{ asset('assets/images/product/placeholder.jpg') }}" alt="{{ $productName }}">
                                         @endif
                                     </a>
                                     <ul class="product-action_list">
@@ -80,7 +91,7 @@
                                 <div class="card-product_info">
                                     <a href="{{ url('/product/' . $product->slug) }}"
                                        class="name-product lh-24 fw-medium link-underline-text">
-                                        {{ $product->name_ru }}
+                                        {{ $productName }}
                                     </a>
                                     <div class="price-wrap">
                                         @if($product->variants->isNotEmpty())

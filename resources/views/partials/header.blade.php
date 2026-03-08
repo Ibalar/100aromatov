@@ -5,9 +5,14 @@
             <div class="col-lg-1 col-6 ">
                 <div class="tf-list list-currenci">
                     <div class="tf-languages">
-                        <select class="tf-dropdown-select style-default color-white type-languages">
-                            <option>Русский</option>
-                            <option>Беларускi</option>
+                        <select class="tf-dropdown-select style-default color-white type-languages"
+                                onchange="if (this.value) { window.location.href = this.value; }">
+                            <option value="{{ route('language.switch', 'ru') }}" @selected(app()->getLocale() === 'ru')>
+                                Русский
+                            </option>
+                            <option value="{{ route('language.switch', 'by') }}" @selected(app()->getLocale() === 'by')>
+                                Беларускi
+                            </option>
                         </select>
                     </div>
                 </div>
