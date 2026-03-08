@@ -19,7 +19,7 @@ class ProductController extends Controller
 
         $query = Product::active()
             ->with('brand', 'category', 'variants', 'images', 'attributeValues.attribute')
-            ->whereHas('variants', fn($q) => $q->where('is_active', true));
+            ->whereHas('variants', fn($q) => $q->where('product_variants.is_active', true));
 
         if ($minPrice) {
             $query->whereHas('variants', fn($q) => $q->where('price_usd', '>=', $minPrice));
