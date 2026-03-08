@@ -18,8 +18,7 @@ class ProductController extends Controller
         $brandFilter = $request->get('brand');
 
         $query = Product::active()
-            ->with('brand', 'category', 'variants', 'images', 'attributeValues.attribute')
-            ->whereHas('variants', fn($q) => $q->where('product_variants.is_active', true));
+            ->with('brand', 'category', 'variants', 'images', 'attributeValues.attribute');
 
         if ($minPrice) {
             $query->whereHas('variants', fn($q) => $q->where('price_usd', '>=', $minPrice));
@@ -32,6 +31,10 @@ class ProductController extends Controller
         }
 
         foreach ($attributeFilters as $attributeId => $values) {
+            // Skip filtering if 'all' or empty value is selected
+            if (in_array('all', $values) || in_array('', $values)) {
+                continue;
+            }
             $query->whereHas('attributeValues', fn($q) =>
                 $q->where('attribute_id', $attributeId)->whereIn('id', $values)
             );
