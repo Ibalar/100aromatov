@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Brand;
+use App\Models\ProductVariant;
+use App\Observers\ProductVariantObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register observer to keep product min/max prices in sync
+        ProductVariant::observe(ProductVariantObserver::class);
+
         require_once app_path('Support/helpers.php');
 
         View::composer('*', function ($view) {

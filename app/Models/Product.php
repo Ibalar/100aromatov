@@ -12,6 +12,8 @@ class Product extends Model
     protected $fillable = [
         'brand_id',
         'category_id',
+        'min_price',
+        'max_price',
         'slug',
         'name_ru',
         'name_by',
@@ -32,6 +34,8 @@ class Product extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
+        'min_price' => 'decimal:2',
+        'max_price' => 'decimal:2',
     ];
 
     /* ================= RELATIONS ================= */
@@ -86,5 +90,22 @@ class Product extends Model
     public function getMinPriceUsdAttribute()
     {
         return $this->variants()->min('price_usd');
+    }
+
+    /* ================= HELPERS ================= */
+
+    /**
+     * Update min and max prices based on active variants.
+     */
+    public function updatePriceRange(): void
+    {
+        $prices = $this->variants()
+            ->where('is_active', true)
+            ->pluck('price_usd');
+
+        $this->update([
+            'min_price' => $prices->min(),
+            'max_price' => $prices->max(),
+        ]);
     }
 }
