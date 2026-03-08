@@ -23,7 +23,6 @@
     <div class="flat-spacing-3">
         <div class="container">
             <h1 class="page-title">{{ __('Категории') }}</h1>
-
             @if(count($tree) > 0)
                 <div class="categories-grid">
                     @foreach($tree as $category)

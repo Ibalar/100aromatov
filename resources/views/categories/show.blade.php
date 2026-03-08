@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     layoutSwitches.forEach(switchBtn => {
         switchBtn.addEventListener('click', function() {
             const layoutValue = this.dataset.valueLayout;
-            
+
             // Update active state
             layoutSwitches.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
