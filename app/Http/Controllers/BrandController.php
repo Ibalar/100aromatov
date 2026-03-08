@@ -46,4 +46,19 @@ class BrandController extends Controller
 
         return view('brands.index', compact('grouped', 'letters', 'search'));
     }
+
+    public function show($slug)
+    {
+        $brand = Brand::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        $products = $brand->products()
+            ->active()
+            ->with('brand', 'variants', 'images')
+            ->orderBy('name_ru')
+            ->paginate(24);
+
+        return view('brand.show', compact('brand', 'products'));
+    }
 }
