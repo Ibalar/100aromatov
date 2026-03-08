@@ -3,6 +3,24 @@
 @section('title', 'Бренды - ' . config('app.name'))
 @section('meta_description', 'Список брендов парфюмерии в нашем интернет-магазине')
 
+@push('styles')
+    <x-seo-meta
+        :title="'Бренды - ' . config('app.name')"
+        :description="'Список брендов парфюмерии в нашем интернет-магазине'"
+        :type="'website'"
+    />
+@endpush
+
+@push('schema_org')
+    <x-schema-org
+        type="brands_list"
+        :title="'Бренды - ' . config('app.name')"
+        :description="'Список брендов парфюмерии в нашем интернет-магазине'"
+        :brands="$brands"
+        :count="$brands->count()"
+    />
+@endpush
+
 @section('content')
 
     <x-breadcrumbs

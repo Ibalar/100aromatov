@@ -18,6 +18,8 @@ class Brand extends Model
         'seo_title_by',
         'seo_description_ru',
         'seo_description_by',
+        'h1_title_ru',
+        'h1_title_by',
         'is_active',
     ];
 

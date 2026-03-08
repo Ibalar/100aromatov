@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="description" content="@yield('meta_description', 'Интернет-магазин')">
+    <x-seo-meta />
 
     <!-- CSRF -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -34,6 +35,7 @@
     <link rel="apple-touch-icon-precomposed" href="{{ asset('assets/images/logo/favicon.svg') }}">
 
     @stack('styles')
+    @stack('schema_org')
 </head>
 <body>
 
