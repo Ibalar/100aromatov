@@ -44,7 +44,7 @@ class ProductController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        $brands = Brand::active()->orderBy('name')->get();
+        $brands = Brand::active()->withCount('products')->orderBy('name')->get();
 
         return view('products.index', compact(
             'products',
