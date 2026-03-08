@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::active()->withCount('products')->get();
+        $categories = Category::active()->get();
         $tree = $this->buildCategoryTree($categories);
         return view('categories.index', compact('tree'));
     }
@@ -19,6 +19,9 @@ class CategoryController extends Controller
     public function show($slug, Request $request)
     {
         $category = Category::where('slug', $slug)->active()->firstOrFail();
+
+        // Get all category IDs including descendants
+        $categoryIds = $category->getDescendantIds();
 
         // Price filter
         $minPrice = $request->get('min_price');
@@ -28,7 +31,7 @@ class CategoryController extends Controller
         $attributeFilters = $request->get('attributes', []);
 
         $query = Product::active()
-            ->where('category_id', $category->id)
+            ->whereIn('category_id', $categoryIds)
             ->with('brand', 'variants', 'images', 'attributeValues.attribute', 'reviews')
             ->whereHas('variants', fn($q) => $q->where('product_variants.is_active', true));
 
@@ -53,9 +56,9 @@ class CategoryController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        // Get min/max price for products in category
+        // Get min/max price for products in category tree
         $priceRange = Product::query()
-            ->where('category_id', $category->id)
+            ->whereIn('category_id', $categoryIds)
             ->where('products.is_active', true)
             ->selectRaw('MIN(variants.price_usd) as min_price, MAX(variants.price_usd) as max_price')
             ->join('product_variants as variants', 'products.id', '=', 'variants.product_id')

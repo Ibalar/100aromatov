@@ -68,4 +68,43 @@ class Category extends Model
                 ->orderBy('id');
         });
     }
+
+    /* ================= ACCESSORS ================= */
+
+    public function getProductsCountAttribute()
+    {
+        $categoryIds = $this->getDescendantIds();
+        return Product::whereIn('category_id', $categoryIds)
+            ->where('is_active', true)
+            ->whereHas('variants', fn($q) => $q->where('product_variants.is_active', true))
+            ->count();
+    }
+
+    /* ================= HELPERS ================= */
+
+    public function getDescendantIds(): array
+    {
+        return $this->gatherDescendantIds($this->id);
+    }
+
+    private function gatherDescendantIds(int $categoryId): array
+    {
+        $ids = [$categoryId];
+        $children = self::where('parent_id', $categoryId)->pluck('id');
+
+        foreach ($children as $childId) {
+            $ids = array_merge($ids, $this->gatherDescendantIds($childId));
+        }
+
+        return $ids;
+    }
+
+    public function getAllProductIds(): array
+    {
+        $categoryIds = $this->getDescendantIds();
+        return Product::whereIn('category_id', $categoryIds)
+            ->where('is_active', true)
+            ->pluck('id')
+            ->toArray();
+    }
 }
