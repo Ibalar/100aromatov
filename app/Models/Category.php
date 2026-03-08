@@ -86,6 +86,7 @@ class Category extends Model
         return $this->gatherDescendantIds($this->id);
     }
 
+
     private function gatherDescendantIds(int $categoryId): array
     {
         $ids = [$categoryId];
