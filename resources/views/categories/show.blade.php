@@ -103,10 +103,6 @@
                     </div>
                     <div class="wrapper-control-shop gridLayout-wrapper">
                         <div class="meta-filter-shop">
-                            <div id="product-count-grid" class="count-text text-caption-01">
-                                {{ __('Найдено') }}: {{ $products->total() }} {{ trans_choice('товар|товара|товаров', $products->total()) }}
-                            </div>
-                            <div id="product-count-list" class="count-text text-caption-01"></div>
                             <div class="br-line type-vertical"></div>
                             <div id="applied-filters"></div>
                             <button id="remove-all" class="remove-all-filters" style="display: none;">
@@ -153,6 +149,7 @@
     </div>
 
 @endsection
+
 
 
 

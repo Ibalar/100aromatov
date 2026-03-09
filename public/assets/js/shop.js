@@ -424,7 +424,7 @@
         bindProductEvents();
     };
 
-    /* Switch Layout 
+    /* Switch Layout
     -------------------------------------------------------------------------------------*/
     var swLayoutShop = function () {
         let isListActive = $(".sw-layout-list").hasClass("active");
@@ -553,7 +553,7 @@
         });
     };
 
-    /* Loading product 
+    /* Loading product
     -------------------------------------------------------------------------------------*/
     var loadProduct = function () {
         const gridInitialItems = 8;
@@ -640,7 +640,7 @@
         $(window).on("scroll", onScroll);
     };
 
-    /* Handle Dropdown Filter 
+    /* Handle Dropdown Filter
     -------------------------------------------------------------------------------------*/
     var handleDropdownFilter = function () {
         if ($(".wrapper-filter-dropdown").length > 0) {

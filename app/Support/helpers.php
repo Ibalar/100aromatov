@@ -33,7 +33,9 @@ if (! function_exists('formatPriceByn')) {
         if ($usdRate === null) {
             $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
         }
+
         $bynPrice = round($usdPrice * $usdRate, 2);
+
         return number_format($bynPrice, 2, ',', ' ') . ' BYN';
     }
 }
@@ -41,8 +43,7 @@ if (! function_exists('formatPriceByn')) {
 if (! function_exists('formatPriceUsd')) {
     function formatPriceUsd(float $usdPrice): string
     {
-        return '
- . number_format($usdPrice, 2);
+        return '$' . number_format($usdPrice, 2, '.', '');
     }
 }
 
@@ -52,6 +53,7 @@ if (! function_exists('getPriceInByn')) {
         if ($usdRate === null) {
             $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
         }
+
         return round($usdPrice * $usdRate, 2);
     }
 }
