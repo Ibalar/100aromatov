@@ -20,6 +20,7 @@ use App\MoonShine\Resources\Attribute\AttributeResource;
 use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
 use App\MoonShine\Resources\FilterPage\FilterPageResource;
 use App\MoonShine\Resources\Wishlist\WishlistResource;
+use App\MoonShine\Resources\Setting\SettingResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -50,6 +51,7 @@ final class MoonShineLayout extends AppLayout
             MenuItem::make(FilterPageResource::class, 'Страницы для фильтра'),
             MenuItem::make(WishlistResource::class, 'Избранное'),
             ...parent::menu(),
+            MenuItem::make(SettingResource::class, 'Settings'),
         ];
     }
 

@@ -19,6 +19,7 @@ use App\MoonShine\Resources\Attribute\AttributeResource;
 use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
 use App\MoonShine\Resources\FilterPage\FilterPageResource;
 use App\MoonShine\Resources\Wishlist\WishlistResource;
+use App\MoonShine\Resources\Setting\SettingResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -40,6 +41,7 @@ class MoonShineServiceProvider extends ServiceProvider
                 AttributeValueResource::class,
                 FilterPageResource::class,
                 WishlistResource::class,
+                SettingResource::class,
             ])
             ->pages([
                 ...$core->getConfig()->getPages(),
