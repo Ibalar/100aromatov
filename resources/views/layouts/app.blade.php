@@ -81,6 +81,7 @@
 <script src="{{ asset('assets/js/plugin/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/swiper-bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/bootstrap-select.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugin/nouislider.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/infinityslide.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/count-down.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/drift.min.js') }}"></script>
@@ -90,9 +91,17 @@
 <script src="{{ asset('assets/js/zoom.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/image-compare-viewer.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/image-compare-viewer.js') }}"></script>
+<script src="{{ asset('assets/js/shop.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/photoswipe-lightbox.umd.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/photoswipe.umd.min.js') }}"></script>
+
+
+
+
+
+
+
 
 @stack('scripts')
 </body>

@@ -4949,8 +4949,9 @@ header.header-sticky.tf-header-landing {
   padding: 15px 24px;
   background: var(--bg);
 }
-.canvas-filter .canvas-body > *:not(:last-child) {
-  margin-bottom: 20px;
+.canvas-filter .canvas-body > *:not(:last-child),
+.canvas-filter .canvas-body .filter-form > *:not(:last-child) {
+    margin-bottom: 20px;
 }
 @media (min-width: 576px) {
   .canvas-filter {
@@ -4968,12 +4969,14 @@ header.header-sticky.tf-header-landing {
   }
 }
 @media (min-width: 1200px) {
-  .canvas-filter .canvas-body > *:not(:last-child) {
-    margin-bottom: 28px;
-  }
-  .canvas-filter.offcanvas .canvas-body > *:not(:last-child) {
-    margin-bottom: 20px;
-  }
+    .canvas-filter .canvas-body > *:not(:last-child),
+    .canvas-filter .canvas-body .filter-form > *:not(:last-child) {
+        margin-bottom: 28px;
+    }
+    .canvas-filter.offcanvas .canvas-body > *:not(:last-child),
+    .canvas-filter.offcanvas .canvas-body .filter-form > *:not(:last-child) {
+        margin-bottom: 28px;
+    }
 }
 
 .sidebar-filter {

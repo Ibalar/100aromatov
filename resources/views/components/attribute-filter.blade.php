@@ -19,7 +19,7 @@
                                      in_array($value->id, $selectedAttributes[$attributeId]);
                     @endphp
                     <li class="list-item">
-                        <input type="checkbox" class="tf-check" name="attributes[{{ $attributeId }}][]" id="attr_{{ $attributeId }}_{{ $value->id }}" value="{{ $value->id }}" {{ $isChecked ? 'checked' : '' }}>
+                        <input type="checkbox" class="tf-check style-2" name="attributes[{{ $attributeId }}][]" id="attr_{{ $attributeId }}_{{ $value->id }}" value="{{ $value->id }}" {{ $isChecked ? 'checked' : '' }}>
                         <label for="attr_{{ $attributeId }}_{{ $value->id }}" class="label">
                             <span class="cate-text">{{ localizedField($value, 'value') }}</span>
                         </label>
