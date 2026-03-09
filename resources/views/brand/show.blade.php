@@ -124,13 +124,13 @@
                                         @if($product->variants->isNotEmpty())
                                             @php
                                                 $minPrice = $product->variants->min('price_usd');
-                                                $minSalePrice = $product->variants->whereNotNull('sale_price_usd')->min('sale_price_usd');
+                                                $minFinalPrice = $product->variants->min('final_price_usd');
                                             @endphp
-                                            @if($minSalePrice)
-                                                <span class="price-new text-primary fw-semibold">${{ number_format($minSalePrice, 2) }}</span>
-                                                <span class="price-old text-caption-01 cl-text-3">${{ number_format($minPrice, 2) }}</span>
+                                            @if($minFinalPrice < $minPrice)
+                                                <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minFinalPrice) }}</span>
+                                                <span class="price-old text-caption-01 cl-text-3">{{ formatPriceByn($minPrice) }}</span>
                                             @else
-                                                <span class="price-new text-primary fw-semibold">${{ number_format($minPrice, 2) }}</span>
+                                                <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minPrice) }}</span>
                                             @endif
                                         @else
                                             <span class="price-new text-primary fw-semibold">Цена по запросу</span>

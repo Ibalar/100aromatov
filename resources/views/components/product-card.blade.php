@@ -67,9 +67,9 @@
             @endfor
         </div>
         <div class="price-wrap">
-            <span class="price-new text-primary fw-semibold">${{ number_format($minFinalPrice, 2) }}</span>
+            <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minFinalPrice) }}</span>
             @if($hasDiscount)
-            <span class="price-old text-caption-01 cl-text-3">${{ number_format($minRegularPrice, 2) }}</span>
+            <span class="price-old text-caption-01 cl-text-3">{{ formatPriceByn($minRegularPrice) }}</span>
             @endif
         </div>
         <div class="product-variants">
@@ -82,9 +82,9 @@
                 @if($variant->is_exclusive) <span class="badge-exclusive">{{ __('Отливант') }}</span> @endif
                 <span class="price">
                     @if($variant->sale_price_usd)
-                    <span class="price-sale">${{ number_format($variant->sale_price_usd, 2) }}</span>
+                    <span class="price-sale">{{ formatPriceByn($variant->sale_price_usd) }}</span>
                     @endif
-                    <span class="price-current">${{ number_format($variant->final_price_usd, 2) }}</span>
+                    <span class="price-current">{{ formatPriceByn($variant->final_price_usd) }}</span>
                 </span>
             </div>
             @endforeach

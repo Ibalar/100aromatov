@@ -33,6 +33,17 @@ class CategoryController extends Controller
         $minPrice = $request->get('min_price');
         $maxPrice = $request->get('max_price');
 
+        // Convert BYN to USD if BYN inputs are provided
+        if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
+            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            if ($request->has('min_price_byn')) {
+                $minPrice = $request->get('min_price_byn') / $usdRate;
+            }
+            if ($request->has('max_price_byn')) {
+                $maxPrice = $request->get('max_price_byn') / $usdRate;
+            }
+        }
+
         $attributeFilters = $request->get('attributes', []);
 
         $query = Product::query()

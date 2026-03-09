@@ -34,7 +34,7 @@
                             </div>
                             <div class="canvas-body">
                                 <form method="GET" action="{{ route('products.index') }}" class="filter-form">
-                                    @include('components.price-filter', ['minPrice' => $minPrice, 'maxPrice' => $maxPrice])
+                                    @include('components.price-filter', ['priceRange' => $priceRange, 'minPrice' => $minPrice, 'maxPrice' => $maxPrice])
 
                                     <!-- Brand Filter -->
                                     <div class="widget-facet">

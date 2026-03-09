@@ -26,3 +26,32 @@ if (! function_exists('localizedField')) {
         return $model->getAttribute($field);
     }
 }
+
+if (! function_exists('formatPriceByn')) {
+    function formatPriceByn(float $usdPrice, ?float $usdRate = null): string
+    {
+        if ($usdRate === null) {
+            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+        }
+        $bynPrice = round($usdPrice * $usdRate, 2);
+        return number_format($bynPrice, 2, ',', ' ') . ' BYN';
+    }
+}
+
+if (! function_exists('formatPriceUsd')) {
+    function formatPriceUsd(float $usdPrice): string
+    {
+        return '
+ . number_format($usdPrice, 2);
+    }
+}
+
+if (! function_exists('getPriceInByn')) {
+    function getPriceInByn(float $usdPrice, ?float $usdRate = null): float
+    {
+        if ($usdRate === null) {
+            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+        }
+        return round($usdPrice * $usdRate, 2);
+    }
+}
