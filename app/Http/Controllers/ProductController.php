@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Attribute;
 use App\Models\Brand;
@@ -15,6 +16,18 @@ class ProductController extends Controller
         // Catalog with filters (similar to category show but without category filter)
         $minPrice = $request->get('min_price');
         $maxPrice = $request->get('max_price');
+
+        // Convert BYN to USD if BYN inputs are provided
+        if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
+            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            if ($request->has('min_price_byn')) {
+                $minPrice = $request->get('min_price_byn') / $usdRate;
+            }
+            if ($request->has('max_price_byn')) {
+                $maxPrice = $request->get('max_price_byn') / $usdRate;
+            }
+        }
+
         $attributeFilters = $request->get('attributes', []);
         $brandFilter = $request->get('brand');
 
@@ -109,6 +122,16 @@ class ProductController extends Controller
             return Brand::active()->withCount('products')->orderBy('name_ru')->get();
         });
 
+        // Calculate price range for filter
+        $priceRange = Cache::remember('price_range_catalog', 3600, function () {
+            return DB::table('product_variants')
+                ->join('products', 'products.id', '=', 'product_variants.product_id')
+                ->where('products.is_active', true)
+                ->where('product_variants.is_active', true)
+                ->selectRaw('MIN(product_variants.price_usd) as min_price, MAX(product_variants.price_usd) as max_price')
+                ->first();
+        });
+
         return view('products.index', compact(
             'products',
             'filterableAttributes',
@@ -116,7 +139,8 @@ class ProductController extends Controller
             'attributeFilters',
             'minPrice',
             'maxPrice',
-            'brandFilter'
+            'brandFilter',
+            'priceRange'
         ));
     }
 

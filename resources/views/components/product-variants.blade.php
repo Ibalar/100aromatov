@@ -21,10 +21,10 @@
                         <span class="variant-volume">{{ $variant->volume_ml }} ml</span>
                         <span class="variant-price-wrapper">
                             @if($variant->sale_price_usd)
-                                <span class="variant-original-price">${{ $variant->price_usd }}</span>
-                                <span class="variant-sale-price">${{ $variant->sale_price_usd }}</span>
+                                <span class="variant-original-price">{{ formatPriceByn($variant->price_usd) }}</span>
+                                <span class="variant-sale-price">{{ formatPriceByn($variant->sale_price_usd) }}</span>
                             @else
-                                <span class="variant-price">${{ $variant->price_usd }}</span>
+                                <span class="variant-price">{{ formatPriceByn($variant->price_usd) }}</span>
                             @endif
                         </span>
                         @if($variant->is_tester)
@@ -149,19 +149,22 @@
         const mainPriceElement = document.getElementById('main-product-price');
         const mainSalePriceElement = document.getElementById('main-product-sale-price');
         const skuElement = document.getElementById('main-product-sku');
+        const usdRate = {{ \App\Models\Setting::getSettings()->usd_rate ?? 1 }};
 
         variantInputs.forEach(input => {
             input.addEventListener('change', function() {
-                const price = this.dataset.price;
-                const salePrice = this.dataset.salePrice;
-                const originalPrice = this.dataset.originalPrice;
+                const price = parseFloat(this.dataset.price);
+                const salePrice = this.dataset.salePrice ? parseFloat(this.dataset.salePrice) : null;
+                const originalPrice = parseFloat(this.dataset.originalPrice);
 
                 if (mainPriceElement) {
-                    mainPriceElement.textContent = '$' + price;
+                    const bynPrice = (price * usdRate).toFixed(2);
+                    mainPriceElement.textContent = bynPrice.replace('.', ',') + ' BYN';
                 }
                 if (mainSalePriceElement) {
                     if (salePrice) {
-                        mainSalePriceElement.textContent = '$' + originalPrice;
+                        const bynPrice = (originalPrice * usdRate).toFixed(2);
+                        mainSalePriceElement.textContent = bynPrice.replace('.', ',') + ' BYN';
                         mainSalePriceElement.style.display = 'inline';
                     } else {
                         mainSalePriceElement.style.display = 'none';
