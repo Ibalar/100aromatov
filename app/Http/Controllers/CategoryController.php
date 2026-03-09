@@ -36,12 +36,11 @@ class CategoryController extends Controller
         $attributeFilters = $request->get('attributes', []);
 
         $query = Product::query()
-            ->join('product_variants as variants_filter', 'products.id', '=', 'variants_filter.product_id')
             ->where('products.is_active', true)
-            ->where('variants_filter.is_active', true)
             ->whereIn('products.category_id', $categoryIds)
-            ->select('products.*')
-            ->distinct();
+            ->whereHas('variants', function ($q) {
+                $q->where('is_active', true);
+            });
 
         if ($minPrice) {
             $query->where('products.min_price', '>=', $minPrice);
