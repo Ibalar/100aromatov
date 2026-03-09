@@ -73,7 +73,7 @@ class ProductController extends Controller
             ->with([
                 // Limited eager loading - select only needed columns
                 'brand' => function ($q) {
-                    $q->select('id', 'name_ru', 'name_by');
+                    $q->select('id', 'name', 'slug');
                 },
                 'category' => function ($q) {
                     $q->select('id', 'slug', 'name_ru', 'name_by');
@@ -126,7 +126,7 @@ class ProductController extends Controller
             ->active()
             ->with([
                 'brand' => function ($q) {
-                    $q->select('id', 'name_ru', 'name_by');
+                    $q->select('id', 'name', 'slug');
                 },
                 'category' => function ($q) {
                     $q->select('id', 'slug', 'name_ru', 'name_by');

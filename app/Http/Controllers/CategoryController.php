@@ -27,7 +27,7 @@ class CategoryController extends Controller
         $category = Category::where('slug', $slug)->active()->firstOrFail();
 
         // include current category
-        $categoryIds = array_merge([$category->id], $category->getDescendantIds());
+        $categoryIds = array_unique(array_merge([$category->id], $category->getDescendantIds()));
 
 
         $minPrice = $request->get('min_price');
@@ -36,11 +36,14 @@ class CategoryController extends Controller
         $attributeFilters = $request->get('attributes', []);
 
         $query = Product::query()
+            ->select('products.*')
+            ->join('product_variants', function ($join) {
+                $join->on('product_variants.product_id', '=', 'products.id')
+                    ->where('product_variants.is_active', true);
+            })
             ->where('products.is_active', true)
             ->whereIn('products.category_id', $categoryIds)
-            ->whereHas('variants', function ($q) {
-                $q->where('is_active', true);
-            });
+            ->groupBy('products.id');
 
         if ($minPrice) {
             $query->where('products.min_price', '>=', $minPrice);
@@ -52,31 +55,28 @@ class CategoryController extends Controller
 
         if (!empty($attributeFilters)) {
 
-            $query->whereExists(function ($sub) use ($attributeFilters) {
+            foreach ($attributeFilters as $attributeId => $values) {
 
-                $sub->selectRaw('1')
-                    ->from('product_attribute_value')
-                    ->whereColumn('product_attribute_value.product_id', 'products.id')
-                    ->where(function ($q) use ($attributeFilters) {
+                if (empty($values) || in_array('all', $values)) {
+                    continue;
+                }
 
-                        foreach ($attributeFilters as $attributeId => $values) {
+                $query->whereExists(function ($sub) use ($attributeId, $values) {
 
-                            if (empty($values) || in_array('all', $values)) {
-                                continue;
-                            }
+                    $sub->selectRaw(1)
+                        ->from('product_attribute_value')
+                        ->whereColumn('product_attribute_value.product_id', 'products.id')
+                        ->where('attribute_id', $attributeId)
+                        ->whereIn('attribute_value_id', $values);
 
-                            $q->orWhere(function ($or) use ($attributeId, $values) {
-                                $or->where('product_attribute_value.attribute_id', $attributeId)
-                                    ->whereIn('product_attribute_value.attribute_value_id', $values);
-                            });
-                        }
-                    });
-            });
+                });
+            }
+
         }
 
         $products = $query
             ->with([
-                'brand:id,name_ru,name_by',
+                'brand:id,name',
 
                 'variants' => function ($q) {
                     $q->select('id', 'product_id', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active')
@@ -106,7 +106,9 @@ class CategoryController extends Controller
                 ->get();
         });
 
-        $cacheKey = "price_range_category_" . md5(implode(',', $categoryIds));
+        sort($categoryIds);
+
+        $cacheKey = "price_range_category_" . implode('_', $categoryIds);
 
         $priceRange = Cache::remember($cacheKey, 3600, function () use ($categoryIds) {
 
