@@ -1,5 +1,7 @@
 @php
-    $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+    $usdRate = cache()->remember('usd_rate',3600,function(){
+        return \App\Models\Setting::getSettings()->usd_rate ?? 1;
+    });
 
     $absoluteMinUsd = $priceRange->min_price ?? 0;
     $absoluteMaxUsd = $priceRange->max_price ?? 1000;
@@ -34,6 +36,8 @@
                 id="price-value-range"
                 data-min="{{ $absoluteMinByn }}"
                 data-max="{{ $absoluteMaxByn }}"
+                data-start-min="{{ $minPriceByn }}"
+                data-start-max="{{ $maxPriceByn }}"
                 data-usd-rate="{{ $usdRate }}">
             </div>
 
@@ -46,7 +50,7 @@
                         <div class="price-val" id="price-min-value">
                             <input
                                 type="number"
-                                name="min_price_byn"
+
                                 class="form-control price-input-byn"
                                 value="{{ request('min_price_byn', $minPriceByn) }}"
                                 step="0.01"
@@ -68,7 +72,7 @@
                         <div class="price-val" id="price-max-value">
                             <input
                                 type="number"
-                                name="max_price_byn"
+
                                 class="form-control price-input-byn"
                                 value="{{ request('max_price_byn', $maxPriceByn) }}"
                                 step="0.01"
@@ -109,7 +113,23 @@
                 const byn = parseFloat(bynInputs[index].value);
 
                 if(!isNaN(byn)){
+
                     usdInputs[index].value = (byn / usdRate).toFixed(2);
+
+                    const slider = document.getElementById('price-value-range');
+
+                    if(slider && slider.noUiSlider){
+
+                        const values = slider.noUiSlider.get();
+
+                        if(index === 0){
+                            slider.noUiSlider.set([byn, values[1]]);
+                        }else{
+                            slider.noUiSlider.set([values[0], byn]);
+                        }
+
+                    }
+
                 }
 
             }

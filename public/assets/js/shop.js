@@ -2,311 +2,82 @@
     "use strict";
 
     /* Range Two Price
-  -------------------------------------------------------------------------------------*/
+-------------------------------------------------------------------------------------*/
     var rangeTwoPrice = function () {
-        if ($("#price-value-range").length > 0) {
-            var skipSlider = document.getElementById("price-value-range");
-            var skipValues = [document.getElementById("price-min-value"), document.getElementById("price-max-value")];
 
-            var min = parseInt(skipSlider.getAttribute("data-min"), 10) || 0;
-            var max = parseInt(skipSlider.getAttribute("data-max"), 10) || 500;
+        const skipSlider = document.getElementById("price-value-range");
+        if (!skipSlider) return;
 
-            noUiSlider.create(skipSlider, {
-                start: [min, max],
-                connect: true,
-                step: 1,
-                range: {
-                    min: min,
-                    max: max,
-                },
-                format: {
-                    from: function (value) {
-                        return parseInt(value, 10);
-                    },
-                    to: function (value) {
-                        return parseInt(value, 10);
-                    },
-                },
+        const min = parseFloat(skipSlider.dataset.min) || 0;
+        const max = parseFloat(skipSlider.dataset.max) || 500;
+
+        const startMin = parseFloat(skipSlider.dataset.startMin) || min;
+        const startMax = parseFloat(skipSlider.dataset.startMax) || max;
+
+        const usdRate = parseFloat(skipSlider.dataset.usdRate) || 1;
+
+        const bynInputs = document.querySelectorAll(".price-input-byn");
+        const usdInputs = document.querySelectorAll(".price-input-usd");
+
+        noUiSlider.create(skipSlider, {
+            start: [startMin, startMax],
+            connect: true,
+            step: 0.01,
+            range: {
+                min: min,
+                max: max,
+            }
+        });
+
+        /* Slider → Inputs */
+        skipSlider.noUiSlider.on("update", function (values) {
+
+            const minByn = parseFloat(values[0]).toFixed(2);
+            const maxByn = parseFloat(values[1]).toFixed(2);
+
+            bynInputs[0].value = minByn;
+            bynInputs[1].value = maxByn;
+
+            usdInputs[0].value = (minByn / usdRate).toFixed(2);
+            usdInputs[1].value = (maxByn / usdRate).toFixed(2);
+
+        });
+
+        /* Auto submit when slider released */
+        skipSlider.noUiSlider.on("change", function () {
+
+            const form = skipSlider.closest("form");
+
+            if(form){
+                form.submit();
+            }
+
+        });
+
+        /* Inputs → Slider */
+        bynInputs.forEach((input, index) => {
+
+            input.addEventListener("input", function () {
+
+                const byn = parseFloat(this.value);
+                if (isNaN(byn)) return;
+
+                const values = skipSlider.noUiSlider.get();
+
+                if (index === 0) {
+                    skipSlider.noUiSlider.set([byn, values[1]]);
+                } else {
+                    skipSlider.noUiSlider.set([values[0], byn]);
+                }
+
+                usdInputs[index].value = (byn / usdRate).toFixed(2);
+
             });
 
-            skipSlider.noUiSlider.on("update", function (val, e) {
-                skipValues[e].innerText = val[e];
-            });
-        }
+        });
+
     };
 
-    /* Filter Products
-  -------------------------------------------------------------------------------------*/
-    var filterProducts = function () {
-        const priceSlider = document.getElementById("price-value-range");
-
-        const minPrice = parseInt(priceSlider.dataset.min, 10) || 0;
-        const maxPrice = parseInt(priceSlider.dataset.max, 10) || 500;
-
-        const filters = {
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            category: [],
-            size: [],
-            color: null,
-            availability: null,
-            brand: null,
-        };
-
-        priceSlider.noUiSlider.on("update", function (values) {
-            filters.minPrice = parseInt(values[0], 10);
-            filters.maxPrice = parseInt(values[1], 10);
-
-            $("#price-min-value").text(filters.minPrice);
-            $("#price-max-value").text(filters.maxPrice);
-
-            applyFilters();
-            updateMetaFilter();
-            updatePagination();
-        });
-        $('input[name="category"]').on("change", function () {
-            const categoryId = $(this).attr("id");
-            const label = $(`label[for="${categoryId}"]`);
-            const categoryLabel = label.find(".cate-text").text().trim();
-
-            if ($(this).is(":checked")) {
-                filters.category.push({ id: categoryId, label: categoryLabel });
-            } else {
-                filters.category = filters.category.filter((cate) => cate.id !== categoryId);
-            }
-            applyFilters();
-            updateMetaFilter();
-            updatePagination();
-        });
-        $('input[name="size"]').on("change", function () {
-            const sizeId = $(this).attr("id");
-            const label = $(`label[for="${sizeId}"]`);
-            const sizeLabel = label.find(".size-text").text().trim();
-
-            if ($(this).is(":checked")) {
-                filters.size.push({ id: sizeId, label: sizeLabel });
-            } else {
-                filters.size = filters.size.filter((cate) => cate.id !== sizeId);
-            }
-            applyFilters();
-            updateMetaFilter();
-            updatePagination();
-        });
-        $('input[name="color"]').on("change", function () {
-            const colorId = $(this).attr("id");
-            const label = $(`label[for="${colorId}"]`);
-            filters.color = label.find(".color-text").text().trim();
-            applyFilters();
-            updateMetaFilter();
-            updatePagination();
-        });
-        $('input[name="availability"]').on("change", function () {
-            filters.availability = $(this).attr("id") === "inStock" ? "In Stock" : "Out of stock";
-            applyFilters();
-            updateMetaFilter();
-            updatePagination();
-        });
-        $('input[name="brand"]').on("change", function () {
-            const brandId = $(this).attr("id");
-            const label = $(`label[for="${brandId}"]`);
-            filters.brand = label.find(".brand-text").text().trim();
-            applyFilters();
-            updateMetaFilter();
-            updatePagination();
-        });
-
-        function updatePagination() {
-            if ($(".meta-filter-shop").hasClass("active") == true) {
-                $("#listLayout .wd-full").css("display", "none");
-                $("#gridLayout .wd-full").css("display", "none");
-            }
-        }
-        function updateMetaFilter() {
-            const appliedFilters = $("#applied-filters");
-            const metaFilterShop = $(".meta-filter-shop");
-            appliedFilters.empty();
-            if (filters.minPrice > minPrice || filters.maxPrice < maxPrice) {
-                appliedFilters.append(
-                    `<span class="filter-tag remove-tag" data-filter="price"><span class="icon icon-X2"></span>$${filters.minPrice} - $${filters.maxPrice}</span>`
-                );
-            }
-            if (filters.category.length > 0) {
-                filters.category.forEach((cate) => {
-                    appliedFilters.append(
-                        `<span class="filter-tag remove-tag" data-filter="category" data-value="${cate.id}"><span class="icon icon-X2"></span> ${cate.label}</span>`
-                    );
-                });
-            }
-            if (filters.size.length > 0) {
-                filters.size.forEach((siz) => {
-                    appliedFilters.append(
-                        `<span class="filter-tag remove-tag" data-filter="size" data-value="${siz.id}"><span class="icon icon-X2"></span> ${siz.label}</span>`
-                    );
-                });
-            }
-            if (filters.color) {
-                appliedFilters.append(
-                    `<span class="filter-tag remove-tag " data-filter="color"><span class="icon icon-X2"></span>${filters.color}</span>`
-                );
-            }
-            if (filters.availability) {
-                appliedFilters.append(
-                    `<span class="filter-tag remove-tag" data-filter="availability"><span class="icon icon-X2"></span>${filters.availability} </span>`
-                );
-            }
-            if (filters.brand) {
-                appliedFilters.append(
-                    `<span class="filter-tag remove-tag " data-filter="brand"><span class="icon icon-X2"></span>${filters.brand}</span>`
-                );
-            }
-
-            const hasFiltersApplied = appliedFilters.children().length > 0;
-            metaFilterShop.toggle(hasFiltersApplied);
-            metaFilterShop.toggleClass("active", hasFiltersApplied);
-            $("#remove-all").toggle(hasFiltersApplied);
-            if ($(".meta-filter-shop").hasClass("active") == false) {
-                limitLayout();
-            }
-        }
-
-        $("#applied-filters").on("click", ".remove-tag", function () {
-            const filterType = $(this).data("filter");
-            const filterValue = $(this).data("value");
-
-            if (filterType === "price") {
-                filters.minPrice = minPrice;
-                filters.maxPrice = maxPrice;
-                priceSlider.noUiSlider.set([minPrice, maxPrice]);
-            }
-            if (filterType === "category") {
-                filters.category = filters.category.filter((cate) => cate.id !== filterValue);
-                $(`input[name="category"][id="${filterValue}"]`).prop("checked", false);
-            }
-            if (filterType === "size") {
-                filters.size = filters.size.filter((siz) => siz.id !== filterValue);
-                $(`input[name="size"][id="${filterValue}"]`).prop("checked", false);
-            }
-            if (filterType === "color") {
-                filters.color = null;
-                $('input[name="color"]').prop("checked", false);
-            }
-            if (filterType === "availability") {
-                filters.availability = null;
-                $('input[name="availability"]').prop("checked", false);
-            }
-            if (filterType === "brand") {
-                filters.brand = null;
-                $('input[name="brand"]').prop("checked", false);
-            }
-
-
-
-            applyFilters();
-            updateMetaFilter();
-        });
-
-        function resetAllFilters() {
-            filters.availability = null;
-            filters.minPrice = minPrice;
-            filters.maxPrice = maxPrice;
-            filters.category = [];
-            filters.size = [];
-            filters.color = null;
-            filters.brand = null;
-
-            priceSlider.noUiSlider.set([minPrice, maxPrice]);
-            $('input[name="category"]').prop("checked", false);
-            $('input[name="size"]').prop("checked", false);
-            $('input[name="color"]').prop("checked", false);
-            $('input[name="availability"]').prop("checked", false);
-            $('input[name="brand"]').prop("checked", false);
-
-
-            applyFilters();
-            updateMetaFilter();
-        }
-
-        $("#remove-all,#reset-filter,.remove-all-filters").on("click", function () {
-            resetAllFilters();
-            limitLayout();
-        });
-
-        $(".reset-price").on("click", function () {
-            filters.minPrice = minPrice;
-            filters.maxPrice = maxPrice;
-            priceSlider.noUiSlider.set([minPrice, maxPrice]);
-            applyFilters();
-            updateMetaFilter();
-        });
-
-        function applyFilters() {
-            let visibleProductCountGrid = 0;
-            let visibleProductCountList = 0;
-
-            $(".wrapper-shop .card-product").each(function () {
-                const product = $(this);
-                let showProduct = true;
-
-                const priceText = product.find(".price-new").text().replace("$", "");
-                const price = parseFloat(priceText);
-
-                if (price < filters.minPrice || price > filters.maxPrice) {
-                    showProduct = false;
-                }
-                if (filters.category.length > 0) {
-                    const cateId = product.data("category");
-                    if (!filters.category.some(c => c.id === cateId)) {
-                        showProduct = false;
-                    }
-                }
-                if (filters.size.length > 0) {
-                    const productSizes = product.find(".product-size_list .size-item")
-                        .map(function () {
-                            return $(this).text().trim();
-                        })
-                        .get();
-
-                    const selectedSizes = filters.size.map(s => s.label.trim());
-                    const hasMatch = selectedSizes.some(size => productSizes.includes(size));
-                    if (!hasMatch) showProduct = false;
-                }
-
-                if (filters.color && !product.find(`.color-swatch:contains('${filters.color}')`).length) {
-                    showProduct = false;
-                }
-                if (filters.availability) {
-                    const availabilityStatus = product.data("availability");
-                    if (filters.availability !== availabilityStatus) {
-                        showProduct = false;
-                    }
-                }
-                if (filters.brand) {
-                    const brand = product.data("brand");
-                    if (brand !== filters.brand) {
-                        showProduct = false;
-                    }
-                }
-
-                product.toggle(showProduct);
-
-                if (showProduct) {
-                    if (product.hasClass("grid")) {
-                        visibleProductCountGrid++;
-                    } else if (product.hasClass("product-style_list")) {
-                        visibleProductCountList++;
-                    }
-                }
-            });
-
-            $("#product-count-grid").html(
-                `<span class="count">${visibleProductCountGrid}</span> ${visibleProductCountGrid === 1 ? "Product" : "Products"} found`
-            );
-
-            $("#product-count-list").html(
-                `<span class="count">${visibleProductCountList}</span> ${visibleProductCountList === 1 ? "Product" : "Products"} found`
-            );
-        }
-    };
 
     /* Filter Sort
     -------------------------------------------------------------------------------------*/
@@ -783,7 +554,6 @@
 
     $(function () {
         rangeTwoPrice();
-        filterProducts();
         filterSort();
         loadProduct();
         handleDropdownFilter();

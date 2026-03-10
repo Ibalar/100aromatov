@@ -36,11 +36,13 @@
                             </div>
                             <div class="canvas-body">
 
+                                <form method="GET" action="{{ route('category.show', $category->slug) }}" class="filter-form">
+
                                     @include('components.price-filter', ['priceRange' => $priceRange, 'minPrice' => $minPrice, 'maxPrice' => $maxPrice])
 
                                     @include('components.attribute-filter', ['attributes' => $filterableAttributes, 'selectedAttributes' => $attributeFilters])
 
-                                    <div class="filter-actions d-xl-none">
+                                    <div class="filter-actions">
                                         <button type="submit" class="tf-btn btn-fill w-100">
                                             <span class="btn-text">{{ __('Применить') }}</span>
                                         </button>
@@ -48,7 +50,7 @@
                                             <span class="btn-text">{{ __('Сбросить') }}</span>
                                         </a>
                                     </div>
-                                
+                                </form>
                             </div>
                         </div>
                     </div>
