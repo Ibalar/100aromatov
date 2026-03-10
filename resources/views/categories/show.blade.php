@@ -35,7 +35,7 @@
                                 <span class="icon-X2 fs-24 close-filter d-xl-none"></span>
                             </div>
                             <div class="canvas-body">
-                                <form method="GET" action="{{ route('category.show', $category->slug) }}" class="filter-form">
+
                                     @include('components.price-filter', ['priceRange' => $priceRange, 'minPrice' => $minPrice, 'maxPrice' => $maxPrice])
 
                                     @include('components.attribute-filter', ['attributes' => $filterableAttributes, 'selectedAttributes' => $attributeFilters])
@@ -48,7 +48,7 @@
                                             <span class="btn-text">{{ __('Сбросить') }}</span>
                                         </a>
                                     </div>
-                                </form>
+                                
                             </div>
                         </div>
                     </div>
