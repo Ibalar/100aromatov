@@ -1,4 +1,4 @@
-<div class="card-product">
+<div class="card-product has-size">
     <div class="card-product_wrapper">
         @if($product->images->first())
         <a href="{{ route('product.show', $product->slug) }}" class="product-img">
@@ -28,16 +28,22 @@
                 </a>
             </li>
         </ul>
-        @php
-            $hasDiscount = false;
-            $minRegularPrice = $product->variants->min('price_usd');
-            $minFinalPrice = $product->variants->min('final_price_usd');
-            $discountPercent = 0;
-            if ($minFinalPrice < $minRegularPrice) {
-                $hasDiscount = true;
-                $discountPercent = round((1 - $minFinalPrice / $minRegularPrice) * 100);
-            }
-        @endphp
+            @php
+                $hasDiscount = false;
+
+                $minRegularPrice = $product->variants->min('price_usd');
+                $maxRegularPrice = $product->variants->max('price_usd');
+
+                $minFinalPrice = $product->variants->min('final_price_usd');
+                $maxFinalPrice = $product->variants->max('final_price_usd');
+
+                $discountPercent = 0;
+
+                if ($minFinalPrice < $minRegularPrice) {
+                    $hasDiscount = true;
+                    $discountPercent = round((1 - $minFinalPrice / $minRegularPrice) * 100);
+                }
+            @endphp
         @if($product->is_featured || $hasDiscount)
         <ul class="product-badge_list">
             @if($product->is_featured)
@@ -53,24 +59,49 @@
                 {{ __('Быстрый заказ') }}
             </a>
         </div>
+            @php
+                $volumes = $product->variants->pluck('volume_ml')->filter()->unique();
+            @endphp
+
+            @if($volumes->count())
+                <div class="variant-box">
+                    <ul class="product-size_list">
+                        @foreach($volumes as $volume)
+                            <li class="size-item text-caption-01">
+                                {{ $volume }} ml
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
     </div>
     <div class="card-product_info">
         <a href="{{ route('product.show', $product->slug) }}" class="name-product lh-24 fw-medium link-underline-text">
             {{ localizedField($product, 'name') }}
         </a>
-        <div class="star-wrap d-flex align-items-center">
-            @php
-                $avgRating = $product->reviews->avg('rating') ?? 0;
-            @endphp
-            @for($i = 1; $i <= 5; $i++)
-                <i class="icon icon-Star {{ $i <= round($avgRating) ? '' : 'text-caption-03' }}"></i>
-            @endfor
-        </div>
+
         <div class="price-wrap">
-            <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minFinalPrice) }}</span>
-            @if($hasDiscount)
-            <span class="price-old text-caption-01 cl-text-3">{{ formatPriceByn($minRegularPrice) }}</span>
+
+            @if($minFinalPrice == $maxFinalPrice)
+
+                <span class="price-new text-primary fw-semibold">
+            {{ formatPriceByn($minFinalPrice) }}
+        </span>
+
+                @if($hasDiscount)
+                    <span class="price-old text-caption-01 cl-text-3">
+            {{ formatPriceByn($minRegularPrice) }}
+        </span>
+                @endif
+
+            @else
+
+                <span class="price-new text-primary fw-semibold">
+            {{ formatPriceByn($minFinalPrice) }} – {{ formatPriceByn($maxFinalPrice) }}
+        </span>
+
             @endif
+
         </div>
         <div class="product-variants">
             @foreach($product->variants as $variant)

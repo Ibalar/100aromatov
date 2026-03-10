@@ -3,3 +3,4 @@
 @include('partials.modals.share')
 @include('partials.modals.shopping-сart')
 @include('partials.modals.sing')
+@include('partials.modals.quickview')

@@ -45,7 +45,6 @@
 
                 <div class="box-wrap">
                     <div class="price-val_wrap">
-                        <span class="cl-text-2 text-body-1">BYN</span>
 
                         <div class="price-val" id="price-min-value">
                             <input
@@ -67,7 +66,6 @@
 
                 <div class="box-wrap">
                     <div class="price-val_wrap">
-                        <span class="cl-text-2 text-body-1">BYN</span>
 
                         <div class="price-val" id="price-max-value">
                             <input

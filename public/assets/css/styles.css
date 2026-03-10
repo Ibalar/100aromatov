@@ -11113,8 +11113,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
   content: attr(data-currency);
 }
 .widget-price .price-val_wrap {
-  padding: 7px 15px;
-  border: 1px solid var(--line);
+  /*padding: 7px 15px;*/
+  /*border: 1px solid var(--line);*/
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
@@ -20903,6 +20903,19 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
     font-weight: 600;
     color: #29293a;
     line-height: 90px;
+}
+
+.collapse-body.filter-group-check {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+.collapse-body.filter-group-check::-webkit-scrollbar {
+    width: 6px;
+}
+.collapse-body.filter-group-check::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
 }
 
 /*# sourceMappingURL=styles.css.map */
