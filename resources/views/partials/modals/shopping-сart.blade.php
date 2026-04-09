@@ -2,7 +2,7 @@
     <div class="canvas-wrapper">
         <div class="popup-header">
             <div class="d-flex align-items-center justify-content-between mb-12">
-                <h5 class="title">{{ __('Корзина') }}</h5>
+                <h5 class="title">{{ __('Список для бронирования') }}</h5>
                 <span class="icon-X2 icon-close-popup" data-bs-dismiss="offcanvas"></span>
             </div>
         </div>
@@ -24,11 +24,11 @@
                             </h5>
                         </div>
                         <div class="tf-mini-cart-view-checkout">
-                            <a href="{{ route('cart.index') }}" class="tf-btn btn-stroke">{{ __('Корзина') }}</a>
-                            <a href="{{ route('checkout.index') }}" class="tf-btn animate-btn">{{ __('Оформить') }}</a>
+                            <a href="{{ route('cart.index') }}" class="tf-btn btn-stroke">{{ __('Весь список') }}</a>
+                            <a href="{{ route('checkout.index') }}" class="tf-btn animate-btn">{{ __('Оформить бронь') }}</a>
                         </div>
                         <button type="button" class="d-flex justify-content-center fw-semibold text-center link js-cart-clear">
-                            {{ __('Очистить корзину') }}
+                            {{ __('Очистить список') }}
                         </button>
                     </div>
                 </div>

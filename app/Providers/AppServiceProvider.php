@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\ProductVariant;
 use App\Observers\ProductVariantObserver;
 use App\Services\CartService;
@@ -41,7 +42,16 @@ class AppServiceProvider extends ServiceProvider
             });
 
             $brandColumns = $brands->chunk(10);
+            $menuCategories = Cache::remember('menu_categories', 3600, function () {
+                return Category::active()
+                    ->whereNull('parent_id')
+                    ->with(['children' => function ($query) {
+                        $query->active();
+                    }])
+                    ->get();
+            });
 
+            $categoryColumns = $menuCategories->chunk(4);
 
             $brandColumns = $brandColumns->map(function ($column, $index) use ($brandColumns) {
                 if ($index === $brandColumns->count() - 1) {
@@ -56,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $view->with('brandColumns', $brandColumns);
+            $view->with('categoryColumns', $categoryColumns);
             $view->with('cartCount', $cartCount);
             $view->with('customerAuth', Auth::guard('customer')->check());
             $view->with('wishlistCount', app(WishlistService::class)->count());

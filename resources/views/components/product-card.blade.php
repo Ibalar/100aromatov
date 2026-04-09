@@ -3,12 +3,12 @@
 @endphp
 
 <div class="card-product has-size">
-    <div class="card-product_wrapper">
+    <div class="card-product_wrapper square">
         @if($product->images->first())
             <a href="{{ route('product.show', $product->slug) }}" class="product-img">
-                <img class="img-product" loading="lazy" width="330" height="440" src="{{ asset('storage/' . $product->images->first()->path) }}" alt="{{ localizedField($product, 'name') }}">
+                <img class="img-product" loading="lazy" width="330" height="330" src="{{ asset('storage/' . $product->images->first()->path) }}" alt="{{ localizedField($product, 'name') }}">
                 @if($product->images->count() > 1)
-                    <img class="img-hover" loading="lazy" width="330" height="440" src="{{ asset('storage/' . $product->images->skip(1)->first()->path) }}" alt="{{ localizedField($product, 'name') }}">
+                    <img class="img-hover" loading="lazy" width="330" height="330" src="{{ asset('storage/' . $product->images->skip(1)->first()->path) }}" alt="{{ localizedField($product, 'name') }}">
                 @endif
             </a>
         @endif
@@ -22,14 +22,8 @@
                     </a>
                 </li>
             @endunless
-            <li class="compare">
-                <a href="#compare" data-bs-toggle="offcanvas" class="hover-tooltip tooltip-left box-icon">
-                    <span class="icon icon-ArrowsLeftRight"></span>
-                    <span class="tooltip">{{ __('Сравнить') }}</span>
-                </a>
-            </li>
             <li>
-                <a href="#quickView" data-bs-toggle="offcanvas" class="hover-tooltip tooltip-left box-icon">
+                <a href="#quickView" data-bs-toggle="offcanvas" class="hover-tooltip tooltip-left box-icon js-quick-view-trigger" data-product-id="{{ $product->id }}">
                     <span class="icon icon-Eye"></span>
                     <span class="tooltip">{{ __('Быстрый просмотр') }}</span>
                 </a>
@@ -74,7 +68,7 @@
 
         <div class="product-action_bot">
             <button type="button" class="tf-btn btn-white small w-100 js-add-to-cart" data-variant-id="{{ $defaultVariant?->id }}" data-qty="1">
-                {{ __('Быстрый заказ') }}
+                {{ __('Отложить') }}
             </button>
         </div>
 

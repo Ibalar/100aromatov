@@ -44,19 +44,44 @@ class BrandController extends Controller
         // Список всех букв (для меню навигации)
         $letters = $grouped->keys();
 
-        return view('brands.index', compact('grouped', 'letters', 'search'));
+        return view('brands.index', compact('brands', 'grouped', 'letters', 'search'));
     }
 
-    public function show($slug)
+    public function show($slug, Request $request)
     {
         $brand = Brand::where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
 
-        $products = $brand->products()
+        $query = $brand->products()
             ->active()
             ->with('brand', 'variants', 'images')
-            ->orderBy('name_ru')
+            ->withCount('reviews');
+
+        $sort = $request->get('sort', 'best-selling');
+
+        switch ($sort) {
+            case 'a-z':
+                $query->orderBy('name_ru');
+                break;
+            case 'z-a':
+                $query->orderByDesc('name_ru');
+                break;
+            case 'price-low-high':
+                $query->orderBy('min_price');
+                break;
+            case 'price-high-low':
+                $query->orderByDesc('max_price');
+                break;
+            case 'best-selling':
+            default:
+                $query->orderByDesc('is_featured')
+                    ->orderByDesc('views')
+                    ->orderBy('name_ru');
+                break;
+        }
+
+        $products = $query
             ->paginate(24);
 
         return view('brand.show', compact('brand', 'products'));

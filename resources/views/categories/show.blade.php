@@ -21,6 +21,45 @@
         ]"
     />
 
+    @if($childCategories->isNotEmpty())
+        <section class="flat-spacing pb-0">
+            <div class="container">
+                <div dir="ltr" class="swiper tf-swiper" data-preview="6" data-tablet="4" data-mobile-sm="3"
+                    data-mobile="2" data-space-lg="30" data-space-md="15" data-space="10" data-pagination="2"
+                    data-pagination-sm="3" data-pagination-md="4" data-pagination-lg="6">
+                    <div class="swiper-wrapper">
+                        @foreach($childCategories as $childCategory)
+                            <div class="swiper-slide">
+                                <a href="{{ route('category.show', $childCategory->slug) }}" class="category-v01 hover-img">
+                                    <div class="cate-image img-style d-flex align-items-center justify-content-center">
+                                        @if($childCategory->image)
+                                            <img
+                                                loading="lazy"
+                                                src="{{ asset('storage/' . $childCategory->image) }}"
+                                                alt="{{ localizedField($childCategory, 'name') }}"
+                                            >
+                                        @else
+                                            <div class="cate-thumb-placeholder text-center px-3">
+                                                <span class="icon icon-shopping-cart-simple fs-36"></span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <h5 class="cate-name text-center link link-underline">
+                                        {{ localizedField($childCategory, 'name') }}
+                                    </h5>
+                                    <p class="text-caption-01 text-center text-secondary mb-0">
+                                        {{ $childCategory->products_count }} {{ trans_choice('товар|товара|товаров', $childCategory->products_count) }}
+                                    </p>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="sw-line-default style-2 tf-sw-pagination"></div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <section class="flat-spacing">
         <div class="container">
             <div class="row">
@@ -34,6 +73,30 @@
                             </div>
                             <div class="canvas-body">
                                 <form method="GET" action="{{ route('category.show', $category->slug) }}" class="filter-form">
+                                    @if($sidebarCategories->isNotEmpty())
+                                        <div class="widget-facet">
+                                            <div class="facet-title" data-bs-target="#filter-category" role="button"
+                                                data-bs-toggle="collapse" aria-expanded="true" aria-controls="filter-category">
+                                                <h6>{{ __('Категории') }}</h6>
+                                                <span class="icon icon-CaretDown"></span>
+                                            </div>
+                                            <div id="filter-category" class="collapse show">
+                                                <ul class="collapse-body filter-group-check group-category">
+                                                    @foreach($sidebarCategories as $sidebarCategory)
+                                                        <li class="list-item">
+                                                            <a href="{{ route('category.show', $sidebarCategory->slug) }}"
+                                                               class="label link {{ $sidebarCategory->id === $category->id ? 'fw-semibold' : '' }}">
+                                                                <span class="cate-text">{{ localizedField($sidebarCategory, 'name') }}</span>
+                                                                <span class="count">({{ $sidebarCategory->products_count }})</span>
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="br-line"></div>
+                                    @endif
+
                                     @include('components.price-filter', ['priceRange' => $priceRange, 'minPrice' => $minPrice, 'maxPrice' => $maxPrice])
 
                                     @include('components.attribute-filter', ['attributes' => $filterableAttributes, 'selectedAttributes' => $attributeFilters])
@@ -150,3 +213,18 @@
         </div>
     </section>
 @endsection
+
+@push('styles')
+    <style>
+        .cate-thumb-placeholder {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f3f3f3 0%, #e7e0d7 100%);
+            color: #181818;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+@endpush

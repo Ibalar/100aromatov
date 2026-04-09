@@ -27,35 +27,36 @@
 @endpush
 
 @section('content')
-
     @php
         $brandName = localizedField($brand, 'name');
+        $brandDescription = localizedField($brand, 'description');
     @endphp
 
     <x-breadcrumbs
         :title="$brandName"
         :items="[
-        ['title' => 'Бренды', 'url' => route('brands.index')],
-        ['title' => $brandName]
-    ]"
+            ['title' => __('Бренды'), 'url' => route('brands.index')],
+            ['title' => $brandName]
+        ]"
     />
 
-    <!-- Brand Info -->
     <section class="flat-spacing-3 pb-0">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="brand-info d-flex flex-column align-items-center text-center">
                         <h1>{{ localizedField($brand, 'h1_title') ?: $brand->name }}</h1>
+
                         @if($brand->logo)
                             <div class="brand-logo mb-4">
-                                <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brandName }}" class="img-fluid" style="max-height: 120px;">
+                                <img
+                                    src="{{ asset('storage/' . $brand->logo) }}"
+                                    alt="{{ $brandName }}"
+                                    class="img-fluid"
+                                    style="max-height: 120px;"
+                                >
                             </div>
                         @endif
-
-                        @php
-                            $brandDescription = localizedField($brand, 'description');
-                        @endphp
 
                         @if($brandDescription)
                             <div class="brand-description text-body-1 cl-text-2 mb-4" style="max-width: 800px;">
@@ -67,98 +68,94 @@
             </div>
         </div>
     </section>
-    <!-- /Brand Info -->
 
-    <!-- Products Grid -->
     <section class="flat-spacing-3">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="mb-0">Товары бренда</h4>
-                        <span class="text-body-2 cl-text-2">{{ $products->total() }} товаров</span>
+                    <div class="tf-shop-control">
+                        <div class="tf-control-sorting">
+                            <div class="tf-dropdown-sort" data-bs-toggle="dropdown">
+                                @php
+                                    $sortOptions = [
+                                        'best-selling' => __('По популярности'),
+                                        'a-z' => __('А-Я'),
+                                        'z-a' => __('Я-А'),
+                                        'price-low-high' => __('Цена: по возрастанию'),
+                                        'price-high-low' => __('Цена: по убыванию'),
+                                    ];
+                                    $currentSort = request('sort', 'best-selling');
+                                @endphp
+                                <div class="btn-select">
+                                    <span class="text-sort-value">{{ $sortOptions[$currentSort] ?? __('По популярности') }}</span>
+                                    <span class="icon icon-CaretDown"></span>
+                                </div>
+                                <div class="dropdown-menu">
+                                    @foreach($sortOptions as $sortValue => $sortLabel)
+                                        <div class="select-item {{ $currentSort === $sortValue ? 'active' : '' }}" data-sort-value="{{ $sortValue }}">
+                                            <span class="text-value-item">{{ $sortLabel }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="tf-control-layout">
+                            <li class="tf-view-layout-switch sw-layout-list list-layout" data-value-layout="list" title="{{ __('Список') }}">
+                                <i class="icon-List"></i>
+                            </li>
+                            <li class="tf-view-layout-switch sw-layout-2" data-value-layout="tf-col-2" title="2 {{ __('колонки') }}">
+                                <i class="icon-grid-2"></i>
+                            </li>
+                            <li class="tf-view-layout-switch sw-layout-3 active d-none d-md-flex" data-value-layout="tf-col-3" title="3 {{ __('колонки') }}">
+                                <i class="icon-grid-3"></i>
+                            </li>
+                            <li class="tf-view-layout-switch sw-layout-4 d-none d-lg-flex" data-value-layout="tf-col-4" title="4 {{ __('колонки') }}">
+                                <i class="icon-grid-4"></i>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
             @if($products->count() > 0)
-                <div class="row tf-grid-layout lg-col-4 md-col-3 sm-col-2">
-                    @foreach($products as $product)
-                        @php
-                            $productName = localizedField($product, 'name');
-                        @endphp
-                        <div class="col-xl-3 col-lg-4 col-md-6">
-                            <div class="card-product wow fadeInUp">
-                                <div class="card-product_wrapper">
-                                    <a href="{{ url('/product/' . $product->slug) }}" class="product-img">
-                                        @if($product->images->first())
-                                            <img class="img-product" loading="lazy" width="330" height="440"
-                                                 src="{{ asset('storage/' . $product->images->first()->path) }}" alt="{{ $productName }}">
-                                        @else
-                                            <img class="img-product" loading="lazy" width="330" height="440"
-                                                 src="{{ asset('assets/images/product/placeholder.jpg') }}" alt="{{ $productName }}">
-                                        @endif
-                                    </a>
-                                    <ul class="product-action_list">
-                                        <li class="wishlist">
-                                            <a href="#;" class="hover-tooltip tooltip-left box-icon">
-                                                <span class="icon icon-heart"></span>
-                                                <span class="tooltip">В избранное</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#quickView" data-bs-toggle="offcanvas"
-                                               class="hover-tooltip tooltip-left box-icon">
-                                                <span class="icon icon-Eye"></span>
-                                                <span class="tooltip">Быстрый просмотр</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="card-product_info">
-                                    <a href="{{ url('/product/' . $product->slug) }}"
-                                       class="name-product lh-24 fw-medium link-underline-text">
-                                        {{ $productName }}
-                                    </a>
-                                    <div class="price-wrap">
-                                        @if($product->variants->isNotEmpty())
-                                            @php
-                                                $minPrice = $product->variants->min('price_usd');
-                                                $minFinalPrice = $product->variants->min('final_price_usd');
-                                            @endphp
-                                            @if($minFinalPrice < $minPrice)
-                                                <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minFinalPrice) }}</span>
-                                                <span class="price-old text-caption-01 cl-text-3">{{ formatPriceByn($minPrice) }}</span>
-                                            @else
-                                                <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minPrice) }}</span>
-                                            @endif
-                                        @else
-                                            <span class="price-new text-primary fw-semibold">Цена по запросу</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
+                <div class="wrapper-control-shop gridLayout-wrapper">
+                    <div class="meta-filter-shop">
+                        <div id="product-count-grid" class="count-text text-caption-01">
+                            {{ $products->total() }} {{ trans_choice('товар|товара|товаров', $products->total()) }}
                         </div>
-                    @endforeach
+                        <div id="product-count-list" class="count-text text-caption-01">
+                            {{ $products->total() }} {{ trans_choice('товар|товара|товаров', $products->total()) }}
+                        </div>
+                    </div>
+
+                    <div class="tf-list-layout wrapper-shop" id="listLayout" style="display: none;">
+                        @foreach($products as $product)
+                            @include('components.product-card-list', ['product' => $product])
+                        @endforeach
+                    </div>
+
+                    <div class="wrapper-shop tf-grid-layout tf-col-3" id="gridLayout">
+                        @foreach($products as $product)
+                            @include('components.product-card', ['product' => $product])
+                        @endforeach
+                    </div>
                 </div>
 
-                <!-- Pagination -->
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <div class="tf-page-pagination">
-                            {{ $products->links() }}
-                        </div>
+                @if($products->hasPages())
+                    <div class="wd-full justify-content-center mt-4">
+                        {{ $products->links() }}
                     </div>
-                </div>
+                @endif
             @else
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <p class="text-body-1 cl-text-2">В данный момент нет доступных товаров этого бренда.</p>
+                <div class="empty-products text-center py-5">
+                    <div class="empty-icon mb-3">
+                        <i class="icon icon-MagnifyingGlass"></i>
                     </div>
+                    <h4>{{ __('Товары не найдены') }}</h4>
+                    <p>{{ __('В данный момент нет доступных товаров этого бренда.') }}</p>
                 </div>
             @endif
         </div>
     </section>
-    <!-- /Products Grid -->
-
 @endsection

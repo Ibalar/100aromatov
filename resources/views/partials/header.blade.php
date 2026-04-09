@@ -11,7 +11,7 @@
                                 Русский
                             </option>
                             <option value="{{ route('language.switch', 'by') }}" @selected(app()->getLocale() === 'by')>
-                                Беларускi
+                                Беларуская
                             </option>
                         </select>
                     </div>
@@ -47,10 +47,9 @@
             </div>
             <div class="col-lg-1 col-6">
                 <div class="d-flex align-items-center justify-content-end gap-20">
-
-                    <a href="https://www.instagram.com/100aromatov.by/" target="_blank" class="d-flex"><i
-                            class="fs-20 text-white link icon icon-InstagramLogo"></i></a>
-
+                    <a href="https://www.instagram.com/100aromatov.by/" target="_blank" class="d-flex">
+                        <i class="fs-20 text-white link icon icon-InstagramLogo"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -75,9 +74,9 @@
                     <ul class="box-nav-menu">
                         <li class="menu-item position-relative">
                             <a href="/" class="item-link">
-                                        <span class="text cus-text">
-                                            Главная
-                                        </span>
+                                <span class="text cus-text">
+                                    Главная
+                                </span>
                             </a>
                         </li>
 
@@ -90,7 +89,6 @@
                             </a>
 
                             <div class="sub-menu mega-menu_home_v2 home-type_3">
-
                                 @foreach($brandColumns as $column)
                                     <ul class="sub-menu_list">
                                         @foreach($column as $brand)
@@ -108,39 +106,64 @@
                                             <li>
                                                 <a href="{{ route('brands.index') }}"
                                                    class="sub-menu_link tf-btn-line-2 py-4 style-primary">
-                                                        <span class="fw-semibold">
-                                                            Смотреть все
-                                                        </span>
+                                                    <span class="fw-semibold">
+                                                        Смотреть все
+                                                    </span>
                                                 </a>
                                             </li>
                                         @endif
-
                                     </ul>
                                 @endforeach
-
-
-
                             </div>
                         </li>
 
-                        <li class="menu-item">
-                            <a href="#" class="item-link">
-                                        <span class="text cus-text">
-                                            Парфюмерия
-                                        </span>
+                        <li class="menu-item position-relative">
+                            <a href="{{ route('categories.index') }}" class="item-link">
+                                <span class="text cus-text">
+                                    Парфюмерия
+                                </span>
                                 <i class="icon icon-CaretDown"></i>
                             </a>
-                            <div class="sub-menu mega-menu">
-                                <div class="container-full">
-                                    <div class="row">
 
-                                    </div>
-                                </div>
+                            <div class="sub-menu mega-menu_home_v2 home-type_3">
+                                @foreach($categoryColumns as $column)
+                                    <ul class="sub-menu_list">
+                                        @foreach($column as $category)
+                                            <li>
+                                                <a href="{{ route('category.show', $category->slug) }}"
+                                                   class="sub-menu_link has-text fw-semibold">
+                                                    <span class="cus-text">
+                                                        {{ localizedField($category, 'name') }}
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            @foreach($category->children as $childCategory)
+                                                <li>
+                                                    <a href="{{ route('category.show', $childCategory->slug) }}"
+                                                       class="sub-menu_link has-text">
+                                                        <span class="cus-text">
+                                                            {{ localizedField($childCategory, 'name') }}
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        @endforeach
+
+                                        @if($loop->last)
+                                            <li>
+                                                <a href="{{ route('categories.index') }}"
+                                                   class="sub-menu_link tf-btn-line-2 py-4 style-primary">
+                                                    <span class="fw-semibold">
+                                                        Смотреть все
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                @endforeach
                             </div>
                         </li>
-
-
-
                     </ul>
                 </nav>
             </div>

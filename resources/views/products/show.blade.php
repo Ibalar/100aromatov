@@ -168,11 +168,11 @@
                                         </button>
                                     </div>
                                     <button type="button" class="btn-action-price tf-btn type-xl animate-btn w-100 js-add-to-cart">
-                                        {{ __('В корзину') }}
+                                        {{ __('Отложить') }}
                                     </button>
                                 </div>
                                 <button type="button" class="tf-btn type-xl btn-primary animate-btn w-100 js-buy-now mt-12">
-                                    {{ __('Купить сейчас') }}
+                                    {{ __('Быстрая бронь') }}
                                 </button>
                             </div>
 

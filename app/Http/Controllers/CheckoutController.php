@@ -33,7 +33,7 @@ class CheckoutController extends Controller
         }
 
         if (empty($items)) {
-            $message = __('Корзина пуста');
+            $message = __('Список для бронирования пуст');
 
             if ($request->expectsJson()) {
                 return response()->json([

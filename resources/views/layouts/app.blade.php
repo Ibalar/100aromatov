@@ -95,6 +95,7 @@
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/cart.js') }}"></script>
 <script src="{{ asset('assets/js/wishlist.js') }}"></script>
+<script src="{{ asset('assets/js/quickview.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/photoswipe-lightbox.umd.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/photoswipe.umd.min.js') }}"></script>
 

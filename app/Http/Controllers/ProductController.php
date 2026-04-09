@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -176,6 +177,88 @@ class ProductController extends Controller
         $product->increment('views');
 
         return view('products.show', compact('product'));
+    }
+
+    public function quickView(Product $product)
+    {
+        abort_unless($product->is_active, 404);
+
+        $product->load([
+            'brand:id,name,slug',
+            'category:id,slug,name_ru,name_by',
+            'variants' => function ($query) {
+                $query->select(
+                    'id',
+                    'product_id',
+                    'sku',
+                    'volume_ml',
+                    'price_usd',
+                    'sale_price_usd',
+                    'is_active',
+                    'is_tester',
+                    'is_raspiv',
+                    'is_unboxed',
+                    'is_gift_wrapped',
+                    'is_exclusive'
+                )
+                    ->where('is_active', true)
+                    ->orderBy('price_usd');
+            },
+            'images' => function ($query) {
+                $query->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
+                    ->orderBy('sort_order');
+            },
+        ])->loadCount([
+            'reviews' => function ($query) {
+                $query->where('is_approved', true);
+            },
+        ]);
+
+        $defaultVariant = $product->variants->first();
+        $description = Str::limit(trim(strip_tags((string) localizedField($product, 'description'))), 260);
+
+        return response()->json([
+            'product' => [
+                'id' => $product->id,
+                'name' => localizedField($product, 'name'),
+                'slug' => $product->slug,
+                'url' => route('product.show', $product->slug),
+                'category_name' => $product->category ? localizedField($product->category, 'name') : null,
+                'brand_name' => $product->brand?->name,
+                'reviews_count' => $product->reviews_count,
+                'description' => $description !== '' ? $description : __('Описание отсутствует'),
+                'country' => $product->country,
+                'concentration' => $product->concentration,
+                'images' => $product->images->map(function ($image) use ($product) {
+                    return [
+                        'src' => asset('storage/' . $image->path),
+                        'alt' => localizedField($image, 'alt') ?: localizedField($product, 'name'),
+                    ];
+                })->values(),
+                'variants' => $product->variants->map(function ($variant) {
+                    return [
+                        'id' => $variant->id,
+                        'sku' => $variant->sku ?: ('PRD-' . $variant->id),
+                        'volume_ml' => $variant->volume_ml,
+                        'label' => trim(($variant->volume_ml ? $variant->volume_ml . ' ml' : '') ?: __('Вариант')),
+                        'price_formatted' => formatPriceByn($variant->final_price_usd),
+                        'original_price_formatted' => $variant->sale_price_usd ? formatPriceByn($variant->price_usd) : null,
+                        'price_value' => (float) $variant->final_price_usd,
+                        'badges' => array_values(array_filter([
+                            $variant->is_tester ? __('Тестер') : null,
+                            $variant->is_raspiv ? __('Распив') : null,
+                            $variant->is_unboxed ? __('Без коробки') : null,
+                            $variant->is_gift_wrapped ? __('Подарочная упаковка') : null,
+                            $variant->is_exclusive ? __('Эксклюзив') : null,
+                        ])),
+                    ];
+                })->values(),
+                'default_variant_id' => $defaultVariant?->id,
+                'default_price_formatted' => $defaultVariant ? formatPriceByn($defaultVariant->final_price_usd) : __('Цена по запросу'),
+                'default_original_price_formatted' => $defaultVariant && $defaultVariant->sale_price_usd ? formatPriceByn($defaultVariant->price_usd) : null,
+                'default_sku' => $defaultVariant?->sku ?: ($defaultVariant ? 'PRD-' . $defaultVariant->id : null),
+            ],
+        ]);
     }
 
     public function search(Request $request)

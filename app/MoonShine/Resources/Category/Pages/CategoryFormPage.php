@@ -22,6 +22,7 @@ use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
@@ -79,6 +80,17 @@ class CategoryFormPage extends FormPage
                                         fn(Slug $field) => $field->from('name_ru')->live(),
                                         fn(Slug $field) => $field->readonly()
                                     ),
+                            ],
+                            colSpan: 6,
+                        ),
+                        Column::make(
+                            [
+                                Image::make('Изображение категории', 'image')
+                                    ->dir('category')
+                                    ->disk('public')
+                                    ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp', 'svg', 'avif'])
+                                    ->removable()
+                                    ->nullable(),
                             ],
                             colSpan: 6,
                         ),

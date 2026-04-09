@@ -62,7 +62,7 @@
             <li>
                 <a href="#;" class="hover-tooltip box-icon js-add-to-cart" data-variant-id="{{ $defaultVariant?->id }}" data-qty="1">
                     <span class="icon icon-Handbag"></span>
-                    <span class="tooltip">{{ __('В корзину') }}</span>
+                    <span class="tooltip">{{ __('Отложить') }}</span>
                 </a>
             </li>
             <li class="wishlist">
@@ -78,7 +78,7 @@
                 </a>
             </li>
             <li>
-                <a href="#quickView" data-bs-toggle="offcanvas" class="hover-tooltip box-icon">
+                <a href="#quickView" data-bs-toggle="offcanvas" class="hover-tooltip box-icon js-quick-view-trigger" data-product-id="{{ $product->id }}">
                     <span class="icon icon-Eye"></span>
                     <span class="tooltip">{{ __('Быстрый просмотр') }}</span>
                 </a>

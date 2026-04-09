@@ -55,7 +55,7 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => __('Товар добавлен в корзину'),
+            'message' => __('Товар добавлен в список для бронирования'),
         ]);
     }
 
@@ -89,4 +89,3 @@ class CartController extends Controller
         return response()->json(['success' => true]);
     }
 }
-

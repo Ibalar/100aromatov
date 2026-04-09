@@ -11,6 +11,8 @@ use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\Category\CategoryResource;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Text;
 use Throwable;
 
 
@@ -26,6 +28,8 @@ class CategoryDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Название RU', 'name_ru'),
+            Image::make('Изображение', 'image'),
         ];
     }
 

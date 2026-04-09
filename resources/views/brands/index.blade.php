@@ -125,3 +125,53 @@
     </div>
 
 @endsection
+
+@push('styles')
+    <style>
+        #letter_A-Я,
+        [id^="letter_"] {
+            scroll-margin-top: 140px;
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const letterLinks = document.querySelectorAll('.brand-letter-link[href^="#letter_"]');
+
+            function getScrollOffset() {
+                const topbar = document.querySelector('.tf-topbar');
+                const header = document.querySelector('.tf-header');
+                const topbarHeight = topbar ? topbar.offsetHeight : 0;
+                const headerHeight = header ? header.offsetHeight : 0;
+
+                return topbarHeight + headerHeight + 16;
+            }
+
+            letterLinks.forEach((link) => {
+                link.addEventListener('click', function (event) {
+                    const targetSelector = this.getAttribute('href');
+                    const target = targetSelector ? document.querySelector(targetSelector) : null;
+
+                    if (!target) {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    const targetTop = target.getBoundingClientRect().top + window.scrollY - getScrollOffset();
+
+                    window.scrollTo({
+                        top: Math.max(targetTop, 0),
+                        behavior: 'smooth',
+                    });
+
+                    if (history.replaceState) {
+                        history.replaceState(null, '', targetSelector);
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

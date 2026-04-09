@@ -28,6 +28,9 @@ Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('categ
 
 // Products
 Route::get('/search', [ProductController::class, 'search'])->name('search');
+Route::get('/product/{product}/quick-view', [ProductController::class, 'quickView'])
+    ->whereNumber('product')
+    ->name('product.quick-view');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

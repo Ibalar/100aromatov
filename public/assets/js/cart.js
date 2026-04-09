@@ -111,9 +111,9 @@
                 qty: Number(qty || 1),
             });
             await refreshCart();
-            notify(result.message || "Товар добавлен в корзину", "success");
+            notify(result.message || "Товар добавлен в список для бронирования", "success");
         } catch (error) {
-            notify(error.message || "Ошибка добавления в корзину", "error");
+            notify(error.message || "Ошибка добавления в список для бронирования", "error");
         }
     }
 
@@ -136,7 +136,7 @@
                 variant_id: Number(variantId),
             });
             await refreshCart();
-            notify("Товар удален из корзины", "info");
+            notify("Товар удален из списка для бронирования", "info");
         } catch (error) {
             notify(error.message || "Ошибка удаления товара", "error");
         }
@@ -146,9 +146,9 @@
         try {
             await request("/cart/clear", "POST");
             await refreshCart();
-            notify("Корзина очищена", "info");
+            notify("Список для бронирования очищен", "info");
         } catch (error) {
-            notify(error.message || "Ошибка очистки корзины", "error");
+            notify(error.message || "Ошибка очистки списка для бронирования", "error");
         }
     }
 

@@ -1,25 +1,25 @@
 @extends('layouts.app')
 
-@section('title', __('РР·Р±СЂР°РЅРЅРѕРµ') . ' - ' . config('app.name'))
+@section('title', __('Избранное') . ' - ' . config('app.name'))
 
 @section('content')
     <x-breadcrumbs
-        :title="__('РР·Р±СЂР°РЅРЅРѕРµ')"
+        :title="__('Избранное')"
         :items="[
-            ['title' => __('РР·Р±СЂР°РЅРЅРѕРµ')]
+            ['title' => __('Избранное')]
         ]"
     />
 
     <div class="section-wishlist flat-spacing pt-0">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-20">
-                <h4 class="mb-0">{{ __('РЎРїРёСЃРѕРє РёР·Р±СЂР°РЅРЅРѕРіРѕ') }}</h4>
+                <h4 class="mb-0">{{ __('Список избранного') }}</h4>
                 <button
                     type="button"
                     class="tf-btn btn-stroke js-wishlist-clear {{ count($products) ? '' : 'd-none' }}"
                     id="js-wishlist-clear"
                 >
-                    {{ __('РћС‡РёСЃС‚РёС‚СЊ') }}
+                    {{ __('Очистить') }}
                 </button>
             </div>
 
@@ -33,10 +33,9 @@
             </div>
 
             <div class="tf-wishlist-empty text-center {{ count($products) ? 'd-none' : '' }}" id="js-wishlist-empty">
-                <p class="text-notice cl-text-2 mb-20">{{ __('Р’С‹ РїРѕРєР° РЅРµ РґРѕР±Р°РІРёР»Рё С‚РѕРІР°СЂС‹ РІ РёР·Р±СЂР°РЅРЅРѕРµ.') }}</p>
-                <a href="{{ route('categories.index') }}" class="tf-btn animate-btn">{{ __('РџРµСЂРµР№С‚Рё РІ РєР°С‚Р°Р»РѕРі') }}</a>
+                <p class="text-notice cl-text-2 mb-20">{{ __('Вы пока не добавили товары в избранное.') }}</p>
+                <a href="{{ route('categories.index') }}" class="tf-btn animate-btn">{{ __('Перейти в каталог') }}</a>
             </div>
         </div>
     </div>
 @endsection
-

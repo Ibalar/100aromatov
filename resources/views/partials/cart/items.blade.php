@@ -29,7 +29,7 @@
             </div>
             <div class="fw-semibold mt-8">{{ number_format($item['line_byn'], 2, ',', ' ') }} BYN</div>
             <button type="button" class="tf-btn-line-3 type-primary mt-8 js-cart-remove">
-                <span class="text-caption-01 fw-semibold">{{ __('РЈРґР°Р»РёС‚СЊ') }}</span>
+                <span class="text-caption-01 fw-semibold">{{ __('Удалить') }}</span>
             </button>
         </div>
     </div>
@@ -37,13 +37,11 @@
     <div class="box-text_empty type-shop_cart">
         <div class="shop-empty_top">
             <span class="icon"><i class="icon-Handbag"></i></span>
-            <h4 class="text-emp">{{ __('Р’Р°С€Р° РєРѕСЂР·РёРЅР° РїСѓСЃС‚Р°') }}</h4>
-            <p class="cl-text-2">{{ __('Р”РѕР±Р°РІСЊС‚Рµ С‚РѕРІР°СЂС‹ РІ РєРѕСЂР·РёРЅСѓ, С‡С‚РѕР±С‹ РѕС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р·') }}</p>
+            <h4 class="text-emp">{{ __('Ваш список для бронирования пуст') }}</h4>
+            <p class="cl-text-2">{{ __('Добавьте товары в список для бронирования, чтобы отправить заявку') }}</p>
         </div>
         <div class="shop-empty_bot">
-            <a href="{{ route('categories.index') }}" class="tf-btn animate-btn">{{ __('РџРµСЂРµР№С‚Рё РІ РєР°С‚Р°Р»РѕРі') }}</a>
+            <a href="{{ route('categories.index') }}" class="tf-btn animate-btn">{{ __('Перейти в каталог') }}</a>
         </div>
     </div>
 @endforelse
-
-

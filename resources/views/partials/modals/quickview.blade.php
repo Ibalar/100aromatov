@@ -1,139 +1,100 @@
 <!-- Quick View -->
-<div class="offcanvas offcanvas-end canvas-quickview" id="quickView">
+<div class="offcanvas offcanvas-end canvas-quickview" id="quickView" aria-labelledby="quickViewLabel">
     <div class="mini-quick-image">
-        <div class="wrap-quick">
+        <div class="wrap-quick" data-quickview-images>
             <div class="image">
-                <img loading="lazy" width="340" height="444" src="assets/images/product/single/detail-2.jpg"
-                     alt="Image">
-            </div>
-            <div class="image">
-                <img loading="lazy" width="340" height="444" src="assets/images/product/single/detail-2_2.jpg"
-                     alt="Image">
-            </div>
-            <div class="image">
-                <img loading="lazy" width="340" height="444" src="assets/images/product/single/detail-2_3.jpg"
-                     alt="Image">
-            </div>
-            <div class="image">
-                <img loading="lazy" width="340" height="444" src="assets/images/product/single/detail-2_4.jpg"
-                     alt="Image">
+                <div class="quickview-image-placeholder">
+                    <i class="icon icon-shopping-cart-simple fs-36"></i>
+                </div>
             </div>
         </div>
     </div>
     <div class="wrap-canvas">
         <div class="canvas-header ps-md-0">
-            <h5 class="title-pop">Quick View</h5>
+            <h5 class="title-pop" id="quickViewLabel">{{ __('Быстрый просмотр') }}</h5>
             <span class="icon-close-popup" data-bs-dismiss="offcanvas">
-                    <i class="icon icon-X2"></i>
-                </span>
+                <i class="icon icon-X2"></i>
+            </span>
         </div>
         <div class="canvas-body ps-md-0">
             <div class="tf-product-quick_view tf-quick-prd_variant">
                 <div class="tf-product-info-heading">
-                    <p class="product-infor-cate text-caption-01 mb-4">
-                        Cosmetic
-                    </p>
-                    <h3 class="product-infor-name mb-12 letter-space-0">
-                        Moon Oil ROSEMARY & BAKUCHIOL
-                    </h3>
+                    <p class="product-infor-cate text-caption-01 mb-4" data-quickview-category></p>
+                    <h3 class="product-infor-name mb-12 letter-space-0" data-quickview-name>{{ __('Загрузка...') }}</h3>
                     <div class="product-infor-meta mb-20">
                         <div class="meta_rate">
                             <div class="star-wrap normal d-flex align-items-center">
-                                <i class="icon icon-Star"></i>
-                                <i class="icon icon-Star"></i>
-                                <i class="icon icon-Star"></i>
-                                <i class="icon icon-Star"></i>
-                                <i class="icon icon-Star"></i>
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="icon icon-Star"></i>
+                                @endfor
                             </div>
-                            <span class="text-caption-01 cl-text-2">
-                                    (134 reviews)
-                                </span>
+                            <span class="text-caption-01 cl-text-2" data-quickview-reviews>(0 {{ __('отзывов') }})</span>
                         </div>
                         <div class="br-line type-vertical"></div>
                         <div class="meta_sold">
-                            <i class="icon icon-Lightning text-primary"></i>
-                            <span class="text-caption-01 cl-text-2">18В sold in lastВ 32В hours</span>
+                            <i class="icon icon-Tag text-primary"></i>
+                            <span class="text-caption-01 cl-text-2" data-quickview-brand></span>
+                        </div>
+                        <div class="br-line type-vertical"></div>
+                        <div class="meta_prd_code text-caption-01">
+                            <span class="cl-text-2">SKU:</span>
+                            <span data-quickview-sku>-</span>
                         </div>
                     </div>
                     <div class="product-infor-price mb-12">
-                        <h4 class="price-on-sale">$59.99</h4>
-                        <div class="br-line type-vertical"></div>
-                        <p class="cl-text-3 text-decoration-line-through">$98.99</p>
-                        <span class="badge-sale text-white fw-semibold text-caption-02">
-                                -25%
-                            </span>
+                        <h4 class="price-on-sale" data-quickview-price>{{ __('Цена по запросу') }}</h4>
+                        <div class="br-line type-vertical" data-quickview-original-separator style="display:none;"></div>
+                        <p class="cl-text-3 text-decoration-line-through" data-quickview-original-price style="display:none;"></p>
                     </div>
-                    <p class="product-infor-desc cl-text-2 mb-12">
-                        Products labelled Committed are personalized cosmetic creations designed to celebrate
-                        self-care, confidence, and the unique beauty that starts from within.
-                    </p>
-                    <div class="product-infor-reality lh-24">
-                        <div class="ic d-flex">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <rect width="24" height="24" rx="4" fill="#101010" />
-                                <path
-                                    d="M19.4569 11.7975C19.435 11.7481 18.9056 10.5738 17.7287 9.39687C16.1606 7.82875 14.18 7 12 7C9.81999 7 7.83937 7.82875 6.27124 9.39687C5.09437 10.5738 4.56249 11.75 4.54312 11.7975C4.51469 11.8614 4.5 11.9306 4.5 12.0006C4.5 12.0706 4.51469 12.1398 4.54312 12.2037C4.56499 12.2531 5.09437 13.4269 6.27124 14.6038C7.83937 16.1713 9.81999 17 12 17C14.18 17 16.1606 16.1713 17.7287 14.6038C18.9056 13.4269 19.435 12.2531 19.4569 12.2037C19.4853 12.1398 19.5 12.0706 19.5 12.0006C19.5 11.9306 19.4853 11.8614 19.4569 11.7975ZM12 14.5C11.5055 14.5 11.0222 14.3534 10.6111 14.0787C10.1999 13.804 9.87951 13.4135 9.69029 12.9567C9.50107 12.4999 9.45157 11.9972 9.54803 11.5123C9.64449 11.0273 9.88259 10.5819 10.2322 10.2322C10.5819 9.8826 11.0273 9.6445 11.5123 9.54804C11.9972 9.45157 12.4999 9.50108 12.9567 9.6903C13.4135 9.87952 13.804 10.2 14.0787 10.6111C14.3534 11.0222 14.5 11.5055 14.5 12C14.5 12.663 14.2366 13.2989 13.7678 13.7678C13.2989 14.2366 12.663 14.5 12 14.5Z"
-                                    fill="white" />
-                            </svg>
-                        </div>
-                        28В people are viewing this right now
-                    </div>
+                    <p class="product-infor-desc cl-text-2 mb-12" data-quickview-description>{{ __('Описание отсутствует') }}</p>
+                    <div class="product-infor-reality lh-24" data-quickview-meta></div>
                 </div>
                 <div class="br-line"></div>
                 <div class="tf-product-variant">
                     <div class="quick-variant-picker picker_size">
                         <div class="variant-picker_label mb-12">
                             <div>
-                                Size:
-                                <span class="variant__value text-capitalize fw-medium">M</span>
-                            </div>
-                            <div data-bs-dismiss="offcanvas">
-                                <a href="#findSize" data-bs-toggle="modal"
-                                   class="tf-btn-line-2 style-primary text-caption-01 fw-semibold">
-                                    Size Guide
-                                </a>
+                                {{ __('Объем') }}:
+                                <span class="variant__value text-capitalize fw-medium" data-quickview-variant-label>-</span>
                             </div>
                         </div>
-                        <div class="variant-picker_values">
-                                <span class="size_btn style-2 active" data-quick-size="30ml"
-                                      data-quick-price="39.99">30ml</span>
-                            <span class="size_btn style-2" data-quick-size="40ml"
-                                  data-quick-price="59.99">50ml</span>
-                            <span class="size_btn style-2" data-quick-size="100ml"
-                                  data-quick-price="79.99">30ml</span>
-                        </div>
+                        <div class="variant-picker_values" data-quickview-variants></div>
                     </div>
 
                     <div class="tf-product-total-quantity">
-                        <p class="">
-                            Quantity:
-                        </p>
+                        <p>{{ __('Количество') }}:</p>
                         <div class="group-action">
                             <div class="wg-quantity">
-                                <button class="btn-quantity btn-decrease">
+                                <button type="button" class="btn-quantity js-quickview-qty-minus">
                                     <i class="icon icon-minus"></i>
                                 </button>
-                                <input class="quantity-product" type="text" name="number" value="1">
-                                <button class="btn-quantity btn-increase">
+                                <input class="quantity-product js-quickview-qty-input" type="text" name="number" value="1" readonly>
+                                <button type="button" class="btn-quantity js-quickview-qty-plus">
                                     <i class="icon icon-plus"></i>
                                 </button>
                             </div>
-                            <a href="#shoppingCart" data-bs-toggle="offcanvas"
-                               class="btn-action-price tf-btn type-xl animate-btn w-100">
-                                Add to Cart
+                            <button
+                                type="button"
+                                class="btn-action-price tf-btn type-xl animate-btn w-100 js-add-to-cart js-quickview-add-to-cart"
+                                data-qty="1"
+                            >
+                                {{ __('Отложить') }}
                                 <span class="d-none d-sm-block d-md-none d-lg-block">&nbsp;-&nbsp;</span>
-                                <span class="price-add d-none d-sm-block d-md-none d-lg-block">$59.99</span>
-                            </a>
+                                <span class="price-add d-none d-sm-block d-md-none d-lg-block" data-quickview-button-price></span>
+                            </button>
                         </div>
-                        <a href="{{ route('checkout.index') }}" class="tf-btn type-xl btn-primary animate-btn w-100">
-                            Buy It Now
-                        </a>
+                        <button
+                            type="button"
+                            class="tf-btn type-xl btn-primary animate-btn w-100 js-buy-now js-quickview-buy-now"
+                            data-qty="1"
+                        >
+                            {{ __('Быстрая бронь') }}
+                        </button>
                     </div>
                 </div>
                 <div class="box-action">
-                    <a href="{{ route('categories.index') }}" class="tf-btn-line-2 style-primary fw-semibold">
-                        View Full Details
+                    <a href="{{ route('categories.index') }}" class="tf-btn-line-2 style-primary fw-semibold" data-quickview-details-link>
+                        {{ __('Смотреть карточку товара') }}
                     </a>
                 </div>
             </div>
@@ -142,3 +103,39 @@
 </div>
 <!-- /Quick View -->
 
+@push('styles')
+    <style>
+        .quickview-image-placeholder {
+            min-height: 240px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f3f3f3 0%, #e7e0d7 100%);
+            color: #181818;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quickview-variant-btn {
+            display: inline-flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 96px;
+            padding: 10px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 10px;
+            background: #fff;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .quickview-variant-btn.active {
+            border-color: #101010;
+            background: #f7f7f7;
+        }
+
+        .quickview-variant-btn .meta {
+            font-size: 12px;
+            color: #6b7280;
+        }
+    </style>
+@endpush

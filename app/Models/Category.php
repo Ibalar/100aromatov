@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Cache;
 
 class Category extends Model
 {
@@ -18,6 +19,7 @@ class Category extends Model
         'name_by',
         'description_ru',
         'description_by',
+        'image',
         'seo_title_ru',
         'seo_title_by',
         'seo_description_ru',
@@ -67,6 +69,13 @@ class Category extends Model
             $query->orderBy('sort_order')
                 ->orderBy('id');
         });
+
+        $flushCategoryCache = static function (): void {
+            Cache::forget('category_tree_active');
+        };
+
+        static::saved($flushCategoryCache);
+        static::deleted($flushCategoryCache);
     }
 
     /* ================= ACCESSORS ================= */
