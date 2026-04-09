@@ -77,7 +77,7 @@ class Product extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('products.is_active', true);
     }
 
     public function scopeWithActiveVariants($query)
