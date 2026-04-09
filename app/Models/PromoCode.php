@@ -35,14 +35,14 @@ class PromoCode extends Model
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_active', true)
+        return $query->where('promo_codes.is_active', true)
             ->where(function ($q) {
-                $q->whereNull('active_from')
-                    ->orWhere('active_from', '<=', now());
+                $q->whereNull('promo_codes.active_from')
+                    ->orWhere('promo_codes.active_from', '<=', now());
             })
             ->where(function ($q) {
-                $q->whereNull('active_to')
-                    ->orWhere('active_to', '>=', now());
+                $q->whereNull('promo_codes.active_to')
+                    ->orWhere('promo_codes.active_to', '>=', now());
             });
     }
 
