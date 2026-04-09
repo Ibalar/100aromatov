@@ -1,4 +1,4 @@
-<section class="section-page-title text-center flat-spacing-3 pb-0">
+<section class="section-page-title flat-spacing-3">
     <div class="container">
         <div class="main-page-title">
 
@@ -26,7 +26,9 @@
 
             </div>
 
-            <h3>{{ $title }}</h3>
+            @if(!empty($title))
+                <h3>{{ $title }}</h3>
+            @endif
 
         </div>
     </div>

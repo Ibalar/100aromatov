@@ -10,12 +10,14 @@
                 <p class="desc-pop cl-text-2">Be part of our growing family of new customers!</p>
             </div>
             <div class="modal-main">
-                <form action="account-page.html" class="form-log">
+                <form method="POST" action="{{ route('customer.register.store') }}" class="form-log">
+                    @csrf
                     <div class="form-content">
                         <fieldset class="tf-field">
                             <label for="user-name" class="tf-lable fw-medium">Username or email address <span
                                     class="text-primary">*</span></label>
-                            <input type="text" id="user-name" placeholder="Username or email address*" required>
+                            <input type="email" id="user-name" name="email" value="{{ old('email') }}" placeholder="Username or email address*" required>
+                            @error('email') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                         </fieldset>
                         <fieldset class="tf-field password-wrapper">
                             <label for="register-password" class="tf-lable fw-medium">
@@ -24,9 +26,10 @@
                             </label>
                             <div class="password-wrapper w-100">
                                 <span class="toggle-pass icon-EyeSlash fs-20 cl-text-3"></span>
-                                <input class="password-field" type="password" id="register-password"
+                                <input class="password-field" type="password" id="register-password" name="password"
                                        placeholder="Password" required>
                             </div>
+                            @error('password') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                         </fieldset>
                         <fieldset class="tf-field password-wrapper">
                             <label for="register-password-confirm" class="tf-lable fw-medium">
@@ -35,7 +38,7 @@
                             </label>
                             <div class="password-wrapper w-100">
                                 <span class="toggle-pass icon-EyeSlash fs-20 cl-text-3"></span>
-                                <input class="password-field" type="password" id="register-password-confirm"
+                                <input class="password-field" type="password" id="register-password-confirm" name="password_confirmation"
                                        placeholder="Confirm Password" required>
                             </div>
                         </fieldset>
@@ -66,12 +69,14 @@
                 <p class="desc-pop cl-text-2">Sign in to access your personalized experience.</p>
             </div>
             <div class="modal-main">
-                <form action="account-page.html" class="form-log">
+                <form method="POST" action="{{ route('customer.login.store') }}" class="form-log">
+                    @csrf
                     <div class="form-content">
                         <fieldset class="tf-field">
                             <label for="user-name-log" class="tf-lable fw-medium">Username or email address <span
                                     class="text-primary">*</span></label>
-                            <input type="text" id="user-name-log" placeholder="Username or email address*" required>
+                            <input type="email" id="user-name-log" name="email" value="{{ old('email') }}" placeholder="Username or email address*" required>
+                            @error('email') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                         </fieldset>
                         <fieldset class="tf-field password-wrapper">
                             <label for="password" class="tf-lable fw-medium">
@@ -80,13 +85,14 @@
                             </label>
                             <div class="password-wrapper w-100">
                                 <span class="toggle-pass icon-EyeSlash fs-20 cl-text-3"></span>
-                                <input class="password-field" type="password" id="password" placeholder="Password"
+                                <input class="password-field" type="password" id="password" name="password" placeholder="Password"
                                        required>
                             </div>
+                            @error('password') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                         </fieldset>
                         <fieldset class="field-bottom">
                             <div class="checkbox-wrap">
-                                <input class="tf-check style-2" type="checkbox" id="remember">
+                                <input class="tf-check style-2" type="checkbox" id="remember" name="remember" value="1">
                                 <label for="remember">
                                     Remember me
                                 </label>

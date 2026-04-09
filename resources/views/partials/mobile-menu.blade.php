@@ -4,9 +4,9 @@
             <span class="icon-close-popup" data-bs-dismiss="offcanvas">
                 <i class="icon icon-X2"></i>
             </span>
-        <form class="form-search-nav">
+        <form action="{{ route('search') }}" method="GET" class="form-search-nav">
             <fieldset>
-                <input type="text" placeholder="What are you looking for?" required>
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Искать на сайте" required>
             </fieldset>
             <button type="submit" class="btn-action">
                 <i class="icon icon-MagnifyingGlass"></i>

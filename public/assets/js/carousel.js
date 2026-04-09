@@ -1,4 +1,11 @@
 $(window).on("load", function () {
+    function firstDefined(items) {
+        for (var i = 0; i < items.length; i++) {
+            if (items[i]) return items[i];
+        }
+        return null;
+    }
+
     $(".tf-swiper").each(function (index, element) {
         var $this = $(element);
         var laptop = $this.data("laptop") || 1;
@@ -53,12 +60,26 @@ $(window).on("load", function () {
                 },
             }
             : {
-                el: [
+                el: firstDefined([
                     $this.find(".tf-sw-pagination")[0],
                     $this.closest(".tf-pag-swiper").find(".tf-sw-pagination")[0],
-                ],
+                ]),
                 clickable: true,
             };
+
+        var nextEl = firstDefined([
+            $this.find(".nav-next-swiper")[0],
+            $this.closest(".tf-btn-swiper-main").find(".nav-next-swiper")[0],
+            $this.closest(".box-swiper").find(".nav-next-swiper")[0],
+            $this.closest(".container").find(".group-btn-slider .nav-next-swiper")[0],
+        ]);
+
+        var prevEl = firstDefined([
+            $this.find(".nav-prev-swiper")[0],
+            $this.closest(".tf-btn-swiper-main").find(".nav-prev-swiper")[0],
+            $this.closest(".box-swiper").find(".nav-prev-swiper")[0],
+            $this.closest(".container").find(".group-btn-slider .nav-prev-swiper")[0],
+        ]);
 
         var swiperT = new Swiper($this[0], {
             direction: direction,
@@ -87,18 +108,8 @@ $(window).on("load", function () {
             observer: true,
             observeParents: true,
             navigation: {
-                nextEl: [
-                    $this.find(".nav-next-swiper")[0],
-                    $this.closest(".tf-btn-swiper-main").find(".nav-next-swiper")[0],
-                    $this.closest(".box-swiper").find(".nav-next-swiper")[0],
-                    $this.closest(".container").find(".group-btn-slider .nav-next-swiper")[0],
-                ],
-                prevEl: [
-                    $this.find(".nav-prev-swiper")[0],
-                    $this.closest(".tf-btn-swiper-main").find(".nav-prev-swiper")[0],
-                    $this.closest(".box-swiper").find(".nav-prev-swiper")[0],
-                    $this.closest(".container").find(".group-btn-slider .nav-prev-swiper")[0],
-                ],
+                nextEl: nextEl,
+                prevEl: prevEl,
             },
             breakpoints: {
                 575: {

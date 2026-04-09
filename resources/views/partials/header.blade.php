@@ -150,9 +150,9 @@
                 </a>
             </div>
             <div class="header-right">
-                <form action="search-result.html" class="form-search-nav style-3 d-none d-xl-block">
+                <form action="{{ route('search') }}" method="GET" class="form-search-nav style-3 d-none d-xl-block">
                     <fieldset>
-                        <input type="text" placeholder="Искать на сайте" required="">
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Искать на сайте" required>
                     </fieldset>
                     <button type="submit" class="btn-action">
                         <i class="icon icon-MagnifyingGlass"></i>
@@ -160,26 +160,30 @@
                 </form>
                 <ul class="nav-icon-list">
                     <li class="d-none d-sm-block d-xl-none">
-                        <a href="#search" data-bs-toggle="modal" class="nav-icon-item link">
+                        <a href="{{ route('search') }}" class="nav-icon-item link">
                             <i class="icon icon-MagnifyingGlass"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="#sign" data-bs-toggle="modal" class="nav-icon-item link">
-                            <i class="icon icon-User"></i>
-                        </a>
+                        @if(auth('customer')->check())
+                            <a href="{{ route('customer.account.dashboard') }}" class="nav-icon-item link">
+                                <i class="icon icon-User"></i>
+                            </a>
+                        @else
+                            <a href="{{ route('customer.login') }}" class="nav-icon-item link">
+                                <i class="icon icon-User"></i>
+                            </a>
+                        @endif
                     </li>
                     <li class="d-none d-sm-block">
-                        <a href="/" class="nav-icon-item link">
-                            <i class="icon icon-HeartStraight"></i>
+                        <a href="{{ route('wishlist.index') }}" class="nav-icon-item link js-wishlist-link">
+                            <i class="icon {{ ($wishlistCount ?? 0) > 0 ? 'icon-heart' : 'icon-HeartStraight' }}"></i>
                         </a>
                     </li>
                     <li>
                         <a href="#shoppingCart" data-bs-toggle="offcanvas" class="nav-icon-item link shop-cart">
                             <i class="icon icon-Handbag"></i>
-                            <span class="count">
-                                        0
-                            </span>
+                            <span class="count js-cart-count">{{ $cartCount ?? 0 }}</span>
                         </a>
                     </li>
                 </ul>

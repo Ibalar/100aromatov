@@ -16,6 +16,7 @@
                            data-price="{{ $variant->final_price_usd }}"
                            data-sale-price="{{ $variant->sale_price_usd }}"
                            data-original-price="{{ $variant->price_usd }}"
+                           data-sku="{{ $variant->sku }}"
                            {{ $loop->first ? 'checked' : '' }}>
                     <span class="variant-content">
                         <span class="variant-volume">{{ $variant->volume_ml }} ml</span>
@@ -169,6 +170,9 @@
                     } else {
                         mainSalePriceElement.style.display = 'none';
                     }
+                }
+                if (skuElement && this.dataset.sku) {
+                    skuElement.textContent = this.dataset.sku;
                 }
             });
         });

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attribute;
+use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Models\Product;
-use App\Models\Attribute;
-use App\Models\Brand;
 
 class ProductController extends Controller
 {
@@ -176,5 +176,95 @@ class ProductController extends Controller
         $product->increment('views');
 
         return view('products.show', compact('product'));
+    }
+
+    public function search(Request $request)
+    {
+        $searchQuery = trim((string) $request->string('q'));
+        $tokens = collect(preg_split('/\s+/u', $searchQuery, -1, PREG_SPLIT_NO_EMPTY))
+            ->map(static fn (string $token) => mb_substr($token, 0, 100))
+            ->filter()
+            ->values();
+
+        $products = collect();
+
+        if ($tokens->isNotEmpty()) {
+            $products = Product::query()
+                ->active()
+                ->join('brands', 'brands.id', '=', 'products.brand_id')
+                ->select('products.*')
+                ->where(function ($query) use ($tokens) {
+                    foreach ($tokens as $token) {
+                        $like = '%' . $token . '%';
+                        $prefix = $token . '%';
+
+                        $query->where(function ($subQuery) use ($like, $prefix) {
+                            $subQuery
+                                ->where('products.name_ru', 'like', $like)
+                                ->orWhere('products.name_by', 'like', $like)
+                                ->orWhere('products.slug', 'like', $prefix)
+                                ->orWhere('brands.name', 'like', $like)
+                                ->orWhereExists(function ($variantQuery) use ($like, $prefix) {
+                                    $variantQuery
+                                        ->selectRaw('1')
+                                        ->from('product_variants')
+                                        ->whereColumn('product_variants.product_id', 'products.id')
+                                        ->where('product_variants.is_active', true)
+                                        ->where(function ($skuQuery) use ($like, $prefix) {
+                                            $skuQuery
+                                                ->where('product_variants.sku', 'like', $prefix)
+                                                ->orWhere('product_variants.sku', 'like', $like);
+                                        });
+                                });
+                        });
+                    }
+                })
+                ->orderByRaw(
+                    "CASE
+                        WHEN products.slug = ? THEN 100
+                        WHEN products.name_ru = ? OR products.name_by = ? THEN 90
+                        WHEN products.name_ru LIKE ? OR products.name_by LIKE ? THEN 80
+                        WHEN brands.name LIKE ? THEN 70
+                        WHEN EXISTS (
+                            SELECT 1
+                            FROM product_variants
+                            WHERE product_variants.product_id = products.id
+                              AND product_variants.is_active = 1
+                              AND product_variants.sku LIKE ?
+                        ) THEN 60
+                        ELSE 10
+                    END DESC",
+                    [
+                        $searchQuery,
+                        $searchQuery,
+                        $searchQuery,
+                        $searchQuery . '%',
+                        $searchQuery . '%',
+                        $searchQuery . '%',
+                        $searchQuery . '%',
+                    ]
+                )
+                ->orderBy('products.name_ru')
+                ->with([
+                    'brand:id,name,slug',
+                    'category:id,slug,name_ru,name_by',
+                    'variants' => function ($query) {
+                        $query->select('id', 'product_id', 'sku', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active', 'is_tester', 'is_raspiv', 'is_unboxed', 'is_exclusive')
+                            ->where('is_active', true)
+                            ->orderBy('price_usd');
+                    },
+                    'images' => function ($query) {
+                        $query->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
+                            ->orderBy('sort_order');
+                    },
+                ])
+                ->paginate(24)
+                ->withQueryString();
+        }
+
+        return view('products.search', [
+            'products' => $products,
+            'searchQuery' => $searchQuery,
+        ]);
     }
 }

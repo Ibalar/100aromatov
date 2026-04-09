@@ -11,6 +11,7 @@ use App\Models\{
     Setting
 };
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
@@ -59,6 +60,7 @@ class OrderService
 
             $order = Order::create([
                 'user_id' => auth()->id(),
+                'customer_id' => auth('customer')->id(),
                 'status' => 'new',
                 'total_usd' => $totalUsdFinal,
                 'total_byn' => $totalByn,
@@ -92,9 +94,15 @@ class OrderService
                 ]);
             }
 
-            app(TelegramService::class)->send(
+            $sent = app(TelegramService::class)->send(
                 $this->buildTelegramMessage($order)
             );
+
+            if (! $sent) {
+                Log::warning('Order created but Telegram notification failed', [
+                    'order_id' => $order->id,
+                ]);
+            }
 
             return $order;
         });
@@ -102,14 +110,36 @@ class OrderService
 
     protected function buildTelegramMessage(Order $order): string
     {
+        if (! $order->relationLoaded('items')) {
+            $order->load('items');
+        }
+
+        $totalByn = number_format((float) $order->total_byn, 2, ',', ' ');
         $message = "<b>Новый заказ #{$order->id}</b>\n";
-        $message .= "Телефон: {$order->phone}\n";
-        $message .= "Сумма: {$order->total_byn} BYN\n\n";
+        $message .= "Телефон: " . $this->escape($order->phone) . "\n";
+        if ($order->email) {
+            $message .= "Email: " . $this->escape($order->email) . "\n";
+        }
+        if ($order->promo_code) {
+            $message .= "Промокод: " . $this->escape($order->promo_code) . "\n";
+        }
+        $message .= "Сумма: {$totalByn} BYN\n\n";
+        $message .= "<b>Позиции:</b>\n";
 
         foreach ($order->items as $item) {
-            $message .= "{$item->name_snapshot} × {$item->qty}\n";
+            $name = $this->escape($item->name_snapshot);
+            $sku = $this->escape($item->sku_snapshot);
+            $price = number_format((float) $item->price_byn_snapshot, 2, ',', ' ');
+            $line = number_format((float) $item->price_byn_snapshot * $item->qty, 2, ',', ' ');
+            $message .= "• {$name} (SKU: {$sku})\n";
+            $message .= "  {$item->qty} x {$price} BYN = {$line} BYN\n";
         }
 
         return $message;
+    }
+
+    private function escape(?string $value): string
+    {
+        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }

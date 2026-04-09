@@ -52,7 +52,7 @@
                         <div class="br-line type-vertical"></div>
                         <div class="meta_sold">
                             <i class="icon icon-Lightning text-primary"></i>
-                            <span class="text-caption-01 cl-text-2">18 sold in last 32 hours</span>
+                            <span class="text-caption-01 cl-text-2">18В sold in lastВ 32В hours</span>
                         </div>
                     </div>
                     <div class="product-infor-price mb-12">
@@ -77,7 +77,7 @@
                                     fill="white" />
                             </svg>
                         </div>
-                        28 people are viewing this right now
+                        28В people are viewing this right now
                     </div>
                 </div>
                 <div class="br-line"></div>
@@ -126,13 +126,13 @@
                                 <span class="price-add d-none d-sm-block d-md-none d-lg-block">$59.99</span>
                             </a>
                         </div>
-                        <a href="checkout.html" class="tf-btn type-xl btn-primary animate-btn w-100">
+                        <a href="{{ route('checkout.index') }}" class="tf-btn type-xl btn-primary animate-btn w-100">
                             Buy It Now
                         </a>
                     </div>
                 </div>
                 <div class="box-action">
-                    <a href="product-detail.html" class="tf-btn-line-2 style-primary fw-semibold">
+                    <a href="{{ route('categories.index') }}" class="tf-btn-line-2 style-primary fw-semibold">
                         View Full Details
                     </a>
                 </div>
@@ -141,3 +141,4 @@
     </div>
 </div>
 <!-- /Quick View -->
+

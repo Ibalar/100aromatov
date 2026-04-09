@@ -13,19 +13,17 @@
 @endpush
 
 @section('content')
-
     <x-breadcrumbs
         :title="localizedField($category, 'name')"
         :items="[
-            ['title' => __('Категории'), 'url' => route('categories.index')],
+            ['title' => __('Каталог'), 'url' => route('categories.index')],
             ['title' => localizedField($category, 'name')]
         ]"
     />
 
-    <div class="flat-spacing">
+    <section class="flat-spacing">
         <div class="container">
             <div class="row">
-                <!-- Sidebar with filters -->
                 <div class="col-xl-3">
                     <div class="canvas-sidebar sidebar-filter canvas-filter left">
                         <div class="canvas-wrapper">
@@ -35,14 +33,12 @@
                                 <span class="icon-X2 fs-24 close-filter d-xl-none"></span>
                             </div>
                             <div class="canvas-body">
-
                                 <form method="GET" action="{{ route('category.show', $category->slug) }}" class="filter-form">
-
                                     @include('components.price-filter', ['priceRange' => $priceRange, 'minPrice' => $minPrice, 'maxPrice' => $maxPrice])
 
                                     @include('components.attribute-filter', ['attributes' => $filterableAttributes, 'selectedAttributes' => $attributeFilters])
 
-                                    <div class="filter-actions">
+                                    <div class="filter-actions d-xl-none">
                                         <button type="submit" class="tf-btn btn-fill w-100">
                                             <span class="btn-text">{{ __('Применить') }}</span>
                                         </button>
@@ -56,13 +52,13 @@
                     </div>
                 </div>
 
-                <!-- Main Content -->
                 <div class="col-xl-9">
                     <div class="tf-shop-control">
                         <button type="button" id="filterShop" class="tf-btn-filter d-xl-none">
                             <span class="icon icon-filter"></span>
                             <span class="text">{{ __('Показать все фильтры') }}</span>
                         </button>
+
                         <div class="tf-control-sorting">
                             <div class="tf-dropdown-sort" data-bs-toggle="dropdown">
                                 @php
@@ -81,13 +77,14 @@
                                 </div>
                                 <div class="dropdown-menu">
                                     @foreach($sortOptions as $sortValue => $sortLabel)
-                                    <div class="select-item {{ $currentSort === $sortValue ? 'active' : '' }}" data-sort-value="{{ $sortValue }}">
-                                        <span class="text-value-item">{{ $sortLabel }}</span>
-                                    </div>
+                                        <div class="select-item {{ $currentSort === $sortValue ? 'active' : '' }}" data-sort-value="{{ $sortValue }}">
+                                            <span class="text-value-item">{{ $sortLabel }}</span>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
                         </div>
+
                         <ul class="tf-control-layout">
                             <li class="tf-view-layout-switch sw-layout-list list-layout" data-value-layout="list" title="{{ __('Список') }}">
                                 <i class="icon-List"></i>
@@ -103,8 +100,11 @@
                             </li>
                         </ul>
                     </div>
+
                     <div class="wrapper-control-shop gridLayout-wrapper">
                         <div class="meta-filter-shop">
+                            <div id="product-count-grid" class="count-text text-caption-01"></div>
+                            <div id="product-count-list" class="count-text text-caption-01"></div>
                             <div class="br-line type-vertical"></div>
                             <div id="applied-filters"></div>
                             <button id="remove-all" class="remove-all-filters" style="display: none;">
@@ -112,33 +112,33 @@
                                 {{ __('Сбросить все') }}
                             </button>
                         </div>
-                    </div>
 
-                    <!-- Grid View -->
-                    <div class="tf-grid-layout wrapper-shop tf-col-3" id="gridLayout">
-                        @if($products->count() > 0)
+                        <div class="tf-list-layout wrapper-shop" id="listLayout" style="display: none;">
                             @foreach($products as $product)
-                                @include('components.product-card', ['product' => $product])
+                                @include('components.product-card-list', ['product' => $product])
                             @endforeach
-                        @endif
-                    </div>
-
-                    <!-- List View -->
-                    <div class="tf-list-layout wrapper-shop" id="listLayout" style="display: none;">
-                        @if($products->count() > 0)
-                            @foreach($products as $product)
-                                @include('components.product-card', ['product' => $product])
-                            @endforeach
-                        @endif
-                    </div>
-
-                    @if($products->count() > 0)
-                        <div class="pagination-wrapper">
-                            {{ $products->appends(request()->query())->links() }}
+                            @if($products->hasPages())
+                                <div class="wd-full justify-content-center">
+                                    {{ $products->appends(request()->query())->links() }}
+                                </div>
+                            @endif
                         </div>
-                    @else
-                        <div class="empty-products">
-                            <div class="empty-icon">
+
+                        <div class="wrapper-shop tf-grid-layout tf-col-3" id="gridLayout">
+                            @foreach($products as $product)
+                                @include('components.product-card', ['product' => $product])
+                            @endforeach
+                            @if($products->hasPages())
+                                <div class="wd-full justify-content-center">
+                                    {{ $products->appends(request()->query())->links() }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    @if($products->count() === 0)
+                        <div class="empty-products text-center py-5">
+                            <div class="empty-icon mb-3">
                                 <i class="icon icon-MagnifyingGlass"></i>
                             </div>
                             <h4>{{ __('Товары не найдены') }}</h4>
@@ -148,10 +148,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </section>
 @endsection
-
-
-
-

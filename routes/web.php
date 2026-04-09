@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\CustomerAccountController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -23,7 +27,45 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
 // Products
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
-Route::post('/checkout', [CheckoutController::class, 'store']);
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::prefix('/cart')->name('cart.')->group(function () {
+    Route::get('/summary', [CartController::class, 'summary'])->name('summary');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::post('/update', [CartController::class, 'update'])->name('update');
+    Route::post('/remove', [CartController::class, 'remove'])->name('remove');
+    Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+});
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::prefix('/wishlist')->name('wishlist.')->group(function () {
+    Route::get('/summary', [WishlistController::class, 'summary'])->name('summary');
+    Route::post('/toggle', [WishlistController::class, 'toggle'])->name('toggle');
+    Route::post('/clear', [WishlistController::class, 'clear'])->name('clear');
+});
+
+Route::middleware('guest:customer')->group(function () {
+    Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
+    Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login.store');
+    Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
+    Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register.store');
+});
+
+Route::middleware('auth:customer')->group(function () {
+    Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
+
+    Route::prefix('/account')->name('customer.account.')->group(function () {
+        Route::get('/', [CustomerAccountController::class, 'dashboard'])->name('dashboard');
+        Route::get('/orders', [CustomerAccountController::class, 'orders'])->name('orders');
+        Route::get('/profile', [CustomerAccountController::class, 'profile'])->name('profile');
+        Route::post('/profile', [CustomerAccountController::class, 'updateProfile'])->name('profile.update');
+        Route::get('/security', [CustomerAccountController::class, 'security'])->name('security');
+        Route::post('/security', [CustomerAccountController::class, 'updatePassword'])->name('security.update');
+        Route::get('/addresses', [CustomerAccountController::class, 'addresses'])->name('addresses');
+    });
+});

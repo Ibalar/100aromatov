@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Setting;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TelegramService
 {
@@ -18,16 +19,34 @@ class TelegramService
         $this->chatId = $settings->telegram_chat_id;
     }
 
-    public function send(string $message): void
+    public function send(string $message): bool
     {
         if (!$this->token || !$this->chatId) {
-            return;
+            Log::warning('Telegram settings are not configured');
+            return false;
         }
 
-        Http::post("https://api.telegram.org/bot{$this->token}/sendMessage", [
-            'chat_id' => $this->chatId,
-            'text' => $message,
-            'parse_mode' => 'HTML',
-        ]);
+        try {
+            $response = Http::timeout(10)->post("https://api.telegram.org/bot{$this->token}/sendMessage", [
+                'chat_id' => $this->chatId,
+                'text' => $message,
+                'parse_mode' => 'HTML',
+            ]);
+
+            if (! $response->ok()) {
+                Log::error('Telegram send failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+                return false;
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::error('Telegram send exception', [
+                'message' => $e->getMessage(),
+            ]);
+            return false;
+        }
     }
 }

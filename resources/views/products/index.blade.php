@@ -12,7 +12,6 @@
 @endpush
 
 @section('content')
-
     <x-breadcrumbs
         :title="__('Каталог')"
         :items="[
@@ -20,10 +19,9 @@
         ]"
     />
 
-    <div class="flat-spacing">
+    <section class="flat-spacing">
         <div class="container">
             <div class="row">
-                <!-- Sidebar with filters -->
                 <div class="col-xl-3">
                     <div class="canvas-sidebar sidebar-filter canvas-filter left">
                         <div class="canvas-wrapper">
@@ -33,13 +31,11 @@
                                 <span class="icon-X2 fs-24 close-filter d-xl-none"></span>
                             </div>
                             <div class="canvas-body">
-                                <form method="GET" action="{{ route('products.index') }}" class="filter-form">
+                                <form method="GET" action="{{ route('categories.index') }}" class="filter-form">
                                     @include('components.price-filter', ['priceRange' => $priceRange, 'minPrice' => $minPrice, 'maxPrice' => $maxPrice])
 
-                                    <!-- Brand Filter -->
                                     <div class="widget-facet">
-                                        <div class="facet-title" data-bs-target="#filter-brand" role="button"
-                                            data-bs-toggle="collapse" aria-expanded="true" aria-controls="filter-brand">
+                                        <div class="facet-title" data-bs-target="#filter-brand" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="filter-brand">
                                             <h6>{{ __('Бренд') }}</h6>
                                             <span class="icon icon-CaretDown"></span>
                                         </div>
@@ -52,13 +48,13 @@
                                                     </label>
                                                 </li>
                                                 @foreach($brands as $brand)
-                                                <li class="list-item">
-                                                    <input type="radio" name="brand" class="tf-check style-2" id="brand_{{ $brand->id }}" value="{{ $brand->id }}" {{ $brandFilter == $brand->id ? 'checked' : '' }}>
-                                                    <label for="brand_{{ $brand->id }}" class="label">
-                                                        <span class="cate-text">{{ $brand->name }}</span>
-                                                        <span class="count">({{ $brand->products_count }})</span>
-                                                    </label>
-                                                </li>
+                                                    <li class="list-item">
+                                                        <input type="radio" name="brand" class="tf-check style-2" id="brand_{{ $brand->id }}" value="{{ $brand->id }}" {{ $brandFilter == $brand->id ? 'checked' : '' }}>
+                                                        <label for="brand_{{ $brand->id }}" class="label">
+                                                            <span class="cate-text">{{ $brand->name }}</span>
+                                                            <span class="count">({{ $brand->products_count }})</span>
+                                                        </label>
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -71,7 +67,7 @@
                                         <button type="submit" class="tf-btn btn-fill w-100">
                                             <span class="btn-text">{{ __('Применить') }}</span>
                                         </button>
-                                        <a href="{{ route('products.index') }}" class="tf-btn btn-white w-100 mt-2">
+                                        <a href="{{ route('categories.index') }}" class="tf-btn btn-white w-100 mt-2">
                                             <span class="btn-text">{{ __('Сбросить') }}</span>
                                         </a>
                                     </div>
@@ -81,13 +77,13 @@
                     </div>
                 </div>
 
-                <!-- Main Content -->
                 <div class="col-xl-9">
                     <div class="tf-shop-control">
                         <button type="button" id="filterShop" class="tf-btn-filter d-xl-none">
                             <span class="icon icon-filter"></span>
                             <span class="text">{{ __('Показать все фильтры') }}</span>
                         </button>
+
                         <div class="tf-control-sorting">
                             <div class="tf-dropdown-sort" data-bs-toggle="dropdown">
                                 @php
@@ -106,13 +102,14 @@
                                 </div>
                                 <div class="dropdown-menu">
                                     @foreach($sortOptions as $sortValue => $sortLabel)
-                                    <div class="select-item {{ $currentSort === $sortValue ? 'active' : '' }}" data-sort-value="{{ $sortValue }}">
-                                        <span class="text-value-item">{{ $sortLabel }}</span>
-                                    </div>
+                                        <div class="select-item {{ $currentSort === $sortValue ? 'active' : '' }}" data-sort-value="{{ $sortValue }}">
+                                            <span class="text-value-item">{{ $sortLabel }}</span>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
                         </div>
+
                         <ul class="tf-control-layout">
                             <li class="tf-view-layout-switch sw-layout-list list-layout" data-value-layout="list" title="{{ __('Список') }}">
                                 <i class="icon-List"></i>
@@ -128,11 +125,10 @@
                             </li>
                         </ul>
                     </div>
+
                     <div class="wrapper-control-shop gridLayout-wrapper">
                         <div class="meta-filter-shop">
-                            <div id="product-count-grid" class="count-text text-caption-01">
-                                {{ __('Найдено') }}: {{ $products->total() }} {{ trans_choice('товар|товара|товаров', $products->total()) }}
-                            </div>
+                            <div id="product-count-grid" class="count-text text-caption-01"></div>
                             <div id="product-count-list" class="count-text text-caption-01"></div>
                             <div class="br-line type-vertical"></div>
                             <div id="applied-filters"></div>
@@ -141,33 +137,33 @@
                                 {{ __('Сбросить все') }}
                             </button>
                         </div>
-                    </div>
 
-                    <!-- Grid View -->
-                    <div class="tf-grid-layout wrapper-shop tf-col-3" id="gridLayout">
-                        @if($products->count() > 0)
+                        <div class="tf-list-layout wrapper-shop" id="listLayout" style="display: none;">
                             @foreach($products as $product)
-                                @include('components.product-card', ['product' => $product])
+                                @include('components.product-card-list', ['product' => $product])
                             @endforeach
-                        @endif
-                    </div>
-
-                    <!-- List View -->
-                    <div class="tf-list-layout wrapper-shop" id="listLayout" style="display: none;">
-                        @if($products->count() > 0)
-                            @foreach($products as $product)
-                                @include('components.product-card', ['product' => $product])
-                            @endforeach
-                        @endif
-                    </div>
-
-                    @if($products->count() > 0)
-                        <div class="pagination-wrapper">
-                            {{ $products->appends(request()->query())->links() }}
+                            @if($products->hasPages())
+                                <div class="wd-full justify-content-center">
+                                    {{ $products->appends(request()->query())->links() }}
+                                </div>
+                            @endif
                         </div>
-                    @else
-                        <div class="empty-products">
-                            <div class="empty-icon">
+
+                        <div class="wrapper-shop tf-grid-layout tf-col-3" id="gridLayout">
+                            @foreach($products as $product)
+                                @include('components.product-card', ['product' => $product])
+                            @endforeach
+                            @if($products->hasPages())
+                                <div class="wd-full justify-content-center">
+                                    {{ $products->appends(request()->query())->links() }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    @if($products->count() === 0)
+                        <div class="empty-products text-center py-5">
+                            <div class="empty-icon mb-3">
                                 <i class="icon icon-MagnifyingGlass"></i>
                             </div>
                             <h4>{{ __('Товары не найдены') }}</h4>
@@ -177,160 +173,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </section>
 @endsection
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Sort dropdown
-    const sortItems = document.querySelectorAll('.select-item');
-    sortItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const sortValue = this.dataset.sortValue;
-            const url = new URL(window.location.href);
-            url.searchParams.set('sort', sortValue);
-            window.location.href = url.toString();
-        });
-    });
-
-    // Layout switch
-    const layoutSwitches = document.querySelectorAll('.tf-view-layout-switch');
-    const gridLayout = document.getElementById('gridLayout');
-    const listLayout = document.getElementById('listLayout');
-
-    layoutSwitches.forEach(switchBtn => {
-        switchBtn.addEventListener('click', function() {
-            const layoutValue = this.dataset.valueLayout;
-            
-            // Update active state
-            layoutSwitches.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-
-            // Toggle layouts
-            if (layoutValue === 'list') {
-                gridLayout.style.display = 'none';
-                listLayout.style.display = 'grid';
-            } else {
-                listLayout.style.display = 'none';
-                gridLayout.style.display = 'grid';
-                gridLayout.className = 'tf-grid-layout wrapper-shop ' + layoutValue;
-            }
-        });
-    });
-
-    // Mobile filter toggle
-    const filterBtn = document.getElementById('filterShop');
-    const canvasSidebar = document.querySelector('.canvas-sidebar');
-    const closeFilter = document.querySelector('.close-filter');
-
-    if (filterBtn && canvasSidebar) {
-        filterBtn.addEventListener('click', function() {
-            canvasSidebar.classList.add('active');
-        });
-    }
-
-    if (closeFilter && canvasSidebar) {
-        closeFilter.addEventListener('click', function() {
-            canvasSidebar.classList.remove('active');
-        });
-    }
-});
-</script>
-@endpush
-
-@push('styles')
-<style>
-    .filter-form {
-        margin-bottom: 0;
-    }
-    .filter-actions {
-        margin-top: 1.5rem;
-        padding-top: 1rem;
-    }
-    .pagination-wrapper {
-        display: flex;
-        justify-content: center;
-        margin-top: 2rem;
-    }
-    .empty-products {
-        text-align: center;
-        padding: 4rem 2rem;
-    }
-    .empty-icon {
-        font-size: 3rem;
-        color: #ccc;
-        margin-bottom: 1rem;
-    }
-    .empty-products h4 {
-        margin-bottom: 0.5rem;
-        color: #333;
-    }
-    .empty-products p {
-        color: #888;
-    }
-    .wrapper-control-shop {
-        margin-bottom: 1.5rem;
-    }
-    .meta-filter-shop {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-    .tf-control-layout {
-        display: flex;
-        gap: 0.5rem;
-    }
-    .tf-control-layout li {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    .tf-control-layout li:hover,
-    .tf-control-layout li.active {
-        background-color: var(--primary);
-        border-color: var(--primary);
-        color: #fff;
-    }
-    .canvas-sidebar .canvas-header {
-        padding: 1.25rem 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid var(--line);
-    }
-    .canvas-sidebar .canvas-body {
-        padding: 1.5rem;
-        max-height: calc(100vh - 120px);
-        overflow-y: auto;
-    }
-    .canvas-sidebar.active {
-        transform: translateX(0);
-    }
-    @media (max-width: 1199px) {
-        .canvas-sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 320px;
-            height: 100vh;
-            background: #fff;
-            z-index: 9999;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-        }
-        .canvas-sidebar.active {
-            transform: translateX(0);
-        }
-    }
-</style>
-@endpush

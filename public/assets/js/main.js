@@ -580,7 +580,7 @@
     /* Add Wishlist
     -------------------------------------------------------------------------*/
     var addWishList = function () {
-        $(".btn-add-wishlist,.btn-wishlist, .card-product .wishlist").on("click", function (e) {
+        $(".btn-add-wishlist,.btn-wishlist").on("click", function (e) {
             e.preventDefault();
             let $this = $(this);
             let icon = $this.find(".icon");
@@ -784,6 +784,10 @@
     /* Delete Wishlist
     -------------------------------------------------------------------------*/
     var deleteWishList = function () {
+        if ($("#js-wishlist-grid").length) {
+            return;
+        }
+
         function checkEmpty() {
             var $wishlistInner = $(".wrapper-wishlist");
             var $product = $(".wrapper-wishlist .card-product");
@@ -1336,7 +1340,7 @@
     var checkOut = function () {
         $("#checkout-btn").on("click", function () {
             if ($("#checkOutAgree").is(":checked")) {
-                window.location.href = "checkout.html";
+                window.location.href = "/checkout";
             } else {
                 alert("Please agree to the Terms and Conditions before continuing.");
             }
