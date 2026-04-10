@@ -1,8 +1,13 @@
 @php
     $wishlistMode = $wishlistMode ?? false;
+    $defaultVariant = $product->variants->first();
+    $variantsCount = $product->variants->count();
+    $hasSingleVariant = $variantsCount === 1;
+    $isSingleVariantPreorder = $hasSingleVariant && $defaultVariant && (float) $defaultVariant->price_usd <= 0;
+    $pricedVariants = $product->variants->filter(static fn ($variant) => (float) $variant->price_usd > 0);
 @endphp
 
-<div class="card-product has-size">
+<div class="card-product">
     <div class="card-product_wrapper square">
         @if($product->images->first())
             <a href="{{ route('product.show', $product->slug) }}" class="product-img">
@@ -32,8 +37,6 @@
 
         @php
             $hasDiscount = false;
-            $defaultVariant = $product->variants->first();
-
             $minRegularPrice = $product->variants->min('price_usd');
             $maxRegularPrice = $product->variants->max('price_usd');
 
@@ -67,26 +70,30 @@
         @endif
 
         <div class="product-action_bot">
-            <button type="button" class="tf-btn btn-white small w-100 js-add-to-cart" data-variant-id="{{ $defaultVariant?->id }}" data-qty="1">
-                {{ __('Отложить') }}
-            </button>
+            @if($isSingleVariantPreorder)
+                <button
+                    type="button"
+                    class="tf-btn btn-white small w-100 js-open-availability-modal"
+                    data-bs-toggle="modal"
+                    data-bs-target="#productAvailabilityModal"
+                    data-product-id="{{ $product->id }}"
+                    data-product-name="{{ localizedField($product, 'name') }}"
+                    data-variant-id="{{ $defaultVariant->id }}"
+                    data-variant-label="{{ $defaultVariant->volume_ml ? $defaultVariant->volume_ml . ' ml' : '' }}"
+                >
+                    {{ __('Уточнить наличие') }}
+                </button>
+            @elseif($hasSingleVariant && $defaultVariant)
+                <button type="button" class="tf-btn btn-white small w-100 js-add-to-cart" data-variant-id="{{ $defaultVariant->id }}" data-qty="1">
+                    {{ __('Отложить') }}
+                </button>
+            @else
+                <a href="{{ route('product.show', $product->slug) }}" class="tf-btn btn-white small w-100">
+                    {{ __('Забронировать') }}
+                </a>
+            @endif
         </div>
 
-        @php
-            $volumes = $product->variants->pluck('volume_ml')->filter()->unique();
-        @endphp
-
-        @if($volumes->count())
-            <div class="variant-box">
-                <ul class="product-size_list">
-                    @foreach($volumes as $volume)
-                        <li class="size-item text-caption-01">
-                            {{ $volume }} ml
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
     </div>
 
     <div class="card-product_info">
@@ -95,7 +102,11 @@
         </a>
 
         <div class="price-wrap">
-            @if($minFinalPrice == $maxFinalPrice)
+            @if($hasSingleVariant && $isSingleVariantPreorder)
+                <span class="price-new text-primary fw-semibold">{{ __('Под заказ') }}</span>
+            @elseif($pricedVariants->isEmpty())
+                <span class="price-new text-primary fw-semibold">{{ __('Под заказ') }}</span>
+            @elseif($minFinalPrice == $maxFinalPrice)
                 <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minFinalPrice) }}</span>
 
                 @if($hasDiscount)
@@ -106,22 +117,5 @@
             @endif
         </div>
 
-        <div class="product-variants">
-            @foreach($product->variants as $variant)
-                <div class="variant-info">
-                    <span class="volume">{{ $variant->volume_ml }} ml</span>
-                    @if($variant->is_tester) <span class="badge-tester">{{ __('Тестер') }}</span> @endif
-                    @if($variant->is_raspiv) <span class="badge-raspiv">{{ __('Распив') }}</span> @endif
-                    @if($variant->is_unboxed) <span class="badge-unboxed">{{ __('Уценка') }}</span> @endif
-                    @if($variant->is_exclusive) <span class="badge-exclusive">{{ __('Отливант') }}</span> @endif
-                    <span class="price">
-                        @if($variant->sale_price_usd)
-                            <span class="price-sale">{{ formatPriceByn($variant->sale_price_usd) }}</span>
-                        @endif
-                        <span class="price-current">{{ formatPriceByn($variant->final_price_usd) }}</span>
-                    </span>
-                </div>
-            @endforeach
-        </div>
     </div>
 </div>

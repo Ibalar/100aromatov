@@ -21,6 +21,8 @@ use App\MoonShine\Resources\FilterPage\FilterPageResource;
 use App\MoonShine\Resources\Wishlist\WishlistResource;
 use App\MoonShine\Resources\Setting\SettingResource;
 use App\MoonShine\Resources\Order\OrderResource;
+use App\MoonShine\Resources\Page\PageResource;
+use App\MoonShine\Resources\Review\ReviewResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -44,6 +46,8 @@ class MoonShineServiceProvider extends ServiceProvider
                 WishlistResource::class,
                 SettingResource::class,
                 OrderResource::class,
+                PageResource::class,
+                ReviewResource::class,
             ])
             ->pages([
                 ...$core->getConfig()->getPages(),

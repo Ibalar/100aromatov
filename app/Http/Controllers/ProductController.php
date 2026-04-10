@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -95,16 +97,17 @@ class ProductController extends Controller
                 'variants' => function ($q) {
                     $q->select('id', 'product_id', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active')
                         ->where('is_active', true)
-                        ->orderBy('price_usd')
-                        ->limit(1); // Only min price variant
+                        ->orderBy('price_usd');
                 },
                 'images' => function ($q) {
                     $q->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
                         ->orderBy('sort_order')
-                        ->limit(1); // Only first image
+                        ->limit(2);
                 }
             ])
-            ->withCount('reviews') // Use aggregate instead of loading all reviews
+            ->withCount([
+                'reviews' => fn ($query) => $query->where('is_approved', true),
+            ])
             ->orderBy('products.name_ru')
             ->simplePaginate(24);
 
@@ -166,17 +169,44 @@ class ProductController extends Controller
                 'attributeValues.attribute',
                 'reviews' => function ($q) {
                     $q->where('is_approved', true)
-                        ->with('user:id,name')
+                        ->with([
+                            'user:id,name',
+                            'customer:id,first_name,last_name,email',
+                        ])
                         ->latest();
                 }
             ])
-            ->withCount('reviews')
+            ->withCount([
+                'reviews' => fn ($query) => $query->where('is_approved', true),
+            ])
             ->firstOrFail();
+
+        $customerReview = null;
+
+        if (auth('customer')->check()) {
+            $customerReview = Review::query()
+                ->where('product_id', $product->id)
+                ->where('customer_id', auth('customer')->id())
+                ->latest()
+                ->first();
+        }
 
         // Increment views
         $product->increment('views');
 
-        return view('products.show', compact('product'));
+        return view('products.show', compact('product', 'customerReview'));
+    }
+
+    public function redirectByOldUrl(Request $request, ?string $path = null): RedirectResponse
+    {
+        $normalizedPath = '/' . ltrim((string) $path, '/');
+
+        $product = Product::query()
+            ->active()
+            ->where('old_url', $normalizedPath)
+            ->firstOrFail();
+
+        return redirect()->route('product.show', $product->slug, 301);
     }
 
     public function quickView(Product $product)
@@ -227,8 +257,9 @@ class ProductController extends Controller
                 'brand_name' => $product->brand?->name,
                 'reviews_count' => $product->reviews_count,
                 'description' => $description !== '' ? $description : __('Описание отсутствует'),
-                'country' => $product->country,
-                'concentration' => $product->concentration,
+                'country' => localizedField($product, 'country'),
+                'concentration' => localizedField($product, 'concentration'),
+                'gender' => localizedField($product, 'gender'),
                 'images' => $product->images->map(function ($image) use ($product) {
                     return [
                         'src' => asset('storage/' . $image->path),
@@ -241,9 +272,10 @@ class ProductController extends Controller
                         'sku' => $variant->sku ?: ('PRD-' . $variant->id),
                         'volume_ml' => $variant->volume_ml,
                         'label' => trim(($variant->volume_ml ? $variant->volume_ml . ' ml' : '') ?: __('Вариант')),
-                        'price_formatted' => formatPriceByn($variant->final_price_usd),
-                        'original_price_formatted' => $variant->sale_price_usd ? formatPriceByn($variant->price_usd) : null,
+                        'price_formatted' => (float) $variant->price_usd <= 0 ? __('Под заказ') : formatPriceByn($variant->final_price_usd),
+                        'original_price_formatted' => ((float) $variant->price_usd <= 0 || ! $variant->sale_price_usd) ? null : formatPriceByn($variant->price_usd),
                         'price_value' => (float) $variant->final_price_usd,
+                        'is_preorder' => (float) $variant->price_usd <= 0,
                         'badges' => array_values(array_filter([
                             $variant->is_tester ? __('Тестер') : null,
                             $variant->is_raspiv ? __('Распив') : null,
@@ -254,8 +286,8 @@ class ProductController extends Controller
                     ];
                 })->values(),
                 'default_variant_id' => $defaultVariant?->id,
-                'default_price_formatted' => $defaultVariant ? formatPriceByn($defaultVariant->final_price_usd) : __('Цена по запросу'),
-                'default_original_price_formatted' => $defaultVariant && $defaultVariant->sale_price_usd ? formatPriceByn($defaultVariant->price_usd) : null,
+                'default_price_formatted' => $defaultVariant ? ((float) $defaultVariant->price_usd <= 0 ? __('Под заказ') : formatPriceByn($defaultVariant->final_price_usd)) : __('Цена по запросу'),
+                'default_original_price_formatted' => $defaultVariant && $defaultVariant->sale_price_usd && (float) $defaultVariant->price_usd > 0 ? formatPriceByn($defaultVariant->price_usd) : null,
                 'default_sku' => $defaultVariant?->sku ?: ($defaultVariant ? 'PRD-' . $defaultVariant->id : null),
             ],
         ]);

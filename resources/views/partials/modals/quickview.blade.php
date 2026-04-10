@@ -62,8 +62,8 @@
                     </div>
 
                     <div class="tf-product-total-quantity">
-                        <p>{{ __('Количество') }}:</p>
-                        <div class="group-action">
+                        <p data-quickview-qty-label>{{ __('Количество') }}:</p>
+                        <div class="group-action" data-quickview-order-actions>
                             <div class="wg-quantity">
                                 <button type="button" class="btn-quantity js-quickview-qty-minus">
                                     <i class="icon icon-minus"></i>
@@ -89,6 +89,16 @@
                             data-qty="1"
                         >
                             {{ __('Быстрая бронь') }}
+                        </button>
+                        <button
+                            type="button"
+                            class="tf-btn type-xl btn-primary animate-btn w-100 js-open-availability-modal"
+                            data-bs-toggle="modal"
+                            data-bs-target="#productAvailabilityModal"
+                            data-quickview-availability-button
+                            style="display:none;"
+                        >
+                            {{ __('Уточнить наличие') }}
                         </button>
                     </div>
                 </div>

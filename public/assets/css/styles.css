@@ -5858,6 +5858,9 @@ header.header-sticky.tf-header-landing {
     width: 80px;
     height: 120px;
   }
+  .wg-quantity {
+    width: 100%;
+  }
 }
 .tf-product-quick_view .variant-size .variant-picker-label {
   justify-content: space-between;
@@ -9938,8 +9941,8 @@ button.animate-btn::after,
   width: 120px !important;
 }
 .tf-dropdown-select.type-languages > .dropdown-menu {
-  width: 110px !important;
-  margin-left: -25px !important;
+  width: 150px !important;
+  margin-left: -15px !important;
 }
 .tf-dropdown-select.color-white > .dropdown-toggle {
   color: var(--white);
@@ -10244,7 +10247,6 @@ button.animate-btn::after,
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
-  text-transform: capitalize;
 }
 .tf-variant-dropdown .dropdown-menu {
   margin: 0px !important;
@@ -10273,7 +10275,6 @@ button.animate-btn::after,
   position: relative;
   font-size: 14px;
   font-weight: 500;
-  text-transform: capitalize;
   padding: 0 20px;
   line-height: 30px;
   width: 100%;

@@ -4,3 +4,4 @@
 @include('partials.modals.shopping-сart')
 @include('partials.modals.sing')
 @include('partials.modals.quickview')
+@include('partials.modals.product-availability')

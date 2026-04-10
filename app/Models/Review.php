@@ -9,6 +9,7 @@ class Review extends Model
 {
     protected $fillable = [
         'user_id',
+        'customer_id',
         'product_id',
         'rating',
         'text',
@@ -31,8 +32,26 @@ class Review extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function getAuthorNameAttribute(): string
+    {
+        if ($this->customer) {
+            return $this->customer->full_name;
+        }
+
+        if ($this->user) {
+            return $this->user->name;
+        }
+
+        return 'Пользователь';
     }
 }

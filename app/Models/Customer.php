@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Review;
 
 class Customer extends Authenticatable
 {
@@ -49,10 +50,14 @@ class Customer extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function getFullNameAttribute(): string
     {
         $name = trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
         return $name !== '' ? $name : $this->email;
     }
 }
-

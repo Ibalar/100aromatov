@@ -18,6 +18,15 @@ class CartService
     public function add(int $variantId, int $qty = 1): void
     {
         $qty = max(1, $qty);
+        $variant = ProductVariant::query()
+            ->whereKey($variantId)
+            ->where('is_active', true)
+            ->first();
+
+        if (! $variant || (float) $variant->price_usd <= 0) {
+            return;
+        }
+
         $cart = $this->getRaw();
         $cart[$variantId] = ($cart[$variantId] ?? 0) + $qty;
         session([self::SESSION_KEY => $cart]);
@@ -26,8 +35,12 @@ class CartService
     public function setQty(int $variantId, int $qty): void
     {
         $cart = $this->getRaw();
+        $variant = ProductVariant::query()
+            ->whereKey($variantId)
+            ->where('is_active', true)
+            ->first();
 
-        if ($qty <= 0) {
+        if ($qty <= 0 || ! $variant || (float) $variant->price_usd <= 0) {
             unset($cart[$variantId]);
         } else {
             $cart[$variantId] = $qty;
@@ -77,6 +90,10 @@ class CartService
         foreach ($raw as $variantId => $qty) {
             $variant = $variants->get((int) $variantId);
             if (! $variant || ! $variant->product) {
+                continue;
+            }
+
+            if ((float) $variant->price_usd <= 0) {
                 continue;
             }
 
@@ -131,4 +148,3 @@ class CartService
             ->all();
     }
 }
-

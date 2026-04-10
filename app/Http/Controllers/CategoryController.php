@@ -100,10 +100,12 @@ class CategoryController extends Controller
                 'images' => function ($q) {
                     $q->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
                         ->orderBy('sort_order')
-                        ->limit(1);
+                        ->limit(2);
                 }
             ])
-            ->withCount('reviews')
+            ->withCount([
+                'reviews' => fn ($query) => $query->where('is_approved', true),
+            ])
             ->orderBy('products.name_ru')
             ->paginate(24);
 
@@ -235,10 +237,12 @@ class CategoryController extends Controller
                 'images' => function ($q) {
                     $q->select('id','product_id','path','alt_ru','alt_by','sort_order')
                         ->orderBy('sort_order')
-                        ->limit(1);
+                        ->limit(2);
                 }
             ])
-            ->withCount('reviews')
+            ->withCount([
+                'reviews' => fn ($query) => $query->where('is_approved', true),
+            ])
             ->orderBy('products.name_ru')
             ->paginate(24);
 

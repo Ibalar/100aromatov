@@ -15,13 +15,17 @@ class Product extends Model
         'min_price',
         'max_price',
         'slug',
+        'old_url',
         'name_ru',
         'name_by',
         'description_ru',
         'description_by',
         'country',
+        'country_by',
         'gender',
+        'gender_by',
         'concentration',
+        'concentration_by',
         'is_active',
         'is_featured',
         'views',
@@ -71,6 +75,11 @@ class Product extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function approvedReviews(): HasMany
+    {
+        return $this->reviews()->where('is_approved', true);
     }
 
     /* ================= SCOPES ================= */

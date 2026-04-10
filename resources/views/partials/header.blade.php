@@ -164,6 +164,16 @@
                                 @endforeach
                             </div>
                         </li>
+
+                        @foreach($menuPages ?? [] as $menuPage)
+                            <li class="menu-item position-relative">
+                                <a href="{{ route('pages.show', $menuPage->slug) }}" class="item-link">
+                                    <span class="text cus-text">
+                                        {{ localizedField($menuPage, 'name') }}
+                                    </span>
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </nav>
             </div>

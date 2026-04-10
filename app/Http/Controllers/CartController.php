@@ -51,6 +51,13 @@ class CartController extends Controller
             ], 422);
         }
 
+        if ((float) $variant->price_usd <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => __('Этот товар доступен только под заказ. Уточните наличие через форму обратной связи.'),
+            ], 422);
+        }
+
         $cartService->add((int) $data['variant_id'], (int) ($data['qty'] ?? 1));
 
         return response()->json([

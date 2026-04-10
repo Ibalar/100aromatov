@@ -56,7 +56,9 @@ class BrandController extends Controller
         $query = $brand->products()
             ->active()
             ->with('brand', 'variants', 'images')
-            ->withCount('reviews');
+            ->withCount([
+                'reviews' => fn ($query) => $query->where('is_approved', true),
+            ]);
 
         $sort = $request->get('sort', 'best-selling');
 

@@ -91,6 +91,12 @@
         if (checkoutTotal) checkoutTotal.textContent = data.total_byn_formatted;
     }
 
+    function getSelectedVariantId() {
+        return document.getElementById("selected-variant-id")?.value ||
+            document.querySelector('input[name="variant_id"]:checked')?.value ||
+            "";
+    }
+
     async function refreshCart() {
         const data = await request("/cart/summary", "GET");
         updateCounts(data.count);
@@ -156,8 +162,7 @@
         const addBtn = event.target.closest(".js-add-to-cart");
         if (addBtn) {
             event.preventDefault();
-            const variantId = addBtn.dataset.variantId ||
-                document.querySelector('input[name="variant_id"]:checked')?.value;
+            const variantId = addBtn.dataset.variantId || getSelectedVariantId();
             const qtyInput = document.querySelector(".js-product-qty");
             const qty = addBtn.dataset.qty || (qtyInput ? qtyInput.value : 1);
             await addToCart(variantId, qty);
@@ -167,8 +172,7 @@
         const buyNowBtn = event.target.closest(".js-buy-now");
         if (buyNowBtn) {
             event.preventDefault();
-            const variantId = buyNowBtn.dataset.variantId ||
-                document.querySelector('input[name="variant_id"]:checked')?.value;
+            const variantId = buyNowBtn.dataset.variantId || getSelectedVariantId();
             const qtyInput = document.querySelector(".js-product-qty");
             const qty = buyNowBtn.dataset.qty || (qtyInput ? qtyInput.value : 1);
             await addToCart(variantId, qty);

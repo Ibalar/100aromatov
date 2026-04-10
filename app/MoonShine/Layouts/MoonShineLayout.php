@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\MoonShine\Layouts;
 
 use App\MoonShine\Resources\Order\OrderResource;
+use App\MoonShine\Resources\Page\PageResource;
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\ColorManager\Palettes\PurplePalette;
 use MoonShine\ColorManager\ColorManager;
@@ -52,6 +53,7 @@ final class MoonShineLayout extends AppLayout
             MenuItem::make(FilterPageResource::class, 'Страницы для фильтра'),
             MenuItem::make(WishlistResource::class, 'Избранное'),
             MenuItem::make(OrderResource::class, 'Заказы'),
+            MenuItem::make(PageResource::class, 'Статические страницы'),
             ...parent::menu(),
             MenuItem::make(SettingResource::class, 'Settings'),
         ];

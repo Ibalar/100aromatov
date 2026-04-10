@@ -7,7 +7,10 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerAccountController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProductAvailabilityInquiryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +35,11 @@ Route::get('/product/{product}/quick-view', [ProductController::class, 'quickVie
     ->whereNumber('product')
     ->name('product.quick-view');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
+Route::post('/product/{slug}/reviews', [ReviewController::class, 'store'])
+    ->middleware('auth:customer')
+    ->name('product.reviews.store');
+Route::post('/product-availability-inquiry', [ProductAvailabilityInquiryController::class, 'store'])
+    ->name('product.availability-inquiry.store');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::prefix('/cart')->name('cart.')->group(function () {
@@ -72,3 +80,8 @@ Route::middleware('auth:customer')->group(function () {
         Route::get('/addresses', [CustomerAccountController::class, 'addresses'])->name('addresses');
     });
 });
+
+Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
+Route::get('/{path}', [ProductController::class, 'redirectByOldUrl'])
+    ->where('path', '.*')
+    ->name('product.redirect.old');

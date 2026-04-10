@@ -2024,6 +2024,10 @@
         min-width: 180px;
     }
 
+    @include res(xl) {
+        width: 100%!important;
+    }
+
     @include res(md) {
         min-width: unset;
     }

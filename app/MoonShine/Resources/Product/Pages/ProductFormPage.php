@@ -77,6 +77,8 @@ class ProductFormPage extends FormPage
                         ->unwrap()
                         ->justifyAlign('between')
                         ->itemsAlign('start'),
+                    Text::make('Старый URL', 'old_url')
+                        ->hint('Например: /old-product-slug или /catalog/old-product-slug'),
                     Switcher::make('Активен', 'is_active'),
                     Switcher::make('В избранных (Featured)', 'is_featured'),
 
@@ -91,9 +93,27 @@ class ProductFormPage extends FormPage
                     TinyMce::make('Описание BY', 'description_by'),
                 ]),
                 Tab::make('Характеристики', [
-                    Text::make('Страна', 'country'),
-                    Text::make('Концентрация', 'concentration'),
-                    Text::make('Пол', 'gender'),
+                    Flex::make([
+                        Text::make('Страна RU', 'country'),
+                        Text::make('Краіна BY', 'country_by'),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
+                    Flex::make([
+                        Text::make('Концентрация RU', 'concentration'),
+                        Text::make('Канцэнтрацыя BY', 'concentration_by'),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
+                    Flex::make([
+                        Text::make('Пол RU', 'gender'),
+                        Text::make('Пол BY', 'gender_by'),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
                 ]),
             ])->vertical(),
 

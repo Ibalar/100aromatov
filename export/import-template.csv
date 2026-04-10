@@ -1,0 +1,2 @@
+ID,name_ru,name_by,Slug,gender,gender_by,concentration,concentration_by,country,country_by,images,description_ru,description_by,sku,volume_ml,price_usd,is_active,is_featured,brand,category,old_url
+,Название товара RU,Назва тавару BY,slug-tovara,унисекс,унісекс,парфюмерная вода,парфумерная вада,Франция,Францыя,products/demo/image-1.jpg|products/demo/image-2.jpg,"<p>Описание товара на русском</p>","<p>Апісанне тавару па-беларуску</p>",SKU-001,100,149.90,1,0,43,12,/old-product-url.html

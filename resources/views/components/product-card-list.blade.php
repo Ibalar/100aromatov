@@ -1,10 +1,14 @@
 @php
     $defaultVariant = $product->variants->first();
+    $variantsCount = $product->variants->count();
+    $hasSingleVariant = $variantsCount === 1;
+    $isSingleVariantPreorder = $hasSingleVariant && $defaultVariant && (float) $defaultVariant->price_usd <= 0;
     $description = \Illuminate\Support\Str::limit(strip_tags((string) localizedField($product, 'description')), 180);
 
     $minRegularPrice = $product->variants->min('price_usd');
     $minFinalPrice = $product->variants->min('final_price_usd');
     $hasDiscount = $minFinalPrice < $minRegularPrice;
+    $pricedVariants = $product->variants->filter(static fn ($variant) => (float) $variant->price_usd > 0);
 @endphp
 
 <div class="card-product product-style_list">
@@ -36,7 +40,9 @@
         </a>
 
         <div class="price-wrap">
-            @if($minRegularPrice !== null && $minFinalPrice !== null)
+            @if($hasSingleVariant && $isSingleVariantPreorder)
+                <span class="price-new text-primary fw-semibold">{{ __('Под заказ') }}</span>
+            @elseif($pricedVariants->isNotEmpty() && $minRegularPrice !== null && $minFinalPrice !== null)
                 <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minFinalPrice) }}</span>
                 @if($hasDiscount)
                     <span class="price-old text-caption-01 cl-text-3">{{ formatPriceByn($minRegularPrice) }}</span>
@@ -60,10 +66,30 @@
 
         <ul class="product-action_list">
             <li>
-                <a href="#;" class="hover-tooltip box-icon js-add-to-cart" data-variant-id="{{ $defaultVariant?->id }}" data-qty="1">
-                    <span class="icon icon-Handbag"></span>
-                    <span class="tooltip">{{ __('Отложить') }}</span>
-                </a>
+                @if($isSingleVariantPreorder)
+                    <a
+                        href="#productAvailabilityModal"
+                        data-bs-toggle="modal"
+                        class="hover-tooltip box-icon js-open-availability-modal"
+                        data-product-id="{{ $product->id }}"
+                        data-product-name="{{ localizedField($product, 'name') }}"
+                        data-variant-id="{{ $defaultVariant->id }}"
+                        data-variant-label="{{ $defaultVariant->volume_ml ? $defaultVariant->volume_ml . ' ml' : '' }}"
+                    >
+                        <span class="icon icon-Handbag"></span>
+                        <span class="tooltip">{{ __('Уточнить наличие') }}</span>
+                    </a>
+                @elseif($hasSingleVariant && $defaultVariant)
+                    <a href="#;" class="hover-tooltip box-icon js-add-to-cart" data-variant-id="{{ $defaultVariant->id }}" data-qty="1">
+                        <span class="icon icon-Handbag"></span>
+                        <span class="tooltip">{{ __('Отложить') }}</span>
+                    </a>
+                @else
+                    <a href="{{ route('product.show', $product->slug) }}" class="hover-tooltip box-icon">
+                        <span class="icon icon-Handbag"></span>
+                        <span class="tooltip">{{ __('Забронировать') }}</span>
+                    </a>
+                @endif
             </li>
             <li class="wishlist">
                 <a href="#;" class="hover-tooltip box-icon js-wishlist-toggle {{ in_array($product->id, $wishlistIds ?? [], true) ? 'addwishlist' : '' }}" data-product-id="{{ $product->id }}">

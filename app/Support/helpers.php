@@ -15,6 +15,12 @@ if (! function_exists('localizedField')) {
             return $value;
         }
 
+        $baseValue = $model->getAttribute($field);
+
+        if (! blank($baseValue)) {
+            return $baseValue;
+        }
+
         $fallbackLocale = $locale === 'by' ? 'ru' : 'by';
         $fallbackField = sprintf('%s_%s', $field, $fallbackLocale);
         $fallbackValue = $model->getAttribute($fallbackField);
@@ -23,7 +29,7 @@ if (! function_exists('localizedField')) {
             return $fallbackValue;
         }
 
-        return $model->getAttribute($field);
+        return $baseValue;
     }
 }
 

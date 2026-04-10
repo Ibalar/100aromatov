@@ -19,6 +19,9 @@
         addToCart: '.js-quickview-add-to-cart',
         buyNow: '.js-quickview-buy-now',
         qtyInput: '.js-quickview-qty-input',
+        qtyLabel: '[data-quickview-qty-label]',
+        orderActions: '[data-quickview-order-actions]',
+        availabilityButton: '[data-quickview-availability-button]',
         detailsLink: '[data-quickview-details-link]',
         buttonPrice: '[data-quickview-button-price]',
     };
@@ -28,7 +31,6 @@
     }
 
     let currentProduct = null;
-    let activeVariantId = null;
 
     function $(selector) {
         return selectors.offcanvas.querySelector(selector);
@@ -70,6 +72,10 @@
         setText(selectors.buttonPrice, "");
         setVisible(selectors.originalPrice, false);
         setVisible(selectors.originalSeparator, false);
+        setVisible(selectors.availabilityButton, false);
+        setVisible(selectors.qtyLabel, true);
+        setVisible(selectors.orderActions, true);
+        setVisible(selectors.buyNow, true);
 
         const images = $(selectors.images);
         if (images) {
@@ -106,6 +112,9 @@
         if (product.concentration) {
             meta.push('<strong>Концентрация:</strong> ' + escapeHtml(product.concentration));
         }
+        if (product.gender) {
+            meta.push('<strong>Пол:</strong> ' + escapeHtml(product.gender));
+        }
         const element = $(selectors.meta);
         if (element) {
             element.innerHTML = meta.join(" | ");
@@ -118,19 +127,24 @@
         const variant = currentProduct.variants.find((item) => String(item.id) === String(variantId));
         if (!variant) return;
 
-        activeVariantId = variant.id;
+        const isPreorder = Boolean(variant.is_preorder);
 
         setText(selectors.variantLabel, variant.label);
         setText(selectors.sku, variant.sku || "-");
         setText(selectors.price, variant.price_formatted);
-        setText(selectors.buttonPrice, variant.price_formatted);
+        setText(selectors.buttonPrice, isPreorder ? "" : variant.price_formatted);
 
         const originalPrice = $(selectors.originalPrice);
         if (originalPrice) {
             originalPrice.textContent = variant.original_price_formatted || "";
         }
+
         setVisible(selectors.originalPrice, Boolean(variant.original_price_formatted));
         setVisible(selectors.originalSeparator, Boolean(variant.original_price_formatted));
+        setVisible(selectors.qtyLabel, !isPreorder);
+        setVisible(selectors.orderActions, !isPreorder);
+        setVisible(selectors.buyNow, !isPreorder);
+        setVisible(selectors.availabilityButton, isPreorder);
 
         selectors.offcanvas.querySelectorAll(".quickview-variant-btn").forEach((button) => {
             button.classList.toggle("active", String(button.dataset.variantId) === String(variant.id));
@@ -138,8 +152,16 @@
 
         const addToCart = $(selectors.addToCart);
         const buyNow = $(selectors.buyNow);
+        const availabilityButton = $(selectors.availabilityButton);
+
         if (addToCart) addToCart.dataset.variantId = variant.id;
         if (buyNow) buyNow.dataset.variantId = variant.id;
+        if (availabilityButton) {
+            availabilityButton.dataset.productId = currentProduct.id;
+            availabilityButton.dataset.productName = currentProduct.name || "";
+            availabilityButton.dataset.variantId = variant.id;
+            availabilityButton.dataset.variantLabel = variant.label || "";
+        }
     }
 
     function renderVariants(product) {
@@ -148,7 +170,6 @@
 
         if (!product.variants || !product.variants.length) {
             container.innerHTML = "";
-            updateVariantUI(null);
             return;
         }
 
