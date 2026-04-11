@@ -28,6 +28,16 @@
                             <div class="canvas-header">
                                 <h4 class="title d-none d-xl-block">{{ __('Фильтры') }}</h4>
                                 <h5 class="title d-xl-none">{{ __('Фильтры') }}</h5>
+                                <x-applied-filter-tags
+                                    :clear-url="route('categories.index')"
+                                    :brands="$brands"
+                                    :filter-attributes="$filterableAttributes"
+                                    :selected-attributes="$attributeFilters"
+                                    :brand-filter="$brandFilter"
+                                    :min-price="$minPrice"
+                                    :max-price="$maxPrice"
+                                    :price-range="$priceRange"
+                                />
                                 <span class="icon-X2 fs-24 close-filter d-xl-none"></span>
                             </div>
                             <div class="canvas-body">

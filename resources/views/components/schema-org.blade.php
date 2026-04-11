@@ -34,7 +34,9 @@
     @php
         $items = [];
         foreach($products as $index => $product) {
-            $minPriceUsd = $product->variants->min('price_usd') ?? 0;
+            $pricedVariants = $product->variants->filter(static fn ($variant) => (float) $variant->price_usd > 0);
+            $priceSource = $pricedVariants->isNotEmpty() ? $pricedVariants : $product->variants;
+            $minPriceUsd = $priceSource->min('price_usd') ?? 0;
             $minPriceByn = round($minPriceUsd * $usdRate, 2);
             $items[] = [
                 '@type' => 'ListItem',
@@ -100,7 +102,9 @@
     </script>
 @elseif($type === 'product')
     @php
-        $minPriceUsd = $product->variants->min('final_price_usd') ?? 0;
+        $pricedVariants = $product->variants->filter(static fn ($variant) => (float) $variant->price_usd > 0);
+        $priceSource = $pricedVariants->isNotEmpty() ? $pricedVariants : $product->variants;
+        $minPriceUsd = $priceSource->min('final_price_usd') ?? 0;
         $minPriceByn = round($minPriceUsd * $usdRate, 2);
 
         $schema = [

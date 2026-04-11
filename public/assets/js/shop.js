@@ -454,6 +454,18 @@
         const listItems = $("#listLayout .card-product");
         const layoutClassGrid = $gridLayout.attr("class") || "";
         const $btn = $("#loadMoreBtn");
+        const hasServerPagination = $gridLayout.find(".wd-full nav, .wd-full .pagination").length > 0
+            || $listLayout.find(".wd-full nav, .wd-full .pagination").length > 0;
+
+        if (!$btn.length || hasServerPagination) {
+            gridItems.css("display", "flex");
+            listItems.css("display", "flex");
+            $gridLayout.find(".wd-full").css("display", "flex");
+            $listLayout.find(".wd-full").css("display", "flex");
+            $(window).off("scroll.limitLayout");
+            $btn.off("click.limitLayout");
+            return;
+        }
 
         let maxItems = 0;
         let initItem = 0;

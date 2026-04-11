@@ -56,7 +56,10 @@ class Product extends Model
 
     public function variants(): HasMany
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(ProductVariant::class)
+            ->orderByRaw('CASE WHEN price_usd = 0 THEN 1 ELSE 0 END')
+            ->orderBy('price_usd')
+            ->orderBy('id');
     }
 
     public function images(): HasMany
@@ -98,7 +101,11 @@ class Product extends Model
 
     public function getMinPriceUsdAttribute()
     {
-        return $this->variants()->min('price_usd');
+        $pricedVariants = $this->variants()->where('price_usd', '>', 0);
+
+        return $pricedVariants->exists()
+            ? $pricedVariants->min('price_usd')
+            : $this->variants()->min('price_usd');
     }
 
     /* ================= HELPERS ================= */
@@ -108,13 +115,22 @@ class Product extends Model
      */
     public function updatePriceRange(): void
     {
-        $prices = $this->variants()
+        $variants = $this->variants()
             ->where('is_active', true)
-            ->pluck('price_usd');
+            ->get(['price_usd']);
+
+        $positivePrices = $variants
+            ->pluck('price_usd')
+            ->filter(static fn ($price) => (float) $price > 0)
+            ->values();
+
+        $prices = $positivePrices->isNotEmpty()
+            ? $positivePrices
+            : $variants->pluck('price_usd');
 
         $this->update([
-            'min_price' => $prices->min(),
-            'max_price' => $prices->max(),
+            'min_price' => $prices->isEmpty() ? null : $prices->min(),
+            'max_price' => $prices->isEmpty() ? null : $prices->max(),
         ]);
     }
 }

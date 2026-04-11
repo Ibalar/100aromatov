@@ -20,7 +20,11 @@ class ProductVariantObserver
     public function updated(ProductVariant $variant): void
     {
         // Update price range if price or active status changed
-        if ($variant->isDirty('price_usd') || $variant->isDirty('is_active')) {
+        if (
+            $variant->wasChanged('price_usd')
+            || $variant->wasChanged('sale_price_usd')
+            || $variant->wasChanged('is_active')
+        ) {
             $this->updateProductPriceRange($variant);
         }
     }

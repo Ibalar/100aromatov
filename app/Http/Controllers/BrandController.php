@@ -62,6 +62,11 @@ class BrandController extends Controller
 
         $sort = $request->get('sort', 'best-selling');
 
+        $query->orderByRaw('CASE WHEN COALESCE(max_price, 0) <= 0 THEN 1 ELSE 0 END');
+
+        $minPositivePriceSql = "(SELECT MIN(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
+        $maxPositivePriceSql = "(SELECT MAX(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
+
         switch ($sort) {
             case 'a-z':
                 $query->orderBy('name_ru');
@@ -70,10 +75,10 @@ class BrandController extends Controller
                 $query->orderByDesc('name_ru');
                 break;
             case 'price-low-high':
-                $query->orderBy('min_price');
+                $query->orderByRaw("COALESCE($minPositivePriceSql, min_price, 0)");
                 break;
             case 'price-high-low':
-                $query->orderByDesc('max_price');
+                $query->orderByRaw("COALESCE($maxPositivePriceSql, max_price, 0) DESC");
                 break;
             case 'best-selling':
             default:

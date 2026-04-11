@@ -20,39 +20,34 @@
     />
 
     @if($rootCategories->isNotEmpty())
-        <section class="flat-spacing pb-0">
+        <section class="flat-spacing pb-0 pt-0">
             <div class="container">
-                <div dir="ltr" class="swiper tf-swiper" data-preview="6" data-tablet="4" data-mobile-sm="3"
-                    data-mobile="2" data-space-lg="30" data-space-md="15" data-space="10" data-pagination="2"
-                    data-pagination-sm="3" data-pagination-md="4" data-pagination-lg="6">
-                    <div class="swiper-wrapper">
-                        @foreach($rootCategories as $rootCategory)
-                            <div class="swiper-slide">
-                                <a href="{{ route('category.show', $rootCategory->slug) }}" class="category-v01 hover-img">
-                                    <div class="cate-image img-style d-flex align-items-center justify-content-center">
-                                        @if($rootCategory->image)
-                                            <img
-                                                loading="lazy"
-                                                src="{{ asset('storage/' . $rootCategory->image) }}"
-                                                alt="{{ localizedField($rootCategory, 'name') }}"
-                                            >
-                                        @else
-                                            <div class="cate-thumb-placeholder text-center px-3">
-                                                <span class="icon icon-shopping-cart-simple fs-36"></span>
-                                            </div>
-                                        @endif
+                <div class="tf-grid-layout ssm-col-3 xl-col-3 gap-lg-30 gap-15">
+                    @foreach($rootCategories as $rootCategory)
+                        <div class="category-v03 style-2 hover-img4">
+                            <a href="{{ route('category.show', $rootCategory->slug) }}" class="cate-image img-style4 d-block">
+                                @if($rootCategory->image)
+                                    <img
+                                        loading="lazy"
+                                        width="330"
+                                        height="330"
+                                        src="{{ asset('storage/' . $rootCategory->image) }}"
+                                        alt="{{ localizedField($rootCategory, 'name') }}"
+                                    >
+                                @else
+                                    <div class="cate-thumb-placeholder cate-thumb-placeholder-v03">
+                                        <span class="icon icon-shopping-cart-simple fs-36"></span>
                                     </div>
-                                    <h5 class="cate-name text-center link link-underline">
-                                        {{ localizedField($rootCategory, 'name') }}
-                                    </h5>
-                                    <p class="text-caption-01 text-center text-secondary mb-0">
-                                        {{ $rootCategory->products_count }} {{ trans_choice('товар|товара|товаров', $rootCategory->products_count) }}
-                                    </p>
+                                @endif
+                            </a>
+                            <div class="cate-content text-center">
+                                <a href="{{ route('category.show', $rootCategory->slug) }}" class="cate_name h5 fw-medium">
+                                    {{ localizedField($rootCategory, 'name') }}
+                                    <i class="icon icon-ArrowUpRight1"></i>
                                 </a>
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="sw-line-default style-2 tf-sw-pagination"></div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -69,8 +64,20 @@
                                 <h5 class="title d-xl-none">{{ __('Фильтры') }}</h5>
                                 <span class="icon-X2 fs-24 close-filter d-xl-none"></span>
                             </div>
+                            <x-applied-filter-tags
+                                :clear-url="route('categories.index')"
+                                :brands="$brands"
+                                :filter-attributes="$filterableAttributes"
+                                :selected-attributes="$attributeFilters"
+                                :brand-filter="$brandFilter"
+                                :min-price="$minPrice"
+                                :max-price="$maxPrice"
+                                :price-range="$priceRange"
+                            />
                             <div class="canvas-body">
                                 <form method="GET" action="{{ route('categories.index') }}" class="filter-form">
+                                    <input type="hidden" name="sort" value="{{ $sort ?? request('sort', 'best-selling') }}">
+
                                     @if($rootCategories->isNotEmpty())
                                         <div class="widget-facet">
                                             <div class="facet-title" data-bs-target="#filter-category" role="button"
@@ -104,14 +111,13 @@
                                         <div id="filter-brand" class="collapse show">
                                             <ul class="collapse-body filter-group-check">
                                                 <li class="list-item">
-                                                    <input type="radio" name="brand" class="tf-check style-2" id="brand-all" value="" {{ is_null($brandFilter) ? 'checked' : '' }}>
-                                                    <label for="brand-all" class="label">
+                                                    <a href="{{ route('categories.index', request()->except(['brand', 'page'])) }}" class="label link">
                                                         <span class="cate-text">{{ __('Все бренды') }}</span>
-                                                    </label>
+                                                    </a>
                                                 </li>
                                                 @foreach($brands as $brand)
                                                     <li class="list-item">
-                                                        <input type="radio" name="brand" class="tf-check style-2" id="brand_{{ $brand->id }}" value="{{ $brand->id }}" {{ $brandFilter == $brand->id ? 'checked' : '' }}>
+                                                        <input type="checkbox" name="brand[]" class="tf-check style-2" id="brand_{{ $brand->id }}" value="{{ $brand->id }}" {{ in_array((string) $brand->id, array_map('strval', $brandFilter ?? []), true) ? 'checked' : '' }}>
                                                         <label for="brand_{{ $brand->id }}" class="label">
                                                             <span class="cate-text">{{ $brand->name }}</span>
                                                             <span class="count">({{ $brand->products_count }})</span>
@@ -156,7 +162,7 @@
                                         'price-low-high' => __('Цена: по возрастанию'),
                                         'price-high-low' => __('Цена: по убыванию'),
                                     ];
-                                    $currentSort = request('sort', 'best-selling');
+                                    $currentSort = $sort ?? request('sort', 'best-selling');
                                 @endphp
                                 <div class="btn-select">
                                     <span class="text-sort-value">{{ $sortOptions[$currentSort] ?? __('По популярности') }}</span>
@@ -250,5 +256,46 @@
             align-items: center;
             justify-content: center;
         }
+
+        .cate-thumb-placeholder-v03 {
+            aspect-ratio: 330 / 440;
+            border-radius: 0;
+        }
     </style>
+@endpush
+
+@push('scripts')
+    <script>
+        (function () {
+            const form = document.querySelector('.filter-form');
+            if (!form) {
+                return;
+            }
+
+            const submitForm = () => form.requestSubmit ? form.requestSubmit() : form.submit();
+
+            form.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach((input) => {
+                input.addEventListener('change', submitForm);
+            });
+
+            document.querySelectorAll('.tf-dropdown-sort .select-item').forEach((item) => {
+                item.addEventListener('click', function () {
+                    const sortInput = form.querySelector('input[name="sort"]');
+                    if (!sortInput) {
+                        return;
+                    }
+
+                    sortInput.value = this.dataset.sortValue || 'best-selling';
+                    submitForm();
+                });
+            });
+
+            const removeAllButton = document.getElementById('remove-all');
+            if (removeAllButton) {
+                removeAllButton.addEventListener('click', function () {
+                    window.location.href = '{{ route('categories.index') }}';
+                });
+            }
+        })();
+    </script>
 @endpush

@@ -28,7 +28,7 @@ class OrderService
 
                 $variant = ProductVariant::findOrFail($item['variant_id']);
 
-                $priceUsd = $variant->sale_price_usd ?? $variant->price_usd;
+                $priceUsd = (float) $variant->final_price_usd;
 
                 $totalUsd += $priceUsd * $item['qty'];
 

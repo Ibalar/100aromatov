@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\Paginator;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Page;
@@ -29,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::defaultView('vendor.pagination.tf-default');
+        Paginator::defaultSimpleView('vendor.pagination.tf-simple');
+
         // Register observer to keep product min/max prices in sync
         ProductVariant::observe(ProductVariantObserver::class);
 

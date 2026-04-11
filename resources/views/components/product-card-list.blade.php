@@ -5,10 +5,11 @@
     $isSingleVariantPreorder = $hasSingleVariant && $defaultVariant && (float) $defaultVariant->price_usd <= 0;
     $description = \Illuminate\Support\Str::limit(strip_tags((string) localizedField($product, 'description')), 180);
 
-    $minRegularPrice = $product->variants->min('price_usd');
-    $minFinalPrice = $product->variants->min('final_price_usd');
-    $hasDiscount = $minFinalPrice < $minRegularPrice;
     $pricedVariants = $product->variants->filter(static fn ($variant) => (float) $variant->price_usd > 0);
+    $priceSource = $pricedVariants->isNotEmpty() ? $pricedVariants : $product->variants;
+    $minRegularPrice = $priceSource->min('price_usd');
+    $minFinalPrice = $priceSource->min('final_price_usd');
+    $hasDiscount = $minFinalPrice < $minRegularPrice;
 @endphp
 
 <div class="card-product product-style_list">

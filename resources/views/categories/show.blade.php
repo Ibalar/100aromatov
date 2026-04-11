@@ -71,8 +71,22 @@
                                 <h5 class="title d-xl-none">{{ __('Фильтры') }}</h5>
                                 <span class="icon-X2 fs-24 close-filter d-xl-none"></span>
                             </div>
+
+                            <x-applied-filter-tags
+                                :clear-url="route('category.show', $category->slug)"
+                                :brands="$brands"
+                                :filter-attributes="$filterableAttributes"
+                                :selected-attributes="$attributeFilters"
+                                :brand-filter="$brandFilter"
+                                :min-price="$minPrice"
+                                :max-price="$maxPrice"
+                                :price-range="$priceRange"
+                            />
+
                             <div class="canvas-body">
                                 <form method="GET" action="{{ route('category.show', $category->slug) }}" class="filter-form">
+                                    <input type="hidden" name="sort" value="{{ $sort ?? request('sort', 'best-selling') }}">
+
                                     @if($sidebarCategories->isNotEmpty())
                                         <div class="widget-facet">
                                             <div class="facet-title" data-bs-target="#filter-category" role="button"
@@ -98,6 +112,34 @@
                                     @endif
 
                                     @include('components.price-filter', ['priceRange' => $priceRange, 'minPrice' => $minPrice, 'maxPrice' => $maxPrice])
+
+                                    @if($brands->isNotEmpty())
+                                        <div class="widget-facet">
+                                            <div class="facet-title" data-bs-target="#filter-brand" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="filter-brand">
+                                                <h6>{{ __('Бренд') }}</h6>
+                                                <span class="icon icon-CaretDown"></span>
+                                            </div>
+                                            <div id="filter-brand" class="collapse show">
+                                                <ul class="collapse-body filter-group-check">
+                                                    <li class="list-item">
+                                                        <a href="{{ route('category.show', array_merge(['slug' => $category->slug], request()->except(['brand', 'page']))) }}" class="label link">
+                                                            <span class="cate-text">{{ __('Все бренды') }}</span>
+                                                        </a>
+                                                    </li>
+                                                    @foreach($brands as $brand)
+                                                        <li class="list-item">
+                                                            <input type="checkbox" name="brand[]" class="tf-check style-2" id="brand_{{ $brand->id }}" value="{{ $brand->id }}" {{ in_array((string) $brand->id, array_map('strval', $brandFilter ?? []), true) ? 'checked' : '' }}>
+                                                            <label for="brand_{{ $brand->id }}" class="label">
+                                                                <span class="cate-text">{{ $brand->name }}</span>
+                                                                <span class="count">({{ $brand->products_count }})</span>
+                                                            </label>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="br-line"></div>
+                                    @endif
 
                                     @include('components.attribute-filter', ['attributes' => $filterableAttributes, 'selectedAttributes' => $attributeFilters])
 
@@ -132,7 +174,7 @@
                                         'price-low-high' => __('Цена: по возрастанию'),
                                         'price-high-low' => __('Цена: по убыванию'),
                                     ];
-                                    $currentSort = request('sort', 'best-selling');
+                                    $currentSort = $sort ?? request('sort', 'best-selling');
                                 @endphp
                                 <div class="btn-select">
                                     <span class="text-sort-value">{{ $sortOptions[$currentSort] ?? __('По популярности') }}</span>
@@ -227,4 +269,40 @@
             justify-content: center;
         }
     </style>
+@endpush
+
+@push('scripts')
+    <script>
+        (function () {
+            const form = document.querySelector('.filter-form');
+            if (!form) {
+                return;
+            }
+
+            const submitForm = () => form.requestSubmit ? form.requestSubmit() : form.submit();
+
+            form.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach((input) => {
+                input.addEventListener('change', submitForm);
+            });
+
+            document.querySelectorAll('.tf-dropdown-sort .select-item').forEach((item) => {
+                item.addEventListener('click', function () {
+                    const sortInput = form.querySelector('input[name="sort"]');
+                    if (!sortInput) {
+                        return;
+                    }
+
+                    sortInput.value = this.dataset.sortValue || 'best-selling';
+                    submitForm();
+                });
+            });
+
+            const removeAllButton = document.getElementById('remove-all');
+            if (removeAllButton) {
+                removeAllButton.addEventListener('click', function () {
+                    window.location.href = '{{ route('category.show', $category->slug) }}';
+                });
+            }
+        })();
+    </script>
 @endpush

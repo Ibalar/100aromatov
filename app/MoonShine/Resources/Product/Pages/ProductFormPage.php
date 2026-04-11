@@ -4,37 +4,33 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Product\Pages;
 
+use App\Models\Product;
 use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
 use App\MoonShine\Resources\Brand\BrandResource;
 use App\MoonShine\Resources\Category\CategoryResource;
+use App\MoonShine\Resources\Product\ProductResource;
 use App\MoonShine\Resources\ProductImage\ProductImageResource;
 use App\MoonShine\Resources\ProductVariant\ProductVariantResource;
+use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
+use MoonShine\Contracts\UI\ActionButtonContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\FormBuilderContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\Contracts\UI\FormBuilderContract;
+use MoonShine\Support\ListOf;
 use MoonShine\TinyMce\Fields\TinyMce;
 use MoonShine\UI\Components\ActionButton;
-use MoonShine\UI\Components\FormBuilder;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
-use App\MoonShine\Resources\Product\ProductResource;
-use MoonShine\Support\ListOf;
-use MoonShine\UI\Components\Layout\Div;
 use MoonShine\UI\Components\Layout\Flex;
-use MoonShine\UI\Components\Layout\Html;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
-use MoonShine\UI\Fields\Textarea;
 use Throwable;
-
 
 /**
  * @extends FormPage<ProductResource>
@@ -53,12 +49,12 @@ class ProductFormPage extends FormPage
                     Flex::make([
                         Text::make('Название RU', 'name_ru')
                             ->when(
-                                fn() => $this->getResource()->isCreateFormPage(),
-                                fn(Text $field) => $field->reactive(),
-                                fn(Text $field) => $field
+                                fn () => $this->getResource()->isCreateFormPage(),
+                                fn (Text $field) => $field->reactive(),
+                                fn (Text $field) => $field
                             )
                             ->required(),
-                        Text::make('Назва BY', 'name_by')->required(),
+                        Text::make('Название BY', 'name_by')->required(),
                     ])
                         ->unwrap()
                         ->justifyAlign('between')
@@ -68,9 +64,9 @@ class ProductFormPage extends FormPage
                             ->unique()
                             ->locked()
                             ->when(
-                                fn() => $this->getResource()->isCreateFormPage(),
-                                fn(Slug $field) => $field->from('name_ru')->live(),
-                                fn(Slug $field) => $field->readonly()
+                                fn () => $this->getResource()->isCreateFormPage(),
+                                fn (Slug $field) => $field->from('name_ru')->live(),
+                                fn (Slug $field) => $field->readonly()
                             ),
                         BelongsTo::make('Категория', 'category', resource: CategoryResource::class),
                     ])
@@ -136,7 +132,24 @@ class ProductFormPage extends FormPage
 
     protected function buttons(): ListOf
     {
-        return parent::buttons();
+        $buttons = [
+            $this->makeCatalogButton(),
+            $this->makeSaveButton(),
+        ];
+
+        if ($this->isItemExists()) {
+            $buttons[] = $this->modifyDetailButton(
+                $this->getResource()->getDetailButton()
+            );
+            $buttons[] = $this->modifyDeleteButton(
+                $this->getResource()->getDeleteButton(
+                    redirectAfterDelete: $this->getResource()->getRedirectAfterDelete(),
+                    isAsync: false,
+                )
+            );
+        }
+
+        return new ListOf(ActionButtonContract::class, $buttons);
     }
 
     protected function formButtons(): ListOf
@@ -149,14 +162,23 @@ class ProductFormPage extends FormPage
         return [];
     }
 
-    /**
-     * @param  FormBuilder  $component
-     *
-     * @return FormBuilder
-     */
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract
     {
-        return $component;
+        return $component
+            ->customAttributes([
+                'id' => $this->getTopSubmitFormId(),
+            ])
+            ->hideSubmit();
+    }
+
+    protected function modifyDetailButton(ActionButtonContract $button): ActionButtonContract
+    {
+        return $button
+            ->setUrl(
+                static fn (?Product $product): string => route('product.show', $product?->slug)
+            )
+            ->blank()
+            ->disableAsync();
     }
 
     /**
@@ -166,7 +188,7 @@ class ProductFormPage extends FormPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -177,7 +199,7 @@ class ProductFormPage extends FormPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -188,7 +210,28 @@ class ProductFormPage extends FormPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
+    }
+
+    protected function getTopSubmitFormId(): string
+    {
+        return 'product-resource-form';
+    }
+
+    protected function makeSaveButton(): ActionButton
+    {
+        return ActionButton::make(__('moonshine::ui.save'))
+            ->primary()
+            ->customAttributes([
+                'type' => 'submit',
+                'form' => $this->getTopSubmitFormId(),
+            ]);
+    }
+
+    protected function makeCatalogButton(): ActionButton
+    {
+        return ActionButton::make('Назад', $this->getResource()->getIndexPageUrl())
+            ->secondary();
     }
 }

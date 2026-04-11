@@ -36,6 +36,8 @@ class ProductResource extends ModelResource implements HasImportExportContract
 
     protected string $model = Product::class;
 
+    protected bool $saveQueryState = true;
+
     protected string $title = 'Товары';
 
     protected string $column = 'name_ru';

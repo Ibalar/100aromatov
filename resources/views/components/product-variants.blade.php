@@ -3,6 +3,16 @@
 @php
     $activeVariants = $variants->where('is_active', true)->values();
     $selectedVariant = $activeVariants->first();
+    $selectedVariantBadges = $selectedVariant
+        ? array_values(array_filter([
+            $selectedVariant->is_tester ? __('Тестер') : null,
+            $selectedVariant->is_raspiv ? __('Распив') : null,
+            $selectedVariant->is_unboxed ? __('Без коробки') : null,
+            $selectedVariant->is_gift_wrapped ? __('Подарочная упаковка') : null,
+            $selectedVariant->is_exclusive ? __('Отливант') : null,
+            $selectedVariant->is_deodorant ? __('Дезодорант') : null,
+        ]))
+        : [];
 @endphp
 
 @if($activeVariants->isNotEmpty())
@@ -34,6 +44,15 @@
                 <span class="text-sort-value value-currentSize" id="selected-variant-dropdown-label">
                     {{ $selectedVariant?->volume_ml ? $selectedVariant->volume_ml . ' ml' : __('Вариант') }}
                 </span>
+                @if($selectedVariantBadges !== [])
+                    <span class="variant-select-badges" id="selected-variant-badges">
+                        @foreach($selectedVariantBadges as $badge)
+                            <span class="variant-option-badge">{{ $badge }}</span>
+                        @endforeach
+                    </span>
+                @else
+                    <span class="variant-select-badges" id="selected-variant-badges" style="display: none;"></span>
+                @endif
                 <span class="icon icon-CaretDown"></span>
             </div>
 
@@ -46,6 +65,7 @@
                             $variant->is_unboxed ? __('Без коробки') : null,
                             $variant->is_gift_wrapped ? __('Подарочная упаковка') : null,
                             $variant->is_exclusive ? __('Отливант') : null,
+                            $variant->is_deodorant ? __('Дезодорант') : null,
                         ]));
                     @endphp
 
@@ -58,9 +78,10 @@
                         data-sku="{{ $variant->sku }}"
                         data-volume="{{ $variant->volume_ml }}"
                         data-is-preorder="{{ (float) $variant->price_usd <= 0 ? 1 : 0 }}"
+                        data-badges='@json($badges)'
                     >
                         <span class="variant-option-main">
-                            <span class="text-value-item variant-option-volume">{{ $variant->volume_ml }} ml</span>
+                            <span class="text-value-item variant-option-volume">{{ $variant->volume_ml }} ml </span>
 
                             <span class="variant-option-price">
                                 @if((float) $variant->price_usd <= 0)
@@ -74,14 +95,12 @@
                             </span>
                             @if(!empty($badges))
                                 <span class="variant-option-badges">
-                                @foreach($badges as $badge)
+                                    @foreach($badges as $badge)
                                         <span class="variant-option-badge">{{ $badge }}</span>
                                     @endforeach
-                            </span>
+                                </span>
                             @endif
                         </span>
-
-
                     </div>
                 @endforeach
             </div>
@@ -102,6 +121,14 @@
 
     .product-variant-dropdown .btn-select {
         min-height: 52px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .product-variant-dropdown .btn-select .icon {
+        margin-left: auto;
     }
 
     .product-variant-dropdown-menu {
@@ -162,6 +189,12 @@
         gap: 6px;
     }
 
+    .variant-select-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
     .variant-option-badge {
         display: inline-flex;
         align-items: center;
@@ -183,6 +216,7 @@
         const mainPriceElement = document.getElementById('main-product-price');
         const mainSalePriceElement = document.getElementById('main-product-sale-price');
         const skuElement = document.getElementById('main-product-sku');
+        const selectedVariantBadges = document.getElementById('selected-variant-badges');
         const qtyLabel = document.getElementById('product-qty-label');
         const orderActions = document.getElementById('product-order-actions');
         const availabilityButton = document.getElementById('product-availability-button');
@@ -248,6 +282,20 @@
 
                 if (dropdownLabel) {
                     dropdownLabel.textContent = volume;
+                }
+
+                if (selectedVariantBadges) {
+                    const badges = JSON.parse(this.dataset.badges || '[]');
+
+                    if (badges.length) {
+                        selectedVariantBadges.innerHTML = badges
+                            .map((badge) => `<span class="variant-option-badge">${badge}</span>`)
+                            .join('');
+                        selectedVariantBadges.style.display = 'flex';
+                    } else {
+                        selectedVariantBadges.innerHTML = '';
+                        selectedVariantBadges.style.display = 'none';
+                    }
                 }
 
                 updatePurchaseState(this);

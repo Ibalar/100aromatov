@@ -6,8 +6,8 @@ use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Review;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -41,19 +41,28 @@ class ProductController extends Controller
             ->select('products.*')
             ->distinct();
 
-        // Price filtering using stored min/max columns (instant, no JOIN needed)
-        if ($minPrice) {
-            $query->where('products.min_price', '>=', $minPrice);
-        }
-        if ($maxPrice) {
-            $query->where('products.max_price', '<=', $maxPrice);
+        if ($minPrice !== null || $maxPrice !== null) {
+            $query->whereExists(function ($sub) use ($minPrice, $maxPrice) {
+                $sub->selectRaw('1')
+                    ->from('product_variants as price_filter_variants')
+                    ->whereColumn('price_filter_variants.product_id', 'products.id')
+                    ->where('price_filter_variants.is_active', true)
+                    ->when(
+                        $minPrice !== null && $minPrice !== '',
+                        static fn ($variantQuery) => $variantQuery->where('price_filter_variants.price_usd', '>=', $minPrice)
+                    )
+                    ->when(
+                        $maxPrice !== null && $maxPrice !== '',
+                        static fn ($variantQuery) => $variantQuery->where('price_filter_variants.price_usd', '<=', $maxPrice)
+                    );
+            });
         }
         if ($brandFilter) {
             $query->where('products.brand_id', $brandFilter);
         }
 
         // Attribute filtering with optimized whereExists
-        if (!empty($attributeFilters)) {
+        if (! empty($attributeFilters)) {
             $query->whereExists(function ($sub) use ($attributeFilters) {
                 $sub->selectRaw('1')
                     ->from('product_attribute_value')
@@ -65,17 +74,17 @@ class ProductController extends Controller
                             if (in_array('all', $values) || in_array('', $values)) {
                                 continue;
                             }
-                            if (!empty($values)) {
+                            if (! empty($values)) {
                                 if ($first) {
                                     $subSub->where(function ($or) use ($attributeId, $values) {
                                         $or->where('attribute_id', $attributeId)
-                                           ->whereIn('attribute_value_id', $values);
+                                            ->whereIn('attribute_value_id', $values);
                                     });
                                     $first = false;
                                 } else {
                                     $subSub->orWhere(function ($or) use ($attributeId, $values) {
                                         $or->where('attribute_id', $attributeId)
-                                           ->whereIn('attribute_value_id', $values);
+                                            ->whereIn('attribute_value_id', $values);
                                     });
                                 }
                             }
@@ -103,7 +112,7 @@ class ProductController extends Controller
                     $q->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
                         ->orderBy('sort_order')
                         ->limit(2);
-                }
+                },
             ])
             ->withCount([
                 'reviews' => fn ($query) => $query->where('is_approved', true),
@@ -122,8 +131,14 @@ class ProductController extends Controller
         });
 
         // Cache brands with product counts for 1 hour
-        $brands = Cache::remember('brands_with_product_counts', 3600, function () {
-            return Brand::active()->withCount('products')->orderBy('name_ru')->get();
+        $brands = Cache::remember('brands_with_visible_product_counts', 3600, function () {
+            return Brand::active()
+                ->whereHas('products', fn ($query) => $query->active())
+                ->withCount([
+                    'products as products_count' => fn ($query) => $query->active(),
+                ])
+                ->orderBy('name_ru')
+                ->get();
         });
 
         // Calculate price range for filter
@@ -132,7 +147,7 @@ class ProductController extends Controller
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
-                ->selectRaw('MIN(product_variants.price_usd) as min_price, MAX(product_variants.price_usd) as max_price')
+                ->selectRaw('COALESCE(MIN(NULLIF(product_variants.price_usd, 0)), MIN(product_variants.price_usd)) as min_price, MAX(product_variants.price_usd) as max_price')
                 ->first();
         });
 
@@ -174,7 +189,7 @@ class ProductController extends Controller
                             'customer:id,first_name,last_name,email',
                         ])
                         ->latest();
-                }
+                },
             ])
             ->withCount([
                 'reviews' => fn ($query) => $query->where('is_approved', true),
@@ -229,7 +244,8 @@ class ProductController extends Controller
                     'is_raspiv',
                     'is_unboxed',
                     'is_gift_wrapped',
-                    'is_exclusive'
+                    'is_exclusive',
+                    'is_deodorant'
                 )
                     ->where('is_active', true)
                     ->orderBy('price_usd');
@@ -282,6 +298,7 @@ class ProductController extends Controller
                             $variant->is_unboxed ? __('Без коробки') : null,
                             $variant->is_gift_wrapped ? __('Подарочная упаковка') : null,
                             $variant->is_exclusive ? __('Эксклюзив') : null,
+                            $variant->is_deodorant ? __('Дезодорант') : null,
                         ])),
                     ];
                 })->values(),
@@ -364,7 +381,7 @@ class ProductController extends Controller
                     'brand:id,name,slug',
                     'category:id,slug,name_ru,name_by',
                     'variants' => function ($query) {
-                        $query->select('id', 'product_id', 'sku', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active', 'is_tester', 'is_raspiv', 'is_unboxed', 'is_exclusive')
+                        $query->select('id', 'product_id', 'sku', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active', 'is_tester', 'is_raspiv', 'is_unboxed', 'is_exclusive', 'is_deodorant')
                             ->where('is_active', true)
                             ->orderBy('price_usd');
                     },

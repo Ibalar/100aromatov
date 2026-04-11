@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Product\Pages;
 
-use App\MoonShine\Resources\ProductImage\ProductImageResource;
-use MoonShine\Laravel\Fields\Relationships\HasMany;
-use MoonShine\Laravel\Pages\Crud\IndexPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Table\TableBuilder;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Laravel\QueryTags\QueryTag;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
-use MoonShine\UI\Fields\ID;
+use App\Models\Brand;
+use App\Models\Product;
 use App\MoonShine\Resources\Product\ProductResource;
+use MoonShine\Contracts\UI\ActionButtonContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\IndexPage;
+use MoonShine\Laravel\QueryTags\QueryTag;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\Metrics\Wrapped\Metric;
+use MoonShine\UI\Components\Table\TableBuilder;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use Throwable;
-
 
 /**
  * @extends IndexPage<ProductResource>
@@ -31,9 +33,17 @@ class ProductIndexPage extends IndexPage
      */
     protected function fields(): iterable
     {
+        $resource = $this->getResource();
+
         return [
-            ID::make(),
-            Text::make('Название', 'name_ru'),
+            ID::make()->sortable(),
+            Text::make('Название', 'name_ru')
+                ->link(
+                    static fn (string $value, Text $field) => $resource->getFormPageUrl(
+                        $field->getData()?->getKey()
+                    ),
+                    blank: false
+                ),
         ];
     }
 
@@ -50,7 +60,20 @@ class ProductIndexPage extends IndexPage
      */
     protected function filters(): iterable
     {
-        return [];
+        return [
+            Select::make('Бренд', 'brand_id')
+                ->options(
+                    Brand::query()
+                        ->orderBy('name')
+                        ->pluck('name', 'id')
+                        ->toArray()
+                )
+                ->native()
+                ->nullable()
+                ->placeholder('Все бренды'),
+
+            Switcher::make('Активен', 'is_active'),
+        ];
     }
 
     /**
@@ -79,6 +102,16 @@ class ProductIndexPage extends IndexPage
         return $component;
     }
 
+    protected function modifyDetailButton(ActionButtonContract $button): ActionButtonContract
+    {
+        return $button
+            ->setUrl(
+                static fn (?Product $product): string => route('product.show', $product?->slug)
+            )
+            ->blank()
+            ->disableAsync();
+    }
+
     /**
      * @return list<ComponentContract>
      * @throws Throwable
@@ -86,7 +119,7 @@ class ProductIndexPage extends IndexPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -97,7 +130,7 @@ class ProductIndexPage extends IndexPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -108,7 +141,7 @@ class ProductIndexPage extends IndexPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
     }
 }

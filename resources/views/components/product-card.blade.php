@@ -37,11 +37,12 @@
 
         @php
             $hasDiscount = false;
-            $minRegularPrice = $product->variants->min('price_usd');
-            $maxRegularPrice = $product->variants->max('price_usd');
+            $priceSource = $pricedVariants->isNotEmpty() ? $pricedVariants : $product->variants;
+            $minRegularPrice = $priceSource->min('price_usd');
+            $maxRegularPrice = $priceSource->max('price_usd');
 
-            $minFinalPrice = $product->variants->min('final_price_usd');
-            $maxFinalPrice = $product->variants->max('final_price_usd');
+            $minFinalPrice = $priceSource->min('final_price_usd');
+            $maxFinalPrice = $priceSource->max('final_price_usd');
 
             $discountPercent = 0;
 
@@ -97,10 +98,6 @@
     </div>
 
     <div class="card-product_info">
-        <a href="{{ route('product.show', $product->slug) }}" class="name-product lh-24 fw-medium link-underline-text">
-            {{ localizedField($product, 'name') }}
-        </a>
-
         <div class="price-wrap">
             @if($hasSingleVariant && $isSingleVariantPreorder)
                 <span class="price-new text-primary fw-semibold">{{ __('Под заказ') }}</span>
@@ -116,6 +113,11 @@
                 <span class="price-new text-primary fw-semibold">{{ formatPriceByn($minFinalPrice) }} &ndash; {{ formatPriceByn($maxFinalPrice) }}</span>
             @endif
         </div>
+
+        <a href="{{ route('product.show', $product->slug) }}" class="name-product lh-24 fw-medium link-underline-text">
+            {{ localizedField($product, 'name') }}
+        </a>
+
 
     </div>
 </div>

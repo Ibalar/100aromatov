@@ -15,7 +15,11 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Cache::remember('category_tree_active', 3600, function () {
-            return Category::active()->withCount('products')->get();
+            return Category::active()
+                ->withCount([
+                    'products as products_count' => fn ($query) => $query->active(),
+                ])
+                ->get();
         });
 
         $tree = $this->buildCategoryTree($categories);
@@ -36,7 +40,8 @@ class CategoryController extends Controller
         }
 
         $attributeFilters = $request->get('attributes', []);
-        $brandFilter = $request->get('brand');
+        $brandFilter = array_values(array_filter((array) $request->input('brand', []), static fn ($value) => $value !== ''));
+        $sort = $request->get('sort', 'best-selling');
 
         $query = Product::active()
             ->join('product_variants as variants_filter', 'products.id', '=', 'variants_filter.product_id')
@@ -44,45 +49,44 @@ class CategoryController extends Controller
             ->select('products.*')
             ->distinct();
 
-        if ($minPrice) {
-            $query->where('products.min_price', '>=', $minPrice);
+        if ($minPrice !== null || $maxPrice !== null) {
+            $query->whereExists(function ($sub) use ($minPrice, $maxPrice) {
+                $sub->selectRaw('1')
+                    ->from('product_variants as price_filter_variants')
+                    ->whereColumn('price_filter_variants.product_id', 'products.id')
+                    ->where('price_filter_variants.is_active', true)
+                    ->when(
+                        $minPrice !== null && $minPrice !== '',
+                        static fn ($variantQuery) => $variantQuery->where('price_filter_variants.price_usd', '>=', $minPrice)
+                    )
+                    ->when(
+                        $maxPrice !== null && $maxPrice !== '',
+                        static fn ($variantQuery) => $variantQuery->where('price_filter_variants.price_usd', '<=', $maxPrice)
+                    );
+            });
         }
-        if ($maxPrice) {
-            $query->where('products.max_price', '<=', $maxPrice);
-        }
-        if ($brandFilter) {
-            $query->where('products.brand_id', $brandFilter);
+        if (!empty($brandFilter)) {
+            $query->whereIn('products.brand_id', $brandFilter);
         }
 
         if (!empty($attributeFilters)) {
-            $query->whereExists(function ($sub) use ($attributeFilters) {
-                $sub->selectRaw('1')
-                    ->from('product_attribute_value')
-                    ->whereColumn('product_attribute_value.product_id', 'products.id')
-                    ->where(function ($subSub) use ($attributeFilters) {
-                        $first = true;
-                        foreach ($attributeFilters as $attributeId => $values) {
-                            if (in_array('all', $values) || in_array('', $values)) {
-                                continue;
-                            }
-                            if (!empty($values)) {
-                                if ($first) {
-                                    $subSub->where(function ($or) use ($attributeId, $values) {
-                                        $or->where('attribute_id', $attributeId)
-                                           ->whereIn('attribute_value_id', $values);
-                                    });
-                                    $first = false;
-                                } else {
-                                    $subSub->orWhere(function ($or) use ($attributeId, $values) {
-                                        $or->where('attribute_id', $attributeId)
-                                           ->whereIn('attribute_value_id', $values);
-                                    });
-                                }
-                            }
-                        }
-                    });
-            });
+            foreach ($attributeFilters as $attributeId => $values) {
+                if (empty($values) || in_array('all', $values) || in_array('', $values)) {
+                    continue;
+                }
+
+                $query->whereExists(function ($sub) use ($attributeId, $values) {
+                    $sub->selectRaw(1)
+                        ->from('product_attribute_value')
+                        ->join('attribute_values', 'attribute_values.id', '=', 'product_attribute_value.attribute_value_id')
+                        ->whereColumn('product_attribute_value.product_id', 'products.id')
+                        ->where('attribute_values.attribute_id', $attributeId)
+                        ->whereIn('product_attribute_value.attribute_value_id', $values);
+                });
+            }
         }
+
+        $this->applySort($query, $sort);
 
         $products = $query
             ->with([
@@ -106,8 +110,8 @@ class CategoryController extends Controller
             ->withCount([
                 'reviews' => fn ($query) => $query->where('is_approved', true),
             ])
-            ->orderBy('products.name_ru')
-            ->paginate(24);
+            ->paginate(12)
+            ->withQueryString();
 
         $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {
             return Attribute::where('is_filterable', true)
@@ -118,8 +122,14 @@ class CategoryController extends Controller
                 ->get();
         });
 
-        $brands = Cache::remember('brands_with_product_counts', 3600, function () {
-            return Brand::active()->withCount('products')->orderBy('name')->get();
+        $brands = Cache::remember('brands_with_visible_product_counts', 3600, function () {
+            return Brand::active()
+                ->whereHas('products', fn ($query) => $query->active())
+                ->withCount([
+                    'products as products_count' => fn ($query) => $query->active(),
+                ])
+                ->orderBy('name')
+                ->get();
         });
 
         $priceRange = Cache::remember('price_range_catalog', 3600, function () {
@@ -127,7 +137,7 @@ class CategoryController extends Controller
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
-                ->selectRaw('MIN(product_variants.price_usd) as min_price, MAX(product_variants.price_usd) as max_price')
+                ->selectRaw('COALESCE(MIN(NULLIF(product_variants.price_usd, 0)), MIN(product_variants.price_usd)) as min_price, MAX(product_variants.price_usd) as max_price')
                 ->first();
         });
 
@@ -141,6 +151,7 @@ class CategoryController extends Controller
             'minPrice',
             'maxPrice',
             'brandFilter',
+            'sort',
             'priceRange'
         ));
     }
@@ -173,6 +184,8 @@ class CategoryController extends Controller
         }
 
         $attributeFilters = $request->get('attributes', []);
+        $brandFilter = array_values(array_filter((array) $request->input('brand', []), static fn ($value) => $value !== ''));
+        $sort = $request->get('sort', 'best-selling');
 
         $childCategories = $category->children;
         $sidebarCategories = $childCategories;
@@ -202,11 +215,24 @@ class CategoryController extends Controller
             ->selectRaw('MIN(product_variants.price_usd) as min_variant_price, MAX(product_variants.price_usd) as max_variant_price');
 
         // Фильтр по цене
-        if ($minPrice) {
-            $query->havingRaw('MAX(product_variants.price_usd) >= ?', [$minPrice]);
+        if ($minPrice !== null || $maxPrice !== null) {
+            $query->whereExists(function ($sub) use ($minPrice, $maxPrice) {
+                $sub->selectRaw(1)
+                    ->from('product_variants as price_filter_variants')
+                    ->whereColumn('price_filter_variants.product_id', 'products.id')
+                    ->where('price_filter_variants.is_active', true)
+                    ->when(
+                        $minPrice !== null && $minPrice !== '',
+                        static fn ($variantQuery) => $variantQuery->where('price_filter_variants.price_usd', '>=', $minPrice)
+                    )
+                    ->when(
+                        $maxPrice !== null && $maxPrice !== '',
+                        static fn ($variantQuery) => $variantQuery->where('price_filter_variants.price_usd', '<=', $maxPrice)
+                    );
+            });
         }
-        if ($maxPrice) {
-            $query->havingRaw('MIN(product_variants.price_usd) <= ?', [$maxPrice]);
+        if (!empty($brandFilter)) {
+            $query->whereIn('products.brand_id', $brandFilter);
         }
 
         // Фильтр по атрибутам
@@ -226,6 +252,8 @@ class CategoryController extends Controller
         }
 
         // Подгружаем все активные варианты и изображения
+        $this->applySort($query, $sort);
+
         $products = $query
             ->with([
                 'brand:id,name',
@@ -243,8 +271,8 @@ class CategoryController extends Controller
             ->withCount([
                 'reviews' => fn ($query) => $query->where('is_approved', true),
             ])
-            ->orderBy('products.name_ru')
-            ->paginate(24);
+            ->paginate(12)
+            ->withQueryString();
 
         // Атрибуты для фильтров
         $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {
@@ -263,9 +291,24 @@ class CategoryController extends Controller
                 ->whereIn('products.category_id', $categoryIds)
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
-                ->selectRaw('MIN(product_variants.price_usd) as min_price, MAX(product_variants.price_usd) as max_price')
+                ->selectRaw('COALESCE(MIN(NULLIF(product_variants.price_usd, 0)), MIN(product_variants.price_usd)) as min_price, MAX(product_variants.price_usd) as max_price')
                 ->first();
         });
+
+        $brands = Brand::query()
+            ->select('brands.id', 'brands.name', 'brands.slug')
+            ->join('products', 'products.brand_id', '=', 'brands.id')
+            ->join('product_variants as variants_filter', function ($join) {
+                $join->on('products.id', '=', 'variants_filter.product_id')
+                    ->where('variants_filter.is_active', true);
+            })
+            ->where('brands.is_active', true)
+            ->where('products.is_active', true)
+            ->whereIn('products.category_id', $categoryIds)
+            ->groupBy('brands.id', 'brands.name', 'brands.slug')
+            ->selectRaw('COUNT(DISTINCT products.id) as products_count')
+            ->orderBy('brands.name')
+            ->get();
 
         return view('categories.show', compact(
             'category',
@@ -273,10 +316,13 @@ class CategoryController extends Controller
             'sidebarCategories',
             'products',
             'filterableAttributes',
+            'brands',
             'priceRange',
             'attributeFilters',
             'minPrice',
-            'maxPrice'
+            'maxPrice',
+            'brandFilter',
+            'sort'
         ));
     }
 
@@ -299,5 +345,33 @@ class CategoryController extends Controller
         }
 
         return $branch;
+    }
+
+    private function applySort($query, string $sort): void
+    {
+        $query->orderByRaw('CASE WHEN COALESCE(products.max_price, 0) <= 0 THEN 1 ELSE 0 END');
+
+        $minPositivePriceSql = "(SELECT MIN(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
+        $maxPositivePriceSql = "(SELECT MAX(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
+
+        switch ($sort) {
+            case 'a-z':
+                $query->orderBy('products.name_ru');
+                break;
+            case 'z-a':
+                $query->orderByDesc('products.name_ru');
+                break;
+            case 'price-low-high':
+                $query->orderByRaw("COALESCE($minPositivePriceSql, products.min_price, 0)");
+                break;
+            case 'price-high-low':
+                $query->orderByRaw("COALESCE($maxPositivePriceSql, products.max_price, 0) DESC");
+                break;
+            case 'best-selling':
+            default:
+                $query->orderByDesc('products.views')
+                    ->orderBy('products.name_ru');
+                break;
+        }
     }
 }
