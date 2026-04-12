@@ -23,6 +23,7 @@ class ProductVariant extends Model
     ];
 
     protected $casts = [
+        'volume_ml' => 'string',
         'price_usd' => 'decimal:2',
         'sale_price_usd' => 'decimal:2',
         'is_tester' => 'boolean',
@@ -37,6 +38,12 @@ class ProductVariant extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function setVolumeMlAttribute($value): void
+    {
+        $value = is_string($value) ? trim($value) : $value;
+        $this->attributes['volume_ml'] = $value === '' ? null : $value;
     }
 
     public function getFinalPriceUsdAttribute()

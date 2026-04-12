@@ -1,4 +1,7 @@
 <!-- Mobile Menu -->
+@php
+    $mobilePhones = collect($siteSettings->phones ?? [])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+@endphp
 <div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
     <div class="canvas-header">
             <span class="icon-close-popup" data-bs-dismiss="offcanvas">
@@ -19,19 +22,33 @@
         </div>
         <div class="need-help-wrap">
             <p class="nd-title h6 fw-medium mb-16">Need Help?</p>
-            <p class="lh-26 cl-text-2 mb-4">
-                600 N Michigan Ave, Chicago, IL 60611, USA
-            </p>
-            <a href="https://www.google.com/maps?q=600+N+Michigan+Ave+Chicago,+IL+60611+USA" target="_blank"
-               class="text-decoration-underline text-primary lh-26 mb-16">
-                Open in Maps
-            </a>
-            <a href="mailto:hi.amere@gmail.com" class="cl-text-2 link mb-8">
-                hi.amere@gmail.com
-            </a>
-            <a href="tel:3156666688" class="cl-text-2 link">
-                315-666-6688
-            </a>
+            @if(filled($siteSettings->address ?? null))
+                <p class="lh-26 cl-text-2 mb-4">
+                    {{ $siteSettings->address }}
+                </p>
+            @endif
+            @if(filled($siteSettings->address_map_url ?? null))
+                <a href="{{ $siteSettings->address_map_url }}" target="_blank" rel="noopener noreferrer"
+                   class="text-decoration-underline text-primary lh-26 mb-16">
+                    Open in Maps
+                </a>
+            @endif
+            @foreach($mobilePhones as $phone)
+                <a href="{{ phoneHref($phone['number'] ?? null) }}" class="cl-text-2 link mb-8 d-inline-flex align-items-center gap-2">
+                    @if($iconUrl = settingPhoneIconUrl($phone['icon'] ?? null))
+                        <img src="{{ $iconUrl }}"
+                             alt="{{ $phone['label'] ?? ($phone['number'] ?? 'Phone') }}"
+                             width="18"
+                             height="18">
+                    @endif
+                    <span>{{ $phone['number'] }}</span>
+                </a>
+            @endforeach
+            @if(filled($siteSettings->instagram_url ?? null))
+                <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener noreferrer" class="cl-text-2 link">
+                    Instagram
+                </a>
+            @endif
         </div>
     </div>
     <div class="canvas-footer">

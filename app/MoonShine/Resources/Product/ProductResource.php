@@ -90,7 +90,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
             Text::make('description_by', 'description_by'),
             Text::make('sku', 'sku'),
             Text::make('volume_ml', 'volume_ml')->fromRaw(
-                static fn (mixed $raw) => blank($raw) ? null : (int) $raw
+                static fn (mixed $raw) => blank($raw) ? null : trim((string) $raw)
             ),
             Text::make('price_usd', 'price_usd')->fromRaw(
                 static fn (mixed $raw) => blank($raw) ? null : (float) $raw

@@ -1,45 +1,65 @@
-<footer class="tf-footer footer-s6 position-relative">
+<footer class="tf-footer footer-s6 position-relative bg-dark">
+    @php
+        $footerPhones = collect($siteSettings->phones ?? [])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+    @endphp
     <div class="br-line fake-class top-0"></div>
     <div class="footer-inner flat-spacing">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-lg-4">
                     <div class="footer-col-block footer-wrap-3 mb-md-0 ms-0">
-                        <p class="footer-heading footer-heading-mobile">OUR STORE</p>
+                        <p class="footer-heading footer-heading-mobile text-white">CONTACTS</p>
                         <div class="tf-collapse-content">
-                            <p class="cl-text-2 mb-4">
-                                24/7 Support Center:
-                            </p>
-                            <a href="tel:0112348888" class="link h4 fw-medium mb-12">
-                                (+01) 1234 8888
-                            </a>
-                            <br>
-                            <a href="https://www.google.com/maps?q=600+N+Michigan+Ave+Chicago,+IL+60611+USA"
-                               target="_blank" class="cl-text-2 link mb-4">
-                                600 N Michigan Ave, Chicago, IL 60611, USA
-                            </a>
-                            <br>
-                            <a href="mailto:hi.amere@gmail.com" class="cl-text-2 link mb-12">
-                                hi.amere@gmail.com
-                            </a>
-                            <div class="d-flex align-items-center gap-20">
-                                <a href="https://www.facebook.com/" target="_blank" class="d-flex"><i
-                                        class="fs-20 link icon icon-FacebookLogo"></i></a>
-                                <a href="https://x.com/" target="_blank" class="d-flex"><i
-                                        class="fs-20 link icon icon-XLogo"></i></a>
-                                <a href="https://www.instagram.com/" target="_blank" class="d-flex"><i
-                                        class="fs-20 link icon icon-InstagramLogo"></i></a>
-                                <a href="https://www.tiktok.com/" target="_blank" class="d-flex"><i
-                                        class="fs-20 link icon icon-TiktokLogo"></i></a>
-                                <a href="https://www.snapchat.com/" target="_blank" class="d-flex"><i
-                                        class="fs-20 link icon icon-SnapchatLogo"></i></a>
-                            </div>
+                            @if($footerPhones->isNotEmpty())
+                                <p class="cl-text-2 mb-4">Телефоны:</p>
+                                <div class="d-flex flex-column gap-8 mb-16">
+                                    @foreach($footerPhones as $phone)
+                                        <a href="{{ phoneHref($phone['number'] ?? null) }}" class="link h6 fw-medium d-inline-flex align-items-center gap-2 text-white">
+                                            @if($iconUrl = settingPhoneIconUrl($phone['icon'] ?? null))
+                                                <img src="{{ $iconUrl }}"
+                                                     alt="{{ $phone['label'] ?? ($phone['number'] ?? 'Phone') }}"
+                                                     width="20"
+                                                     height="20">
+                                            @endif
+                                            <span>{{ $phone['number'] }}</span>
+                                            @if(filled($phone['label'] ?? null))
+                                                <span class="cl-text-2">({{ $phone['label'] }})</span>
+                                            @endif
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            @if(filled($siteSettings->address ?? null))
+                                @if(filled($siteSettings->address_map_url ?? null))
+                                    <a href="{{ $siteSettings->address_map_url }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="cl-text-2 link mb-12 d-inline-block">
+                                        {{ $siteSettings->address }}
+                                    </a>
+                                @else
+                                    <p class="cl-text-2 mb-12">{{ $siteSettings->address }}</p>
+                                @endif
+                            @endif
+
+                            @if(filled($siteSettings->requisites ?? null))
+                                <div class="cl-text-2 mb-12" style="white-space: pre-line;">{{ $siteSettings->requisites }}</div>
+                            @endif
+
+                            @if(filled($siteSettings->instagram_url ?? null))
+                                <div class="d-flex align-items-center gap-20">
+                                    <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener noreferrer" class="d-flex">
+                                        <i class="fs-20 link icon icon-InstagramLogo"></i>
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-2">
                     <div class="footer-col-block footer-wrap-1 mx-xl-auto mb-lg-0">
-                        <p class="footer-heading footer-heading-mobile">COMPANY</p>
+                        <p class="footer-heading footer-heading-mobile text-white">COMPANY</p>
                         <div class="tf-collapse-content">
                             <ul class="footer-menu-list">
                                 <li><a href="about.html" class="cl-text-2 link">About Us</a></li>
@@ -53,7 +73,7 @@
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-2">
                     <div class="footer-col-block footer-wrap-2 mx-xl-auto mb-lg-0">
-                        <p class="footer-heading footer-heading-mobile">CUSTOMER</p>
+                        <p class="footer-heading footer-heading-mobile text-white">CUSTOMER</p>
                         <div class="tf-collapse-content">
                             <ul class="footer-menu-list">
                                 <li><a href="shipping.html" class="cl-text-2 link">Shipping</a></li>
@@ -69,7 +89,7 @@
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="footer-col-block footer-wrap-3 ms-0 ms-lg-auto mb-0">
-                        <p class="footer-heading footer-heading-mobile">NEWSLETTER</p>
+                        <p class="footer-heading footer-heading-mobile text-white">NEWSLETTER</p>
                         <div class="tf-collapse-content">
                             <p class="footer-desc cl-text-2 mb-16">
                                 Subscribe for store updates and discounts.

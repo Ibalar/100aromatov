@@ -37,10 +37,12 @@ class ProductVariantFormPage extends FormPage
                 BelongsTo::make('Товар', 'product', resource: ProductResource::class),
 
                 Text::make('SKU', 'sku'),
-                Number::make('Объем ML', 'volume_ml'),
+                Text::make('Объем ML', 'volume_ml'),
 
-                Number::make('Цена USD', 'price_usd'),
-                Number::make('Акционная цена USD', 'sale_price_usd'),
+                Number::make('Цена USD', 'price_usd')
+                    ->step(0.01),
+                Number::make('Акционная цена USD', 'sale_price_usd')
+                    ->step(0.01),
 
                 Switcher::make('Тестер', 'is_tester'),
                 Switcher::make('Распив', 'is_raspiv'),

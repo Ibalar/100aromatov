@@ -63,3 +63,35 @@ if (! function_exists('getPriceInByn')) {
         return round($usdPrice * $usdRate, 2);
     }
 }
+
+if (! function_exists('phoneHref')) {
+    function phoneHref(?string $phone): string
+    {
+        $phone = trim((string) $phone);
+
+        if ($phone === '') {
+            return 'tel:';
+        }
+
+        $normalized = preg_replace('/(?!^\+)[^\d]/', '', $phone) ?? $phone;
+
+        return 'tel:' . $normalized;
+    }
+}
+
+if (! function_exists('settingPhoneIconUrl')) {
+    function settingPhoneIconUrl(?string $path): ?string
+    {
+        $path = trim((string) $path);
+
+        if ($path === '') {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        return asset('storage/' . ltrim($path, '/'));
+    }
+}

@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\ProductVariant;
+use App\Models\Setting;
 use App\Observers\ProductVariantObserver;
 use App\Services\CartService;
 use App\Services\WishlistService;
@@ -78,10 +79,13 @@ class AppServiceProvider extends ServiceProvider
                 $cartCount = app(CartService::class)->getSummary()['total_qty'];
             }
 
+            $siteSettings = Setting::getSettings();
+
             $view->with('brandColumns', $brandColumns);
             $view->with('categoryColumns', $categoryColumns);
             $view->with('menuPages', $menuPages);
             $view->with('cartCount', $cartCount);
+            $view->with('siteSettings', $siteSettings);
             $view->with('customerAuth', Auth::guard('customer')->check());
             $view->with('wishlistCount', app(WishlistService::class)->count());
             $view->with('wishlistIds', app(WishlistService::class)->ids());

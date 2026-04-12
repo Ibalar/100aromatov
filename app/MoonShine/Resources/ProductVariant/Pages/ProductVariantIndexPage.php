@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\ProductVariant\Pages;
 
-use MoonShine\Laravel\Pages\Crud\IndexPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Table\TableBuilder;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Laravel\QueryTags\QueryTag;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
-use MoonShine\UI\Fields\ID;
 use App\MoonShine\Resources\ProductVariant\ProductVariantResource;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\IndexPage;
+use MoonShine\Laravel\QueryTags\QueryTag;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\Metrics\Wrapped\Metric;
+use MoonShine\UI\Components\Table\TableBuilder;
+use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Text;
 use Throwable;
-
 
 /**
  * @extends IndexPage<ProductVariantResource>
@@ -33,7 +32,7 @@ class ProductVariantIndexPage extends IndexPage
         return [
             ID::make(),
             Text::make('SKU', 'sku'),
-            Number::make('Объем ML', 'volume_ml'),
+            Text::make('Объем ML', 'volume_ml'),
             Number::make('Цена USD', 'price_usd'),
         ];
     }
@@ -70,11 +69,6 @@ class ProductVariantIndexPage extends IndexPage
         return [];
     }
 
-    /**
-     * @param  TableBuilder  $component
-     *
-     * @return TableBuilder
-     */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
         return $component;
@@ -87,7 +81,7 @@ class ProductVariantIndexPage extends IndexPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -98,7 +92,7 @@ class ProductVariantIndexPage extends IndexPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -109,7 +103,7 @@ class ProductVariantIndexPage extends IndexPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
     }
 }

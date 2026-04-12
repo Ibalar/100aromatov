@@ -1,4 +1,7 @@
 <!-- Topbar -->
+@php
+    $headerPhones = collect($siteSettings->phones ?? [])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+@endphp
 <div class="tf-topbar topbar-s3 bg-dark tf-btn-swiper-main">
     <div class="container-full">
         <div class="row align-items-center">
@@ -19,37 +22,26 @@
             </div>
             <div class="col-lg-10 d-none d-lg-block">
                 <div class="tf-list justify-content-center">
-                    <a href="tel:+375291519223" class="text-white link phone-a1 d-inline-flex align-items-center gap-2">
-                        <img src="{{ asset('assets/icon/a1.svg') }}"
-                             alt="A1"
-                             class="phone-a1__icon"
-                             width="20"
-                             height="20">
-                        +375 29 151 92 23
-                    </a>
-                    <a href="tel:+375295577883" class="text-white link phone-a1 d-inline-flex align-items-center gap-2">
-                        <img src="{{ asset('assets/icon/mts.webp') }}"
-                             alt="MTS"
-                             class="phone-a1__icon"
-                             width="20"
-                             height="20">
-                        +375 29 55 77 88 3
-                    </a>
-                    <a href="tel:+375257274050" class="text-white link phone-a1 d-inline-flex align-items-center gap-2">
-                        <img src="{{ asset('assets/icon/life.png') }}"
-                             alt="Life"
-                             class="phone-a1__icon"
-                             width="40"
-                             height="20">
-                        +375 25 727 40 50
-                    </a>
+                    @foreach($headerPhones as $phone)
+                        <a href="{{ phoneHref($phone['number'] ?? null) }}" class="text-white link phone-a1 d-inline-flex align-items-center gap-2">
+                            @if($iconUrl = settingPhoneIconUrl($phone['icon'] ?? null))
+                                <img src="{{ $iconUrl }}"
+                                     alt="{{ $phone['label'] ?? ($phone['number'] ?? 'Phone') }}"
+                                     class="phone-a1__icon"
+                                     style="height: 20px; max-width: 100%;">
+                            @endif
+                            <span>{{ $phone['number'] }}</span>
+                        </a>
+                    @endforeach
                 </div>
             </div>
             <div class="col-lg-1 col-6">
                 <div class="d-flex align-items-center justify-content-end gap-20">
-                    <a href="https://www.instagram.com/100aromatov.by/" target="_blank" class="d-flex">
-                        <i class="fs-20 text-white link icon icon-InstagramLogo"></i>
-                    </a>
+                    @if(filled($siteSettings->instagram_url ?? null))
+                        <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener noreferrer" class="d-flex">
+                            <i class="fs-20 text-white link icon icon-InstagramLogo"></i>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

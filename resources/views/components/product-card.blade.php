@@ -55,7 +55,7 @@
         @if($product->is_featured || $hasDiscount)
             <ul class="product-badge_list">
                 @if($product->is_featured)
-                    <li class="product-badge_item text-caption-01 new">{{ __('NEW') }}</li>
+                    <li class="product-badge_item text-caption-01 new">{{ __('ХИТ') }}</li>
                 @endif
                 @if($hasDiscount)
                     <li class="product-badge_item text-caption-01 sale">-{{ $discountPercent }}%</li>
