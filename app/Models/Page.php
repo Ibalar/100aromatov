@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Page extends Model
 {
@@ -27,6 +28,16 @@ class Page extends Model
         'is_active' => 'boolean',
         'show_in_menu' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        $forgetMenuCache = static function (): void {
+            Cache::forget('menu_pages');
+        };
+
+        static::saved($forgetMenuCache);
+        static::deleted($forgetMenuCache);
+    }
 
     public function scopeActive(Builder $query): Builder
     {

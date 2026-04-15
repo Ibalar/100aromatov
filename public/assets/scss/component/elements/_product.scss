@@ -2140,6 +2140,11 @@
 
     @include res(xl, min) {
         gap: 30px;
+
+        .card-product_wrapper {
+            flex: 0 0 260px;
+            max-width: 260px;
+        }
     }
 
     @include res(xl) {

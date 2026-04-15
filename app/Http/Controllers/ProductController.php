@@ -34,12 +34,13 @@ class ProductController extends Controller
         $attributeFilters = $request->get('attributes', []);
         $brandFilter = $request->get('brand');
 
-        // Build query with JOIN instead of whereHas for better performance
         $query = Product::active()
-            ->join('product_variants as variants_filter', 'products.id', '=', 'variants_filter.product_id')
-            ->where('variants_filter.is_active', true)
-            ->select('products.*')
-            ->distinct();
+            ->whereExists(function ($sub) {
+                $sub->selectRaw('1')
+                    ->from('product_variants as variants_filter')
+                    ->whereColumn('variants_filter.product_id', 'products.id')
+                    ->where('variants_filter.is_active', true);
+            });
 
         if ($minPrice !== null || $maxPrice !== null) {
             $query->whereExists(function ($sub) use ($minPrice, $maxPrice) {
@@ -93,7 +94,6 @@ class ProductController extends Controller
             });
         }
 
-        // Use simplePaginate to eliminate COUNT query (2-3x faster)
         $products = $query
             ->with([
                 // Limited eager loading - select only needed columns
@@ -118,7 +118,8 @@ class ProductController extends Controller
                 'reviews' => fn ($query) => $query->where('is_approved', true),
             ])
             ->orderBy('products.name_ru')
-            ->simplePaginate(24);
+            ->paginate(24)
+            ->withQueryString();
 
         // Cache filterable attributes for 1 hour
         $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {

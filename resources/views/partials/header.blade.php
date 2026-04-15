@@ -1,6 +1,13 @@
 <!-- Topbar -->
 @php
     $headerPhones = collect($siteSettings->phones ?? [])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+    $hasContactsPageInMenu = collect($menuPages ?? [])->contains(function ($menuPage) {
+        $slug = mb_strtolower((string) ($menuPage->slug ?? ''));
+        $name = mb_strtolower((string) localizedField($menuPage, 'name'));
+
+        return str_contains($slug, 'contact') || str_contains($slug, 'kontakt') || str_contains($slug, 'контакт')
+            || str_contains($name, 'contact') || str_contains($name, 'kontakt') || str_contains($name, 'контакт');
+    });
 @endphp
 <div class="tf-topbar topbar-s3 bg-dark tf-btn-swiper-main">
     <div class="container-full">
@@ -11,10 +18,10 @@
                         <select class="tf-dropdown-select style-default color-white type-languages"
                                 onchange="if (this.value) { window.location.href = this.value; }">
                             <option value="{{ route('language.switch', 'ru') }}" @selected(app()->getLocale() === 'ru')>
-                                Русский
+                                {{ __('Русский') }}
                             </option>
                             <option value="{{ route('language.switch', 'by') }}" @selected(app()->getLocale() === 'by')>
-                                Беларуская
+                                {{ __('Беларуская') }}
                             </option>
                         </select>
                     </div>
@@ -26,7 +33,7 @@
                         <a href="{{ phoneHref($phone['number'] ?? null) }}" class="text-white link phone-a1 d-inline-flex align-items-center gap-2">
                             @if($iconUrl = settingPhoneIconUrl($phone['icon'] ?? null))
                                 <img src="{{ $iconUrl }}"
-                                     alt="{{ $phone['label'] ?? ($phone['number'] ?? 'Phone') }}"
+                                     alt="{{ $phone['label'] ?? ($phone['number'] ?? __('Телефон')) }}"
                                      class="phone-a1__icon"
                                      style="height: 20px; max-width: 100%;">
                             @endif
@@ -67,7 +74,7 @@
                         <li class="menu-item position-relative">
                             <a href="/" class="item-link">
                                 <span class="text cus-text">
-                                    Главная
+                                    {{ __('Главная') }}
                                 </span>
                             </a>
                         </li>
@@ -75,7 +82,7 @@
                         <li class="menu-item position-relative">
                             <a href="{{ route('brands.index') }}" class="item-link">
                                 <span class="text cus-text">
-                                    Бренды
+                                    {{ __('Бренды') }}
                                 </span>
                                 <i class="icon icon-CaretDown"></i>
                             </a>
@@ -99,7 +106,7 @@
                                                 <a href="{{ route('brands.index') }}"
                                                    class="sub-menu_link tf-btn-line-2 py-4 style-primary">
                                                     <span class="fw-semibold">
-                                                        Смотреть все
+                                                        {{ __('Смотреть все') }}
                                                     </span>
                                                 </a>
                                             </li>
@@ -112,7 +119,7 @@
                         <li class="menu-item position-relative">
                             <a href="{{ route('categories.index') }}" class="item-link">
                                 <span class="text cus-text">
-                                    Парфюмерия
+                                    {{ __('Парфюмерия') }}
                                 </span>
                                 <i class="icon icon-CaretDown"></i>
                             </a>
@@ -147,7 +154,7 @@
                                                 <a href="{{ route('categories.index') }}"
                                                    class="sub-menu_link tf-btn-line-2 py-4 style-primary">
                                                     <span class="fw-semibold">
-                                                        Смотреть все
+                                                        {{ __('Смотреть все') }}
                                                     </span>
                                                 </a>
                                             </li>
@@ -156,6 +163,16 @@
                                 @endforeach
                             </div>
                         </li>
+
+                        @unless($hasContactsPageInMenu)
+                            <li class="menu-item position-relative">
+                                <a href="{{ route('contacts.index') }}" class="item-link">
+                                    <span class="text cus-text">
+                                        {{ __('Контакты') }}
+                                    </span>
+                                </a>
+                            </li>
+                        @endunless
 
                         @foreach($menuPages ?? [] as $menuPage)
                             <li class="menu-item position-relative">
@@ -177,7 +194,7 @@
             <div class="header-right">
                 <form action="{{ route('search') }}" method="GET" class="form-search-nav style-3 d-none d-xl-block">
                     <fieldset>
-                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Искать на сайте" required>
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="{{ __('Искать на сайте') }}" required>
                     </fieldset>
                     <button type="submit" class="btn-action">
                         <i class="icon icon-MagnifyingGlass"></i>

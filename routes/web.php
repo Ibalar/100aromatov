@@ -13,9 +13,11 @@ use App\Http\Controllers\ProductAvailabilityInquiryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
 
 Route::get('/language/{lang}', [LanguageController::class, 'switch'])
     ->name('language.switch');

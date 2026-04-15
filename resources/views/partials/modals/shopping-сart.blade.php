@@ -25,7 +25,7 @@
                         </div>
                         <div class="tf-mini-cart-view-checkout">
                             <a href="{{ route('cart.index') }}" class="tf-btn btn-stroke">{{ __('Весь список') }}</a>
-                            <a href="{{ route('checkout.index') }}" class="tf-btn animate-btn">{{ __('Оформить бронь') }}</a>
+                            <a href="{{ route('checkout.index') }}" class="tf-btn animate-btn text-center">{{ __('Оформить бронь') }}</a>
                         </div>
                         <button type="button" class="d-flex justify-content-center fw-semibold text-center link js-cart-clear">
                             {{ __('Очистить список') }}

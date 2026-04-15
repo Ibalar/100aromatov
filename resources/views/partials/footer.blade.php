@@ -1,30 +1,137 @@
 <footer class="tf-footer footer-s6 position-relative bg-dark">
     @php
         $footerPhones = collect($siteSettings->phones ?? [])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+        $footerPages = collect($menuPages ?? []);
+
+        $findFooterPage = function (array $needles) use ($footerPages) {
+            return $footerPages->first(function ($page) use ($needles) {
+                $slug = mb_strtolower((string) ($page->slug ?? ''));
+                $name = mb_strtolower((string) localizedField($page, 'name'));
+
+                foreach ($needles as $needle) {
+                    if (str_contains($slug, $needle) || str_contains($name, $needle)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        };
+
+        $salePage = $findFooterPage(['akci', 'sale', 'скид', 'распрод']);
+        $shopPage = $findFooterPage(['shop', 'magazin', 'магаз', 'крам']);
+        $contactsPage = $findFooterPage(['contact', 'kontakt', 'контакт']);
+        $orderPage = $findFooterPage(['zakaz', 'order', 'оформ']);
+        $paymentPage = $findFooterPage(['oplata', 'payment', 'оплат']);
+        $deliveryPage = $findFooterPage(['delivery', 'dostav', 'самовывоз', 'дастаўк']);
+        $returnPage = $findFooterPage(['return', 'vozvrat', 'обмен', 'вяртан']);
+        $giftPage = $findFooterPage(['gift', 'cert', 'podar', 'сертифик', 'падар']);
+
+        $shopLinks = collect([
+            $salePage ? ['title' => __('Акции'), 'url' => route('pages.show', $salePage->slug)] : null,
+            $shopPage ? ['title' => __('Наш магазин'), 'url' => route('pages.show', $shopPage->slug)] : null,
+            $contactsPage ? ['title' => __('Контакты'), 'url' => route('pages.show', $contactsPage->slug)] : null,
+        ])->filter()->values();
+
+        if ($shopLinks->isEmpty()) {
+            $shopLinks = collect([
+                ['title' => __('Каталог'), 'url' => route('categories.index')],
+                ['title' => __('Бренды'), 'url' => route('brands.index')],
+                ['title' => __('Контакты'), 'url' => filled($siteSettings->address_map_url ?? null) ? $siteSettings->address_map_url : route('home')],
+            ]);
+        }
+
+        $usefulLinks = collect([
+            $orderPage ? ['title' => __('Как оформить заказ'), 'url' => route('pages.show', $orderPage->slug)] : null,
+            $paymentPage ? ['title' => __('Способы оплаты'), 'url' => route('pages.show', $paymentPage->slug)] : null,
+            $deliveryPage ? ['title' => __('Доставка и самовывоз'), 'url' => route('pages.show', $deliveryPage->slug)] : null,
+            $returnPage ? ['title' => __('Обмен и возврат товара'), 'url' => route('pages.show', $returnPage->slug)] : null,
+            $giftPage ? ['title' => __('Подарочный сертификат'), 'url' => route('pages.show', $giftPage->slug)] : null,
+        ])->filter()->values();
+
+        if ($usefulLinks->isEmpty()) {
+            $usefulLinks = collect([
+                ['title' => __('Оформление брони'), 'url' => route('checkout.index')],
+                ['title' => __('Список для бронирования'), 'url' => route('cart.index')],
+                ['title' => __('Уточнить наличие'), 'url' => route('categories.index')],
+            ]);
+        }
+
+        $accountLinks = collect([
+            ['title' => __('Личный кабинет'), 'url' => route('customer.account.dashboard')],
+            ['title' => __('Заказы'), 'url' => route('customer.account.orders')],
+            ['title' => __('Профиль'), 'url' => route('customer.account.profile')],
+            ['title' => __('Безопасность'), 'url' => route('customer.account.security')],
+        ]);
+
+        $usefulLinks = $usefulLinks
+            ->merge($accountLinks)
+            ->unique('url')
+            ->values();
     @endphp
     <div class="br-line fake-class top-0"></div>
     <div class="footer-inner flat-spacing">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="footer-col-block footer-wrap-3 mb-md-0 ms-0">
-                        <p class="footer-heading footer-heading-mobile text-white">CONTACTS</p>
+            <div class="row g-4">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="footer-col-block footer-wrap-1 mb-lg-0">
+                        <p class="footer-heading footer-heading-mobile text-white">{{ __('О Нас') }}</p>
+                        <div class="tf-collapse-content">
+                            <ul class="footer-menu-list">
+                                <li><a href="{{ route('home') }}" class="cl-text-2 link">{{ __('Главная') }}</a></li>
+                                <li><a href="{{ route('categories.index') }}" class="cl-text-2 link">{{ __('Каталог') }}</a></li>
+                                <li><a href="{{ route('brands.index') }}" class="cl-text-2 link">{{ __('Бренды') }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="footer-col-block footer-wrap-2 mb-lg-0">
+                        <p class="footer-heading footer-heading-mobile text-white">{{ __('Наш магазин') }}</p>
+                        <div class="tf-collapse-content">
+                            <ul class="footer-menu-list">
+                                @foreach($shopLinks as $link)
+                                    <li>
+                                        <a href="{{ $link['url'] }}" class="cl-text-2 link" @if(str_starts_with($link['url'], 'http')) target="_blank" rel="noopener noreferrer" @endif>
+                                            {{ $link['title'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="footer-col-block footer-wrap-2 mb-lg-0">
+                        <p class="footer-heading footer-heading-mobile text-white">{{ __('Полезное') }}</p>
+                        <div class="tf-collapse-content">
+                            <ul class="footer-menu-list">
+                                @foreach($usefulLinks as $link)
+                                    <li><a href="{{ $link['url'] }}" class="cl-text-2 link">{{ $link['title'] }}</a></li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="footer-col-block footer-wrap-3 mb-0">
+                        <p class="footer-heading footer-heading-mobile text-white">{{ __('Наши контакты') }}</p>
                         <div class="tf-collapse-content">
                             @if($footerPhones->isNotEmpty())
-                                <p class="cl-text-2 mb-4">Телефоны:</p>
-                                <div class="d-flex flex-column gap-8 mb-16">
+                                <p class="cl-text-2 mb-4">{{ __('Телефоны') }}:</p>
+                                <div class="d-flex flex-column gap-8 mb-12">
                                     @foreach($footerPhones as $phone)
                                         <a href="{{ phoneHref($phone['number'] ?? null) }}" class="link h6 fw-medium d-inline-flex align-items-center gap-2 text-white">
                                             @if($iconUrl = settingPhoneIconUrl($phone['icon'] ?? null))
                                                 <img src="{{ $iconUrl }}"
-                                                     alt="{{ $phone['label'] ?? ($phone['number'] ?? 'Phone') }}"
+                                                     alt="{{ $phone['label'] ?? ($phone['number'] ?? __('Телефон')) }}"
                                                      width="20"
                                                      height="20">
                                             @endif
                                             <span>{{ $phone['number'] }}</span>
-                                            @if(filled($phone['label'] ?? null))
-                                                <span class="cl-text-2">({{ $phone['label'] }})</span>
-                                            @endif
                                         </a>
                                     @endforeach
                                 </div>
@@ -43,9 +150,7 @@
                                 @endif
                             @endif
 
-                            @if(filled($siteSettings->requisites ?? null))
-                                <div class="cl-text-2 mb-12" style="white-space: pre-line;">{{ $siteSettings->requisites }}</div>
-                            @endif
+
 
                             @if(filled($siteSettings->instagram_url ?? null))
                                 <div class="d-flex align-items-center gap-20">
@@ -57,64 +162,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-6 col-lg-2">
-                    <div class="footer-col-block footer-wrap-1 mx-xl-auto mb-lg-0">
-                        <p class="footer-heading footer-heading-mobile text-white">COMPANY</p>
-                        <div class="tf-collapse-content">
-                            <ul class="footer-menu-list">
-                                <li><a href="about.html" class="cl-text-2 link">About Us</a></li>
-                                <li><a href="our-store.html" class="cl-text-2 link">Our Stories</a></li>
-                                <li><a href="contact.html" class="cl-text-2 link">Contact us</a></li>
-                                <li><a href="blog.html" class="cl-text-2 link">Latest New</a></li>
-                                <li><a href="account-page.html" class="cl-text-2 link">My Account</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="col-12">
+                    @if(filled($siteSettings->requisites ?? null))
+                        <div class="cl-text-2 mb-12" style="white-space: pre-line;">{{ $siteSettings->requisites }}</div>
+                    @endif
                 </div>
-                <div class="col-sm-6 col-md-6 col-lg-2">
-                    <div class="footer-col-block footer-wrap-2 mx-xl-auto mb-lg-0">
-                        <p class="footer-heading footer-heading-mobile text-white">CUSTOMER</p>
-                        <div class="tf-collapse-content">
-                            <ul class="footer-menu-list">
-                                <li><a href="shipping.html" class="cl-text-2 link">Shipping</a></li>
-                                <li><a href="return-and-refund.html" class="cl-text-2 link">Return & Refund</a>
-                                </li>
-                                <li><a href="privacy-policy.html" class="cl-text-2 link">Privacy Policy</a></li>
-                                <li><a href="term-and-condition.html" class="cl-text-2 link">Terms &
-                                        Conditions</a></li>
-                                <li><a href="faq.html" class="cl-text-2 link">Orders FAQs</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="footer-col-block footer-wrap-3 ms-0 ms-lg-auto mb-0">
-                        <p class="footer-heading footer-heading-mobile text-white">NEWSLETTER</p>
-                        <div class="tf-collapse-content">
-                            <p class="footer-desc cl-text-2 mb-16">
-                                Subscribe for store updates and discounts.
-                            </p>
-                            <form class="form-sub">
-                                <fieldset>
-                                    <input type="email" placeholder="Enter your e-mail" required>
-                                </fieldset>
-                                <button type="submit" class="btn-action">
-                                    <i class="icon icon-ArrowUpRight"></i>
-                                </button>
-                            </form>
-                            <p class="text-remember cl-text-2">
-                                By clicking subcribe, you agree to the
-                                <a href="term-and-condition.html" class="link link-underline">
-                                    Terms of Service
-                                </a>
-                                and
-                                <a href="privacy-policy.html" class="link link-underline">
-                                    Privacy Policy
-                                </a>.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
@@ -122,39 +175,12 @@
         <div class="container">
             <div class="br-line d-none d-sm-block"></div>
             <div class="inner-bottom">
-                <div class="tf-list list-currenci">
-                    <div class="tf-currencies">
-                        <select class="tf-dropdown-select style-default color-text-2 type-currencies">
-                            <option selected data-thumbnail="assets/images/country/us.png">United States (USD $)
-                            </option>
-                            <option data-thumbnail="assets/images/country/vn.png">Viet Nam (VND ₫)</option>
-                        </select>
-                    </div>
-                    <div class="tf-languages">
-                        <select class="tf-dropdown-select style-default color-text-2 type-languages">
-                            <option>English</option>
-                            <option>العربية</option>
-                            <option>简体中文</option>
-                            <option>اردو</option>
-                        </select>
-                    </div>
-                </div>
                 <p class="text-nocopy cl-text-2">
-                    ©2026 Amerce. All Rights Reserved.
+                    ©{{ date('Y') }} 100aromatov.by. {{ __('Все права защищены.') }}
                 </p>
                 <ul class="tf-list payment-list">
-                    <li><img loading="lazy" width="38" height="24" src="assets/images/payment/visa.svg"
-                             alt="Image"></li>
-                    <li><img loading="lazy" width="38" height="24" src="assets/images/payment/master-card.svg"
-                             alt="Image"></li>
-                    <li><img loading="lazy" width="38" height="24" src="assets/images/payment/amex.svg"
-                             alt="Image"></li>
-                    <li><img loading="lazy" width="38" height="24" src="assets/images/payment/paypal.svg"
-                             alt="Image"></li>
-                    <li><img loading="lazy" width="38" height="24" src="assets/images/payment/water.svg"
-                             alt="Image"></li>
-                    <li><img loading="lazy" width="38" height="24" src="assets/images/payment/discover.svg"
-                             alt="Image"></li>
+                    <li><img loading="lazy" width="38" height="24" src="{{ asset('assets/images/payment/visa.svg') }}" alt="Visa"></li>
+                    <li><img loading="lazy" width="38" height="24" src="{{ asset('assets/images/payment/master-card.svg') }}" alt="Mastercard"></li>
                 </ul>
             </div>
         </div>

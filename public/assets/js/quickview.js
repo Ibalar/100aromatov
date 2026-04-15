@@ -30,6 +30,18 @@
         return;
     }
 
+    const i18n = {
+        loadingText: selectors.offcanvas.dataset.loadingText || "Загрузка...",
+        loadingPrice: selectors.offcanvas.dataset.loadingPrice || "...",
+        skuLabel: selectors.offcanvas.dataset.skuLabel || "SKU:",
+        countryLabel: selectors.offcanvas.dataset.countryLabel || "Страна:",
+        concentrationLabel: selectors.offcanvas.dataset.concentrationLabel || "Концентрация:",
+        genderLabel: selectors.offcanvas.dataset.genderLabel || "Пол:",
+        reviewsLabel: selectors.offcanvas.dataset.reviewsLabel || "отзывов",
+        loadErrorTitle: selectors.offcanvas.dataset.loadErrorTitle || "Не удалось загрузить товар",
+        loadErrorDescription: selectors.offcanvas.dataset.loadErrorDescription || "Попробуйте открыть полную карточку товара.",
+    };
+
     let currentProduct = null;
 
     function $(selector) {
@@ -61,11 +73,11 @@
 
     function setLoadingState() {
         setText(selectors.category, "");
-        setText(selectors.name, "Загрузка...");
+        setText(selectors.name, i18n.loadingText);
         setText(selectors.reviews, "");
         setText(selectors.brand, "");
         setText(selectors.sku, "-");
-        setText(selectors.price, "...");
+        setText(selectors.price, i18n.loadingPrice);
         setText(selectors.description, "");
         setText(selectors.meta, "");
         setText(selectors.variantLabel, "-");
@@ -107,13 +119,13 @@
     function renderMeta(product) {
         const meta = [];
         if (product.country) {
-            meta.push('<strong>Страна:</strong> ' + escapeHtml(product.country));
+            meta.push('<strong>' + escapeHtml(i18n.countryLabel) + '</strong> ' + escapeHtml(product.country));
         }
         if (product.concentration) {
-            meta.push('<strong>Концентрация:</strong> ' + escapeHtml(product.concentration));
+            meta.push('<strong>' + escapeHtml(i18n.concentrationLabel) + '</strong> ' + escapeHtml(product.concentration));
         }
         if (product.gender) {
-            meta.push('<strong>Пол:</strong> ' + escapeHtml(product.gender));
+            meta.push('<strong>' + escapeHtml(i18n.genderLabel) + '</strong> ' + escapeHtml(product.gender));
         }
         const element = $(selectors.meta);
         if (element) {
@@ -194,7 +206,7 @@
         renderImages(product.images, product.name);
         setText(selectors.category, product.category_name || "");
         setText(selectors.name, product.name || "");
-        setText(selectors.reviews, "(" + (product.reviews_count || 0) + " отзывов)");
+        setText(selectors.reviews, "(" + (product.reviews_count || 0) + " " + i18n.reviewsLabel + ")");
         setText(selectors.brand, product.brand_name || "");
         setText(selectors.description, product.description || "");
         renderMeta(product);
@@ -230,8 +242,8 @@
 
             renderProduct(data.product);
         } catch (error) {
-            setText(selectors.name, "Не удалось загрузить товар");
-            setText(selectors.description, "Попробуйте открыть полную карточку товара.");
+            setText(selectors.name, i18n.loadErrorTitle);
+            setText(selectors.description, i18n.loadErrorDescription);
             setText(selectors.price, "");
         }
     }

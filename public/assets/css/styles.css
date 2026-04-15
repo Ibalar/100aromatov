@@ -13214,6 +13214,10 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
   .product-style_list {
     gap: 30px;
   }
+  .product-style_list .card-product_wrapper {
+    flex: 0 0 260px;
+    max-width: 260px;
+  }
 }
 @media (max-width: 1199px) {
   .product-style_list .card-product_wrapper {

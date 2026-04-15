@@ -44,10 +44,12 @@ class CategoryController extends Controller
         $sort = $request->get('sort', 'best-selling');
 
         $query = Product::active()
-            ->join('product_variants as variants_filter', 'products.id', '=', 'variants_filter.product_id')
-            ->where('variants_filter.is_active', true)
-            ->select('products.*')
-            ->distinct();
+            ->whereExists(function ($sub) {
+                $sub->selectRaw('1')
+                    ->from('product_variants as variants_filter')
+                    ->whereColumn('variants_filter.product_id', 'products.id')
+                    ->where('variants_filter.is_active', true);
+            });
 
         if ($minPrice !== null || $maxPrice !== null) {
             $query->whereExists(function ($sub) use ($minPrice, $maxPrice) {

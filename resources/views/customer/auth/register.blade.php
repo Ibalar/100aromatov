@@ -15,22 +15,22 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-5">
                     <div class="card p-4">
-                        <h3 class="mb-3">{{ __('Создать аккаунт') }}</h3>
+                        <h3 class="mb-3 text-center mb-20">{{ __('Создать аккаунт') }}</h3>
                         <form method="POST" action="{{ route('customer.register.store') }}">
                             @csrf
-                            <fieldset class="tf-field mb-3">
-                                <label class="tf-lable fw-medium">E-mail</label>
+                            <fieldset class="tf-field mb-15">
+                                <label class="tf-lable fw-medium">{{ __('Email') }}</label>
                                 <input type="email" name="email" value="{{ old('email') }}" required>
                                 @error('email') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                             </fieldset>
 
-                            <fieldset class="tf-field mb-3">
+                            <fieldset class="tf-field mb-15">
                                 <label class="tf-lable fw-medium">{{ __('Пароль') }}</label>
                                 <input type="password" name="password" required>
                                 @error('password') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                             </fieldset>
 
-                            <fieldset class="tf-field mb-3">
+                            <fieldset class="tf-field mb-15">
                                 <label class="tf-lable fw-medium">{{ __('Подтвердите пароль') }}</label>
                                 <input type="password" name="password_confirmation" required>
                             </fieldset>
@@ -47,4 +47,3 @@
         </div>
     </section>
 @endsection
-

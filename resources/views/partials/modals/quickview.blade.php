@@ -1,5 +1,18 @@
 <!-- Quick View -->
-<div class="offcanvas offcanvas-end canvas-quickview" id="quickView" aria-labelledby="quickViewLabel">
+<div
+    class="offcanvas offcanvas-end canvas-quickview"
+    id="quickView"
+    aria-labelledby="quickViewLabel"
+    data-loading-text="{{ __('Загрузка...') }}"
+    data-loading-price="..."
+    data-sku-label="{{ __('SKU') }}:"
+    data-country-label="{{ __('Страна') }}:"
+    data-concentration-label="{{ __('Концентрация') }}:"
+    data-gender-label="{{ __('Пол') }}:"
+    data-reviews-label="{{ __('Отзывы') }}"
+    data-load-error-title="{{ __('Не удалось загрузить товар') }}"
+    data-load-error-description="{{ __('Попробуйте открыть полную карточку товара.') }}"
+>
     <div class="mini-quick-image">
         <div class="wrap-quick" data-quickview-images>
             <div class="image">
@@ -28,7 +41,7 @@
                                     <i class="icon icon-Star"></i>
                                 @endfor
                             </div>
-                            <span class="text-caption-01 cl-text-2" data-quickview-reviews>(0 {{ __('отзывов') }})</span>
+                            <span class="text-caption-01 cl-text-2" data-quickview-reviews>(0 {{ __('Отзывы') }})</span>
                         </div>
                         <div class="br-line type-vertical"></div>
                         <div class="meta_sold">
@@ -37,7 +50,7 @@
                         </div>
                         <div class="br-line type-vertical"></div>
                         <div class="meta_prd_code text-caption-01">
-                            <span class="cl-text-2">SKU:</span>
+                            <span class="cl-text-2">{{ __('SKU') }}:</span>
                             <span data-quickview-sku>-</span>
                         </div>
                     </div>

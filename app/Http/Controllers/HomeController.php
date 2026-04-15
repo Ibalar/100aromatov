@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\View\View;
 
@@ -44,6 +45,14 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
-        return view('home', compact('featuredProducts', 'saleProducts'));
+        $homeBrands = Brand::query()
+            ->active()
+            ->whereNotNull('logo')
+            ->where('logo', '!=', '')
+            ->inRandomOrder()
+            ->limit(10)
+            ->get(['id', 'slug', 'name', 'logo']);
+
+        return view('home', compact('featuredProducts', 'saleProducts', 'homeBrands'));
     }
 }

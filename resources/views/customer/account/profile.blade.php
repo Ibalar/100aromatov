@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <fieldset class="tf-field">
-                                        <label class="tf-lable fw-medium">E-mail</label>
+                                        <label class="tf-lable fw-medium">{{ __('Email') }}</label>
                                         <input type="email" name="email" value="{{ old('email', $customer->email) }}" required>
                                     </fieldset>
                                 </div>
@@ -61,4 +61,3 @@
         </div>
     </section>
 @endsection
-

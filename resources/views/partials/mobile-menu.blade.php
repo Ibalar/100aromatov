@@ -9,7 +9,7 @@
             </span>
         <form action="{{ route('search') }}" method="GET" class="form-search-nav">
             <fieldset>
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Искать на сайте" required>
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="{{ __('Искать на сайте') }}" required>
             </fieldset>
             <button type="submit" class="btn-action">
                 <i class="icon icon-MagnifyingGlass"></i>
@@ -21,7 +21,7 @@
             <ul class="nav-ul-mb" id="wrapper-menu-navigation"></ul>
         </div>
         <div class="need-help-wrap">
-            <p class="nd-title h6 fw-medium mb-16">Need Help?</p>
+            <p class="nd-title h6 fw-medium mb-16">{{ __('Нужна помощь?') }}</p>
             @if(filled($siteSettings->address ?? null))
                 <p class="lh-26 cl-text-2 mb-4">
                     {{ $siteSettings->address }}
@@ -30,14 +30,14 @@
             @if(filled($siteSettings->address_map_url ?? null))
                 <a href="{{ $siteSettings->address_map_url }}" target="_blank" rel="noopener noreferrer"
                    class="text-decoration-underline text-primary lh-26 mb-16">
-                    Open in Maps
+                    {{ __('Открыть на карте') }}
                 </a>
             @endif
             @foreach($mobilePhones as $phone)
                 <a href="{{ phoneHref($phone['number'] ?? null) }}" class="cl-text-2 link mb-8 d-inline-flex align-items-center gap-2">
                     @if($iconUrl = settingPhoneIconUrl($phone['icon'] ?? null))
                         <img src="{{ $iconUrl }}"
-                             alt="{{ $phone['label'] ?? ($phone['number'] ?? 'Phone') }}"
+                             alt="{{ $phone['label'] ?? ($phone['number'] ?? __('Телефон')) }}"
                              width="18"
                              height="18">
                     @endif
@@ -46,7 +46,7 @@
             @endforeach
             @if(filled($siteSettings->instagram_url ?? null))
                 <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener noreferrer" class="cl-text-2 link">
-                    Instagram
+                    {{ __('Instagram') }}
                 </a>
             @endif
         </div>
