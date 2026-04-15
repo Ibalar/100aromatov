@@ -44,18 +44,24 @@ return new class extends Migration
      */
     private function updateProductPrices(): void
     {
-        DB::statement('
-            UPDATE products p
-            SET min_price = (
-                SELECT MIN(price_usd)
-                FROM product_variants
-                WHERE product_id = p.id AND is_active = 1
-            ),
-            max_price = (
-                SELECT MAX(price_usd)
-                FROM product_variants
-                WHERE product_id = p.id AND is_active = 1
-            )
-        ');
+        DB::table('products')
+            ->select('id')
+            ->orderBy('id')
+            ->chunk(200, static function ($products): void {
+                foreach ($products as $product) {
+                    $priceRange = DB::table('product_variants')
+                        ->where('product_id', $product->id)
+                        ->where('is_active', true)
+                        ->selectRaw('MIN(price_usd) as min_price, MAX(price_usd) as max_price')
+                        ->first();
+
+                    DB::table('products')
+                        ->where('id', $product->id)
+                        ->update([
+                            'min_price' => $priceRange?->min_price,
+                            'max_price' => $priceRange?->max_price,
+                        ]);
+                }
+            });
     }
 };

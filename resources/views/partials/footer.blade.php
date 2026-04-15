@@ -176,11 +176,10 @@
             <div class="br-line d-none d-sm-block"></div>
             <div class="inner-bottom">
                 <p class="text-nocopy cl-text-2">
-                    ©{{ date('Y') }} 100aromatov.by. {{ __('Все права защищены.') }}
+                    © 2018-{{ date('Y') }} {{ __('Все права защищены.') }}
                 </p>
                 <ul class="tf-list payment-list">
-                    <li><img loading="lazy" width="38" height="24" src="{{ asset('assets/images/payment/visa.svg') }}" alt="Visa"></li>
-                    <li><img loading="lazy" width="38" height="24" src="{{ asset('assets/images/payment/master-card.svg') }}" alt="Mastercard"></li>
+                    <li class="cl-text-2">Разработка сайта <a class="text-white ps-2" href="https://webart.by"> WebArt BY</a></li>
                 </ul>
             </div>
         </div>

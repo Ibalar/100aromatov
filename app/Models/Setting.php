@@ -14,6 +14,7 @@ class Setting extends Model
         'usd_rate',
         'telegram_bot_token',
         'telegram_chat_id',
+        'email',
         'phones',
         'address',
         'address_map_url',

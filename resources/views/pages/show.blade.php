@@ -27,9 +27,8 @@
     <section class="flat-spacing-3 pt-0">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-xl-9 col-lg-10">
+                <div class="col-12">
                     <div class="static-page-content">
-                        <h1 class="mb-4">{{ $pageName }}</h1>
 
                         @if($pageDescription)
                             <div class="cl-text-2 text-body-1">

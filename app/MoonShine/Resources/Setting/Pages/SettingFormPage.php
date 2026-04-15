@@ -46,6 +46,8 @@ class SettingFormPage extends FormPage
                 ]),
                 Tab::make('Контакты', [
                     Box::make([
+                        Text::make('Email', 'email')
+                            ->hint('Например: info@example.com'),
                         Json::make('Телефоны', 'phones')
                             ->fields([
                                 Text::make('Подпись оператора', 'label')
@@ -83,7 +85,9 @@ class SettingFormPage extends FormPage
 
     protected function rules(DataWrapperContract $item): array
     {
-        return [];
+        return [
+            'email' => ['nullable', 'email'],
+        ];
     }
 
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract

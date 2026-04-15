@@ -1,4 +1,4 @@
-﻿<div class="offcanvas offcanvas-end popup-shopping-cart" id="shoppingCart">
+<div class="offcanvas offcanvas-end popup-shopping-cart" id="shoppingCart">
     <div class="canvas-wrapper">
         <div class="popup-header">
             <div class="d-flex align-items-center justify-content-between mb-12">

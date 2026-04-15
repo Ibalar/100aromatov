@@ -21,9 +21,9 @@ use MoonShine\Laravel\Pages\LoginPage;
 use MoonShine\Laravel\Pages\ProfilePage;
 
 return [
-    'title' => env('MOONSHINE_TITLE', 'MoonShine'),
-    'logo' => '/vendor/moonshine/logo-small.svg',
-    'logo_small' => '/vendor/moonshine/logo-small.svg',
+    'title' => env('MOONSHINE_TITLE', 'WebArt.BY'),
+    'logo' => '/moonshine/logo.svg',
+    'logo_small' => '/moonshine/logo.svg',
 
     'favicons' => [
         'apple-touch' => '/vendor/moonshine/apple-touch-icon.png',

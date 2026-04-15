@@ -59,6 +59,14 @@ final class MoonShineLayout extends AppLayout
         ];
     }
 
+    protected function getFooterMenu(): array
+    {
+        return [
+            url('/wiki/') => 'Wiki для администраторов',
+            ...parent::getFooterMenu(),
+        ];
+    }
+
     /**
      * @param ColorManager $colorManager
      */

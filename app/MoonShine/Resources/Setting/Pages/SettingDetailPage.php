@@ -11,6 +11,7 @@ use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\Setting\SettingResource;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
 use Throwable;
 
 
@@ -26,6 +27,7 @@ class SettingDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Email', 'email'),
         ];
     }
 

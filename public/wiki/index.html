@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wiki администратора</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 32px 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.55;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 24px;
+        }
+        h1, h2 {
+            margin-top: 0;
+            color: #111827;
+        }
+        h2 {
+            margin-top: 28px;
+            border-top: 1px solid #f3f4f6;
+            padding-top: 18px;
+        }
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        ul {
+            margin: 8px 0 0;
+        }
+        .muted {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .back {
+            display: inline-block;
+            margin-bottom: 16px;
+            text-decoration: none;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="/admin">&larr; Вернуться в админку</a>
+    <h1>Wiki администратора</h1>
+    <p class="muted">Быстрая инструкция по работе с сайтом через панель MoonShine.</p>
+
+    <h2>1. Товары</h2>
+    <ul>
+        <li>Раздел: <code>Товары</code>.</li>
+        <li>Обязательные поля: бренд, категория, slug, название, активный вариант с ценой.</li>
+        <li>После создания товара проверьте карточку на витрине.</li>
+    </ul>
+
+    <h2>2. Категории и бренды</h2>
+    <ul>
+        <li>Разделы: <code>Категории</code> и <code>Бренды</code>.</li>
+        <li>Следите за уникальностью <code>slug</code>.</li>
+        <li>Для бренда желательно загружать логотип, чтобы он отображался на главной.</li>
+    </ul>
+
+    <h2>3. Заказы</h2>
+    <ul>
+        <li>Раздел: <code>Заказы</code>.</li>
+        <li>Проверяйте контактные данные и состав заказа перед сменой статуса.</li>
+        <li>Если Telegram-уведомления не приходят, проверьте настройки в <code>Settings</code>.</li>
+    </ul>
+
+    <h2>4. Контакты и настройки</h2>
+    <ul>
+        <li>Раздел: <code>Settings</code>.</li>
+        <li>Там управляются телефоны, email, адрес, реквизиты и соцсети.</li>
+        <li>Изменения сразу влияют на публичные страницы сайта.</li>
+    </ul>
+
+    <h2>5. Рекомендации перед публикацией</h2>
+    <ul>
+        <li>Проверьте, что у товара есть изображение и активная цена.</li>
+        <li>Проверьте корректность slug и SEO-полей.</li>
+        <li>Откройте страницу сайта в режиме гостя и проверьте итоговый вид.</li>
+    </ul>
+</div>
+</body>
+</html>

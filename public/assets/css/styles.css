@@ -193,7 +193,7 @@ body::-webkit-scrollbar-thumb {
   background-color: var(--primary);
   border-radius: 999px;
 }
-@media (max-width: 1199px) {
+@media (max-width: 991px) {
   body {
     padding-bottom: 70px;
   }
@@ -5104,7 +5104,7 @@ header.header-sticky.tf-header-landing {
   font-size: 12px;
   line-height: 16px;
 }
-@media (max-width: 1199px) {
+@media (max-width: 991px) {
   .tf-toolbar-bottom {
     display: flex;
   }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'home' => 'Home',
+    'home' => 'Главная',
     'profile' => 'Профиль',
     'dashboard' => 'Панель',
     'add' => 'Добавить',

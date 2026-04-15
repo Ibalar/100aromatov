@@ -35,13 +35,11 @@
             @endif
             @foreach($mobilePhones as $phone)
                 <a href="{{ phoneHref($phone['number'] ?? null) }}" class="cl-text-2 link mb-8 d-inline-flex align-items-center gap-2">
-                    @if($iconUrl = settingPhoneIconUrl($phone['icon'] ?? null))
-                        <img src="{{ $iconUrl }}"
-                             alt="{{ $phone['label'] ?? ($phone['number'] ?? __('Телефон')) }}"
-                             width="18"
-                             height="18">
-                    @endif
                     <span>{{ $phone['number'] }}</span>
+                    @if($phone['label'])
+                       ( {{ $phone['label'] }} )
+                    @endif
+
                 </a>
             @endforeach
             @if(filled($siteSettings->instagram_url ?? null))
@@ -52,21 +50,16 @@
         </div>
     </div>
     <div class="canvas-footer">
-        <div class="d-flex justify-content-center border-end">
-            <div class="tf-currencies">
-                <select class="tf-dropdown-select style-default type-currencies">
-                    <option selected data-thumbnail="assets/images/country/us.png">(USD $)</option>
-                    <option data-thumbnail="assets/images/country/vn.png">(VND ₫)</option>
-                </select>
-            </div>
-        </div>
         <div class="d-flex justify-content-center">
             <div class="tf-languages">
-                <select class="tf-dropdown-select style-default type-languages">
-                    <option>English</option>
-                    <option>العربية</option>
-                    <option>简体中文</option>
-                    <option>اردو</option>
+                <select class="tf-dropdown-select style-default type-languages"
+                        onchange="if (this.value) { window.location.href = this.value; }">
+                    <option value="{{ route('language.switch', 'ru') }}" @selected(app()->getLocale() === 'ru')>
+                        {{ __('Русский') }}
+                    </option>
+                    <option value="{{ route('language.switch', 'by') }}" @selected(app()->getLocale() === 'by')>
+                        {{ __('Беларуская') }}
+                    </option>
                 </select>
             </div>
         </div>

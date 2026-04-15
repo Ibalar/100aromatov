@@ -148,21 +148,20 @@
                                                 </li>
                                             @endforeach
                                         @endforeach
-
-                                        @if($loop->last)
-                                            <li>
-                                                <a href="{{ route('categories.index') }}"
-                                                   class="sub-menu_link tf-btn-line-2 py-4 style-primary">
-                                                    <span class="fw-semibold">
-                                                        {{ __('Смотреть все') }}
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        @endif
                                     </ul>
                                 @endforeach
                             </div>
                         </li>
+
+                        @foreach($menuPages ?? [] as $menuPage)
+                            <li class="menu-item position-relative">
+                                <a href="{{ route('pages.show', $menuPage->slug) }}" class="item-link">
+                                    <span class="text cus-text">
+                                        {{ localizedField($menuPage, 'name') }}
+                                    </span>
+                                </a>
+                            </li>
+                        @endforeach
 
                         @unless($hasContactsPageInMenu)
                             <li class="menu-item position-relative">
@@ -174,15 +173,6 @@
                             </li>
                         @endunless
 
-                        @foreach($menuPages ?? [] as $menuPage)
-                            <li class="menu-item position-relative">
-                                <a href="{{ route('pages.show', $menuPage->slug) }}" class="item-link">
-                                    <span class="text cus-text">
-                                        {{ localizedField($menuPage, 'name') }}
-                                    </span>
-                                </a>
-                            </li>
-                        @endforeach
                     </ul>
                 </nav>
             </div>
