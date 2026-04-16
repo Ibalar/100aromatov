@@ -101,7 +101,7 @@
                                     <div class="meta_rate">
                                         <div class="star-wrap normal d-flex align-items-center">
                                             @for($i = 1; $i <= 5; $i++)
-                                                <i class="icon icon-Star{{ $averageRating !== null && $i <= round($averageRating) ? 'Fill' : '' }}"></i>
+                                                <i class="icon icon-Star {{ $averageRating !== null && $i <= round($averageRating) ? 'is-active' : '' }}"></i>
                                             @endfor
                                         </div>
                                         <span class="text-caption-01 cl-text-2">({{ $reviewsCount }} {{ __('отзывов') }})</span>
@@ -298,7 +298,7 @@
                                 </p>
                                 <div class="star-wrap normal d-flex align-items-center">
                                     @for($i = 1; $i <= 5; $i++)
-                                        <i class="icon icon-Star{{ $averageRating !== null && $i <= round($averageRating) ? 'Fill' : '' }} fs-24"></i>
+                                        <i class="icon icon-Star fs-24 {{ $averageRating !== null && $i <= round($averageRating) ? 'is-active' : '' }}"></i>
                                     @endfor
                                 </div>
                                 <p class="rate-number">
@@ -322,6 +322,9 @@
                             <div class="review-summary-actions">
                                 <a href="#write-review-form" class="action btn-comment-review tf-btn animate-btn">
                                     {{ __('Оставить отзыв') }}
+                                </a>
+                                <a href="{{ route('reviews.index') }}" class="action tf-btn btn-line ms-12">
+                                    {{ __('Все отзывы') }}
                                 </a>
                             </div>
                         </div>
@@ -354,10 +357,23 @@
                                             </div>
                                             <div class="comment-star-wrap mt-8 mb-8">
                                                 @for($i = 1; $i <= 5; $i++)
-                                                    <i class="icon icon-Star{{ $i <= $review->rating ? 'Fill' : '' }}"></i>
+                                                    <i class="icon icon-Star {{ $i <= (int) $review->rating ? 'is-active' : '' }}"></i>
                                                 @endfor
                                             </div>
                                             <p class="comment_text text-body-1">{{ $review->text }}</p>
+                                            @if(filled($review->image))
+                                                <div class="review-image-wrap">
+                                                    <a href="{{ asset('storage/' . $review->image) }}" target="_blank" rel="noopener noreferrer">
+                                                        <img src="{{ asset('storage/' . $review->image) }}" alt="{{ __('Фото к отзыву') }}" class="review-image">
+                                                    </a>
+                                                </div>
+                                            @endif
+                                            @if(filled($review->admin_reply))
+                                                <div class="review-admin-reply">
+                                                    <p class="review-admin-reply__title">{{ __('Ответ администратора') }}</p>
+                                                    <p class="review-admin-reply__text">{{ $review->admin_reply }}</p>
+                                                </div>
+                                            @endif
                                         </div>
                                     @empty
                                         <p class="cl-text-2">{{ __('Пока нет отзывов. Будьте первым, кто оставит отзыв.') }}</p>
@@ -385,7 +401,7 @@
                                     </div>
                                 @endif
 
-                                <form method="POST" action="{{ route('product.reviews.store', $product->slug) }}" class="form-rating">
+                                <form method="POST" action="{{ route('product.reviews.store', $product->slug) }}" class="form-rating" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-content mb-24">
                                         <div class="review-rating-select mb-20">
@@ -427,6 +443,15 @@
                                                 @enderror
                                             </fieldset>
                                         </div>
+
+                                        <fieldset class="tf-field mt-20">
+                                            <label for="review-image" class="tf-lable fw-medium">{{ __('Фото к отзыву (необязательно)') }}</label>
+                                            <input type="file" name="image" id="review-image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                                            <p class="cl-text-3 text-caption-01 mt-8 mb-0">{{ __('Форматы: JPG, PNG, WEBP. До 5 МБ.') }}</p>
+                                            @error('image')
+                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </fieldset>
                                     </div>
 
                                     <button type="submit" class="tf-btn animate-btn">
@@ -639,6 +664,45 @@
         background: #fafafa;
     }
 
+    .review-image-wrap {
+        margin-top: 14px;
+    }
+
+    .review-image {
+        display: block;
+        max-width: 220px;
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #eee;
+    }
+
+    .review-admin-reply {
+        margin-top: 14px;
+        padding: 14px 16px;
+        border-left: 3px solid #181818;
+        background: #f8f8f8;
+        border-radius: 8px;
+    }
+
+    .review-admin-reply__title {
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .review-admin-reply__text {
+        margin-bottom: 0;
+    }
+
+    .star-wrap .icon-Star,
+    .comment-star-wrap .icon-Star {
+        color: #d0d0d0;
+    }
+
+    .star-wrap .icon-Star.is-active,
+    .comment-star-wrap .icon-Star.is-active {
+        color: #f5b301;
+    }
+
     @media (max-width: 991px) {
         .box-rating {
             grid-template-columns: 1fr;
@@ -651,7 +715,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const shouldOpenReviewTab = window.location.hash === '#customer-reviews'
-            || @json($errors->has('rating') || $errors->has('text') || session()->has('review_success'));
+            || @json($errors->has('rating') || $errors->has('text') || $errors->has('image') || session()->has('review_success'));
 
         if (!shouldOpenReviewTab) {
             return;

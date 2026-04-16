@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Services\WishlistService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
@@ -35,6 +36,8 @@ class CustomerAuthController extends Controller
 
         $request->session()->regenerate();
 
+        app(WishlistService::class)->syncSessionToCustomer($customer);
+
         return redirect()->route('customer.account.dashboard');
     }
 
@@ -58,6 +61,8 @@ class CustomerAuthController extends Controller
         Auth::guard('customer')->login($customer);
         $request->session()->regenerate();
 
+        app(WishlistService::class)->syncSessionToCustomer($customer);
+
         return redirect()->route('customer.account.dashboard');
     }
 
@@ -70,4 +75,3 @@ class CustomerAuthController extends Controller
         return redirect()->route('customer.login');
     }
 }
-

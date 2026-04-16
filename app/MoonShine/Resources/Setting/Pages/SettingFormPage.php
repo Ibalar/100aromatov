@@ -69,6 +69,16 @@ class SettingFormPage extends FormPage
                             ->hint('Можно указать УНП, расчетный счет, банк и другие данные'),
                     ]),
                 ]),
+                Tab::make('Метрики/счетчики', [
+                    Box::make([
+                        Textarea::make('Код перед </head>', 'metrics_head_code')
+                            ->hint('Например: Google Tag Manager, Meta Pixel и другие скрипты в head'),
+                        Textarea::make('Код сразу после <body>', 'metrics_body_start_code')
+                            ->hint('Например: noscript часть GTM'),
+                        Textarea::make('Код перед </body>', 'metrics_body_end_code')
+                            ->hint('Дополнительный код счетчиков/метрик'),
+                    ]),
+                ]),
             ]),
         ];
     }

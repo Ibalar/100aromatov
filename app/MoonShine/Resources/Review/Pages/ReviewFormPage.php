@@ -8,14 +8,14 @@ use App\Models\Review;
 use App\MoonShine\Resources\Product\ProductResource;
 use App\MoonShine\Resources\Review\ReviewResource;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\UI\FormBuilderContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
@@ -31,18 +31,30 @@ class ReviewFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
+                Text::make('Тип', formatted: static fn (Review $review) => $review->product_id ? 'Товар' : 'О магазине')
+                    ->previewMode(),
                 BelongsTo::make(
                     'Товар',
                     'product',
                     formatted: static fn ($product) => localizedField($product, 'name'),
                     resource: ProductResource::class,
-                ),
+                )->nullable(),
                 Text::make('Автор', formatted: static fn (Review $review) => $review->author_name)
                     ->previewMode(),
                 Text::make('Email автора', formatted: static fn (Review $review) => $review->customer?->email ?? '')
                     ->previewMode(),
                 Number::make('Оценка', 'rating')->min(1)->max(5),
                 Textarea::make('Текст', 'text'),
+                Image::make('Фото', 'image')
+                    ->dir('reviews')
+                    ->disk('public')
+                    ->allowedExtensions(['jpg', 'jpeg', 'png', 'webp'])
+                    ->removable()
+                    ->nullable(),
+                Textarea::make('Ответ администратора', 'admin_reply'),
+                Date::make('Дата отзыва', 'created_at')
+                    ->format('d.m.Y H:i')
+                    ->default(now()->toDateTimeString()),
                 Switcher::make('Одобрен', 'is_approved'),
             ]),
         ];

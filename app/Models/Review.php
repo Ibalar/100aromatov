@@ -13,7 +13,10 @@ class Review extends Model
         'product_id',
         'rating',
         'text',
+        'image',
+        'admin_reply',
         'is_approved',
+        'created_at',
     ];
 
     protected $casts = [
@@ -53,5 +56,12 @@ class Review extends Model
         }
 
         return 'Пользователь';
+    }
+
+    public function getTargetLabelAttribute(): string
+    {
+        return $this->product
+            ? (string) localizedField($this->product, 'name')
+            : 'Магазин';
     }
 }

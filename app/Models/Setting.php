@@ -20,6 +20,9 @@ class Setting extends Model
         'address_map_url',
         'instagram_url',
         'requisites',
+        'metrics_head_code',
+        'metrics_body_start_code',
+        'metrics_body_end_code',
     ];
 
     protected $casts = [

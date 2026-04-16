@@ -26,10 +26,10 @@ return [
     'logo_small' => '/moonshine/logo.svg',
 
     'favicons' => [
-        'apple-touch' => '/vendor/moonshine/apple-touch-icon.png',
-        '32' => '/vendor/moonshine/favicon-32x32.png',
-        '16' => '/vendor/moonshine/favicon-16x16.png',
-        'safari-pinned-tab' => '/vendor/moonshine/safari-pinned-tab.svg',
+        'apple-touch' => '/moonshine/favicon/apple-touch-icon.png',
+        '32' => '/moonshine/favicon/favicon-32x32.png',
+        '16' => '/moonshine/favicon/favicon-16x16.png',
+        'safari-pinned-tab' => '/moonshine/favicon/safari-pinned-tab.svg',
     ],
 
     // Default flags

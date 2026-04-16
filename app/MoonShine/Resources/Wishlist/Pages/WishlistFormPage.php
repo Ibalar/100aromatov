@@ -4,23 +4,17 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Wishlist\Pages;
 
-use App\Models\Product;
-use App\MoonShine\Resources\Product\ProductResource;
-use MoonShine\Laravel\Fields\Relationships\BelongsTo;
-use MoonShine\Laravel\Models\MoonshineUser;
-use MoonShine\Laravel\Pages\Crud\FormPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\Contracts\UI\FormBuilderContract;
-use MoonShine\Laravel\Resources\MoonShineUserResource;
-use MoonShine\UI\Components\FormBuilder;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use App\MoonShine\Resources\Wishlist\WishlistResource;
+use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\FormBuilderContract;
+use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\FormBuilder;
 use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Text;
 use Throwable;
-
 
 /**
  * @extends FormPage<WishlistResource>
@@ -33,10 +27,11 @@ class WishlistFormPage extends FormPage
     protected function fields(): iterable
     {
         return [
-            Box::make([
-                ID::make(),
-                BelongsTo::make('Товар', 'product', resource: ProductResource::class),
-            ]),
+            ID::make()->readonly(),
+            Text::make('Клиент', 'customer.email')->readonly(),
+            Text::make('Товар', 'product.name_ru')->readonly(),
+            Text::make('Добавлено', 'created_at')->readonly(),
+            Text::make('Обновлено', 'updated_at')->readonly(),
         ];
     }
 
@@ -55,11 +50,6 @@ class WishlistFormPage extends FormPage
         return [];
     }
 
-    /**
-     * @param  FormBuilder  $component
-     *
-     * @return FormBuilder
-     */
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract
     {
         return $component;
@@ -72,7 +62,7 @@ class WishlistFormPage extends FormPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -83,7 +73,7 @@ class WishlistFormPage extends FormPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -94,7 +84,7 @@ class WishlistFormPage extends FormPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
     }
 }

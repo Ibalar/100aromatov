@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Wishlist\Pages;
 
-use MoonShine\Laravel\Pages\Crud\DetailPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Table\TableBuilder;
-use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\Wishlist\WishlistResource;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
 use Throwable;
-
 
 /**
  * @extends DetailPage<WishlistResource>
@@ -26,6 +26,10 @@ class WishlistDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Клиент', 'customer.email'),
+            Text::make('Товар', 'product.name_ru'),
+            Text::make('Добавлено', 'created_at'),
+            Text::make('Обновлено', 'updated_at'),
         ];
     }
 
@@ -34,11 +38,6 @@ class WishlistDetailPage extends DetailPage
         return parent::buttons();
     }
 
-    /**
-     * @param  TableBuilder  $component
-     *
-     * @return TableBuilder
-     */
     protected function modifyDetailComponent(ComponentContract $component): ComponentContract
     {
         return $component;
@@ -51,7 +50,7 @@ class WishlistDetailPage extends DetailPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -62,7 +61,7 @@ class WishlistDetailPage extends DetailPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -73,7 +72,7 @@ class WishlistDetailPage extends DetailPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
     }
 }

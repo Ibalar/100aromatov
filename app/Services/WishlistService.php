@@ -2,26 +2,63 @@
 
 namespace App\Services;
 
+use App\Models\Customer;
 use App\Models\Product;
+use App\Models\Wishlist;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class WishlistService
 {
     private const SESSION_KEY = 'wishlist.product_ids';
+    private const SESSION_SYNCED_KEY = 'wishlist.synced_with_customer';
 
     public function ids(): array
     {
-        return array_values(array_unique(array_map('intval', session(self::SESSION_KEY, []))));
+        $customer = $this->authenticatedCustomer();
+
+        if ($customer) {
+            return Wishlist::query()
+                ->where('customer_id', $customer->id)
+                ->orderBy('id')
+                ->pluck('product_id')
+                ->map(static fn ($id) => (int) $id)
+                ->unique()
+                ->values()
+                ->toArray();
+        }
+
+        return $this->sessionIds();
     }
 
     public function has(int $productId): bool
     {
-        return in_array($productId, $this->ids(), true);
+        $customer = $this->authenticatedCustomer();
+
+        if ($customer) {
+            return Wishlist::query()
+                ->where('customer_id', $customer->id)
+                ->where('product_id', $productId)
+                ->exists();
+        }
+
+        return in_array($productId, $this->sessionIds(), true);
     }
 
     public function add(int $productId): void
     {
-        $ids = $this->ids();
+        $customer = $this->authenticatedCustomer();
+
+        if ($customer) {
+            Wishlist::query()->firstOrCreate([
+                'customer_id' => $customer->id,
+                'product_id' => $productId,
+            ]);
+
+            return;
+        }
+
+        $ids = $this->sessionIds();
         if (! in_array($productId, $ids, true)) {
             $ids[] = $productId;
             session([self::SESSION_KEY => $ids]);
@@ -30,7 +67,18 @@ class WishlistService
 
     public function remove(int $productId): void
     {
-        $ids = array_values(array_filter($this->ids(), fn (int $id) => $id !== $productId));
+        $customer = $this->authenticatedCustomer();
+
+        if ($customer) {
+            Wishlist::query()
+                ->where('customer_id', $customer->id)
+                ->where('product_id', $productId)
+                ->delete();
+
+            return;
+        }
+
+        $ids = array_values(array_filter($this->sessionIds(), fn (int $id) => $id !== $productId));
         session([self::SESSION_KEY => $ids]);
     }
 
@@ -38,21 +86,41 @@ class WishlistService
     {
         if ($this->has($productId)) {
             $this->remove($productId);
+
             return false;
         }
 
         $this->add($productId);
+
         return true;
     }
 
     public function clear(): void
     {
+        $customer = $this->authenticatedCustomer();
+
+        if ($customer) {
+            Wishlist::query()
+                ->where('customer_id', $customer->id)
+                ->delete();
+
+            return;
+        }
+
         session()->forget(self::SESSION_KEY);
     }
 
     public function count(): int
     {
-        return count($this->ids());
+        $customer = $this->authenticatedCustomer();
+
+        if ($customer) {
+            return Wishlist::query()
+                ->where('customer_id', $customer->id)
+                ->count();
+        }
+
+        return count($this->sessionIds());
     }
 
     public function items(): Collection
@@ -77,5 +145,66 @@ class WishlistService
             ->map(fn (int $id) => $indexed->get($id))
             ->filter();
     }
-}
 
+    public function syncSessionToCustomer(?Customer $customer = null): void
+    {
+        $customer ??= Auth::guard('customer')->user();
+        if (! $customer) {
+            return;
+        }
+
+        $sessionIds = $this->sessionIds();
+        if ($sessionIds !== []) {
+            $existingIds = Wishlist::query()
+                ->where('customer_id', $customer->id)
+                ->whereIn('product_id', $sessionIds)
+                ->pluck('product_id')
+                ->map(static fn ($id) => (int) $id)
+                ->toArray();
+
+            $existingMap = array_fill_keys($existingIds, true);
+            $insertRows = [];
+
+            foreach ($sessionIds as $productId) {
+                if (! isset($existingMap[$productId])) {
+                    $insertRows[] = [
+                        'customer_id' => $customer->id,
+                        'product_id' => $productId,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+
+            if ($insertRows !== []) {
+                Wishlist::query()->insert($insertRows);
+            }
+        }
+
+        session()->forget(self::SESSION_KEY);
+        session([self::SESSION_SYNCED_KEY => true]);
+    }
+
+    private function sessionIds(): array
+    {
+        return array_values(array_unique(array_map('intval', session(self::SESSION_KEY, []))));
+    }
+
+    private function authenticatedCustomer(): ?Customer
+    {
+        /** @var Customer|null $customer */
+        $customer = Auth::guard('customer')->user();
+
+        if (! $customer) {
+            session()->forget(self::SESSION_SYNCED_KEY);
+
+            return null;
+        }
+
+        if (! session(self::SESSION_SYNCED_KEY, false)) {
+            $this->syncSessionToCustomer($customer);
+        }
+
+        return $customer;
+    }
+}

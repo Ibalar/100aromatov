@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\FilterPage\Pages;
 
-use MoonShine\Laravel\Pages\Crud\DetailPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Table\TableBuilder;
-use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\FilterPage\FilterPageResource;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Json;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 use Throwable;
-
 
 /**
  * @extends DetailPage<FilterPageResource>
@@ -26,6 +29,17 @@ class FilterPageDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Slug', 'slug'),
+            Text::make('Category', 'category.name_ru'),
+            Json::make('Filter Data', 'filter_data')->object(),
+            Text::make('H1 RU', 'h1_ru'),
+            Text::make('H1 BY', 'h1_by'),
+            Text::make('SEO Title RU', 'seo_title_ru'),
+            Text::make('SEO Title BY', 'seo_title_by'),
+            Textarea::make('SEO Desc RU', 'seo_description_ru'),
+            Textarea::make('SEO Desc BY', 'seo_description_by'),
+            Switcher::make('Indexable', 'is_indexable'),
+            Switcher::make('Show in tiles', 'show_in_category_tiles'),
         ];
     }
 
@@ -34,11 +48,6 @@ class FilterPageDetailPage extends DetailPage
         return parent::buttons();
     }
 
-    /**
-     * @param  TableBuilder  $component
-     *
-     * @return TableBuilder
-     */
     protected function modifyDetailComponent(ComponentContract $component): ComponentContract
     {
         return $component;
@@ -51,7 +60,7 @@ class FilterPageDetailPage extends DetailPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -62,7 +71,7 @@ class FilterPageDetailPage extends DetailPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -73,7 +82,7 @@ class FilterPageDetailPage extends DetailPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
     }
 }

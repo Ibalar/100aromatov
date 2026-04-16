@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\Paginator;
+use Intervention\Image\Interfaces\ImageManagerInterface;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Page;
@@ -13,8 +14,10 @@ use App\Models\ProductVariant;
 use App\Models\Setting;
 use App\Observers\ProductVariantObserver;
 use App\Services\CartService;
+use App\Services\LfmImageService;
 use App\Services\WishlistService;
 use Illuminate\Support\Facades\Auth;
+use UniSharp\LaravelFilemanager\Services\ImageService as BaseLfmImageService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,7 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (interface_exists(ImageManagerInterface::class) && class_exists(BaseLfmImageService::class)) {
+            $this->app->singleton(BaseLfmImageService::class, function ($app) {
+                return new LfmImageService($app->make(ImageManagerInterface::class));
+            });
+        }
     }
 
     /**

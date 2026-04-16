@@ -6,6 +6,7 @@ namespace App\MoonShine\Layouts;
 
 use App\MoonShine\Resources\Order\OrderResource;
 use App\MoonShine\Resources\Page\PageResource;
+use App\MoonShine\Resources\Review\ReviewResource;
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\ColorManager\Palettes\PurplePalette;
 use MoonShine\ColorManager\ColorManager;
@@ -31,6 +32,7 @@ final class MoonShineLayout extends AppLayout
      */
     protected ?string $palette = PurplePalette::class;
 
+
     protected function assets(): array
     {
         return [
@@ -48,14 +50,19 @@ final class MoonShineLayout extends AppLayout
             ])->icon('shopping-bag'),
             MenuItem::make(CategoryResource::class, 'Категории')->icon('document-duplicate'),
             MenuItem::make(BrandResource::class, 'Бренды')->icon('rectangle-group'),
-            MenuItem::make(AttributeResource::class, 'Характеристики'),
-            MenuItem::make(AttributeValueResource::class, 'Значения характеристик'),
-            MenuItem::make(FilterPageResource::class, 'Страницы для фильтра'),
-            MenuItem::make(WishlistResource::class, 'Избранное'),
-            MenuItem::make(OrderResource::class, 'Заказы'),
-            MenuItem::make(PageResource::class, 'Статические страницы'),
+            MenuGroup::make('Характеристики', [
+                MenuItem::make(AttributeResource::class, 'Характеристики'),
+                MenuItem::make(AttributeValueResource::class, 'Значения характеристик'),
+                MenuItem::make(FilterPageResource::class, 'Страницы для фильтра'),
+            ])->icon('adjustments-vertical'),
+            MenuItem::make(PageResource::class, 'Статические страницы')->icon('computer-desktop'),
+            MenuGroup::make('Заказы и статистика', [
+                MenuItem::make(OrderResource::class, 'Заказы'),
+                MenuItem::make(WishlistResource::class, 'Списки избранного'),
+            ])->icon('shopping-cart'),
+            MenuItem::make(ReviewResource::class, 'Отзывы')->icon('chat-bubble-left-right'),
+            MenuItem::make(SettingResource::class, 'Настройки сайта')->icon('cog-8-tooth'),
             ...parent::menu(),
-            MenuItem::make(SettingResource::class, 'Settings'),
         ];
     }
 
@@ -63,8 +70,12 @@ final class MoonShineLayout extends AppLayout
     {
         return [
             url('/wiki/') => 'Wiki для администраторов',
-            ...parent::getFooterMenu(),
         ];
+    }
+
+    protected function getFooterCopyright(): string
+    {
+        return 'Веб-панель сайта - WebArt.BY';
     }
 
     /**

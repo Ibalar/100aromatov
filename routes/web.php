@@ -15,6 +15,8 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
+use MoonShine\Laravel\Http\Middleware\Authenticate as MoonShineAuthenticate;
+use UniSharp\LaravelFilemanager\Lfm;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
@@ -24,16 +26,20 @@ Route::get('/language/{lang}', [LanguageController::class, 'switch'])
 
 Route::get('/brands', [BrandController::class, 'index'])
     ->name('brands.index');
+Route::get('/sale', [CategoryController::class, 'sale'])
+    ->name('sale.index');
 
 Route::get('/brand/{slug}', [BrandController::class, 'show'])
     ->name('brand.show');
 
 // Categories
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/category/{slug}/filter/{filterSlug}', [CategoryController::class, 'showFilter'])->name('category.filter');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
 // Products
 Route::get('/search', [ProductController::class, 'search'])->name('search');
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::get('/product/{product}/quick-view', [ProductController::class, 'quickView'])
     ->whereNumber('product')
     ->name('product.quick-view');
@@ -41,6 +47,9 @@ Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product
 Route::post('/product/{slug}/reviews', [ReviewController::class, 'store'])
     ->middleware('auth:customer')
     ->name('product.reviews.store');
+Route::post('/reviews', [ReviewController::class, 'storeStore'])
+    ->middleware('auth:customer')
+    ->name('reviews.store');
 Route::post('/product-availability-inquiry', [ProductAvailabilityInquiryController::class, 'store'])
     ->name('product.availability-inquiry.store');
 
@@ -85,6 +94,18 @@ Route::middleware('auth:customer')->group(function () {
 });
 
 Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
+
+$moonshinePrefix = trim((string) env('MOONSHINE_ROUTE_PREFIX', 'admin'), '/');
+$lfmPrefix = $moonshinePrefix !== ''
+    ? $moonshinePrefix . '/laravel-filemanager'
+    : 'laravel-filemanager';
+
+Route::middleware(['moonshine', MoonShineAuthenticate::class])
+    ->prefix($lfmPrefix)
+    ->group(function (): void {
+        Lfm::routes();
+    });
+
 Route::get('/{path}', [ProductController::class, 'redirectByOldUrl'])
     ->where('path', '.*')
     ->name('product.redirect.old');

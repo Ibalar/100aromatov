@@ -31,8 +31,6 @@ class SettingIndexPage extends IndexPage
             ID::make(),
             Text::make('Курс пересчета', 'usd_rate')
                 ->updateOnPreview(),
-            Text::make('Email', 'email')
-                ->updateOnPreview(),
         ];
     }
 

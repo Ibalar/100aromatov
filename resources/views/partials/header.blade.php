@@ -153,6 +153,14 @@
                             </div>
                         </li>
 
+                        <li class="menu-item position-relative">
+                            <a href="{{ route('sale.index') }}" class="item-link">
+                                <span class="text cus-text">
+                                    {{ __('Акции') }}
+                                </span>
+                            </a>
+                        </li>
+
                         @foreach($menuPages ?? [] as $menuPage)
                             <li class="menu-item position-relative">
                                 <a href="{{ route('pages.show', $menuPage->slug) }}" class="item-link">
@@ -162,6 +170,14 @@
                                 </a>
                             </li>
                         @endforeach
+
+                        <li class="menu-item position-relative">
+                            <a href="{{ route('reviews.index') }}" class="item-link">
+                                <span class="text cus-text">
+                                    {{ __('Отзывы') }}
+                                </span>
+                            </a>
+                        </li>
 
                         @unless($hasContactsPageInMenu)
                             <li class="menu-item position-relative">

@@ -1,23 +1,50 @@
 @extends('layouts.app')
 
-@section('title', localizedField($category, 'name') . ' - ' . config('app.name'))
-@section('meta_description', localizedField($category, 'seo_description') ?: localizedField($category, 'description') ?: __('Парфюмерия в категории') . ' ' . localizedField($category, 'name'))
+@php
+    $activeFilterPage = $activeFilterPage ?? null;
+    $filterTiles = $filterTiles ?? $category->filterPages()->where('show_in_category_tiles', true)->orderBy('h1_ru')->get();
+
+    $baseCategoryUrl = route('category.show', $category->slug);
+    $currentCategoryUrl = $activeFilterPage
+        ? route('category.filter', ['slug' => $category->slug, 'filterSlug' => $activeFilterPage->slug])
+        : $baseCategoryUrl;
+
+    $baseRouteName = $activeFilterPage ? 'category.filter' : 'category.show';
+    $baseRouteParams = $activeFilterPage
+        ? ['slug' => $category->slug, 'filterSlug' => $activeFilterPage->slug]
+        : ['slug' => $category->slug];
+
+    $pageTitle = $activeFilterPage
+        ? (localizedField($activeFilterPage, 'seo_title') ?: localizedField($activeFilterPage, 'h1') ?: localizedField($category, 'name'))
+        : localizedField($category, 'name');
+
+    $metaDescription = $activeFilterPage
+        ? (localizedField($activeFilterPage, 'seo_description') ?: localizedField($activeFilterPage, 'seo_text'))
+        : (localizedField($category, 'seo_description') ?: localizedField($category, 'description'));
+
+    $h1Title = $activeFilterPage
+        ? (localizedField($activeFilterPage, 'h1') ?: localizedField($category, 'name'))
+        : localizedField($category, 'name');
+@endphp
+
+@section('title', $pageTitle . ' - ' . config('app.name'))
+@section('meta_description', $metaDescription ?: __('Парфюмерия в категории') . ' ' . localizedField($category, 'name'))
 
 @push('schema_org')
     <x-schema-org
         type="category"
-        :title="localizedField($category, 'name') . ' - ' . config('app.name')"
-        :description="localizedField($category, 'seo_description') ?: localizedField($category, 'description')"
+        :title="$pageTitle . ' - ' . config('app.name')"
+        :description="$metaDescription"
         :category="$category"
     />
 @endpush
 
 @section('content')
     <x-breadcrumbs
-        :title="localizedField($category, 'name')"
+        :title="$h1Title"
         :items="[
             ['title' => __('Каталог'), 'url' => route('categories.index')],
-            ['title' => localizedField($category, 'name')]
+            ['title' => $h1Title]
         ]"
     />
 
@@ -73,7 +100,7 @@
                             </div>
 
                             <x-applied-filter-tags
-                                :clear-url="route('category.show', $category->slug)"
+                                :clear-url="$currentCategoryUrl"
                                 :brands="$brands"
                                 :filter-attributes="$filterableAttributes"
                                 :selected-attributes="$attributeFilters"
@@ -84,7 +111,7 @@
                             />
 
                             <div class="canvas-body">
-                                <form method="GET" action="{{ route('category.show', $category->slug) }}" class="filter-form">
+                                <form method="GET" action="{{ $currentCategoryUrl }}" class="filter-form">
                                     <input type="hidden" name="sort" value="{{ $sort ?? request('sort', 'best-selling') }}">
 
                                     @if($sidebarCategories->isNotEmpty())
@@ -122,7 +149,7 @@
                                             <div id="filter-brand" class="collapse show">
                                                 <ul class="collapse-body filter-group-check">
                                                     <li class="list-item">
-                                                        <a href="{{ route('category.show', array_merge(['slug' => $category->slug], request()->except(['brand', 'page']))) }}" class="label link">
+                                                        <a href="{{ route($baseRouteName, array_merge($baseRouteParams, request()->except(['brand', 'page']))) }}" class="label link">
                                                             <span class="cate-text">{{ __('Все бренды') }}</span>
                                                         </a>
                                                     </li>
@@ -147,7 +174,7 @@
                                         <button type="submit" class="tf-btn btn-fill w-100">
                                             <span class="btn-text">{{ __('Применить') }}</span>
                                         </button>
-                                        <a href="{{ route('category.show', $category->slug) }}" class="tf-btn btn-white w-100 mt-2">
+                                        <a href="{{ $currentCategoryUrl }}" class="tf-btn btn-white w-100 mt-2">
                                             <span class="btn-text">{{ __('Сбросить') }}</span>
                                         </a>
                                     </div>
@@ -205,6 +232,22 @@
                             </li>
                         </ul>
                     </div>
+
+                    @if($filterTiles->isNotEmpty())
+                        <div class="category-filter-tiles">
+                            <a href="{{ $baseCategoryUrl }}" class="filter-tile {{ $activeFilterPage ? '' : 'active' }}">
+                                {{ __('Все') }}
+                            </a>
+                            @foreach($filterTiles as $tile)
+                                <a
+                                    href="{{ route('category.filter', ['slug' => $category->slug, 'filterSlug' => $tile->slug]) }}"
+                                    class="filter-tile {{ $activeFilterPage && $activeFilterPage->id === $tile->id ? 'active' : '' }}"
+                                >
+                                    {{ localizedField($tile, 'h1') ?: $tile->slug }}
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
 
                     <div class="wrapper-control-shop gridLayout-wrapper">
                         <div class="meta-filter-shop">
@@ -268,6 +311,38 @@
             align-items: center;
             justify-content: center;
         }
+
+        .category-filter-tiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 0 24px;
+        }
+
+        .category-filter-tiles .filter-tile {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 8px 14px;
+            border: 1px solid #dfd7cc;
+            border-radius: 999px;
+            font-size: 13px;
+            line-height: 1;
+            color: #181818;
+            background: #fff;
+            transition: all .2s ease;
+        }
+
+        .category-filter-tiles .filter-tile:hover {
+            border-color: #181818;
+        }
+
+        .category-filter-tiles .filter-tile.active {
+            color: #fff;
+            border-color: #181818;
+            background: #181818;
+        }
     </style>
 @endpush
 
@@ -300,7 +375,7 @@
             const removeAllButton = document.getElementById('remove-all');
             if (removeAllButton) {
                 removeAllButton.addEventListener('click', function () {
-                    window.location.href = '{{ route('category.show', $category->slug) }}';
+                    window.location.href = @json($currentCategoryUrl);
                 });
             }
         })();
