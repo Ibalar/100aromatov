@@ -87,9 +87,7 @@ class Category extends Model
 
     public function getProductsCountAttribute()
     {
-        $categoryIds = $this->getDescendantIds();
-        $query = Product::whereIn('category_id', $categoryIds)
-            ->where('is_active', true);
+        $query = Product::where('products.is_active', true);
 
         if ($this->is_miniature) {
             $query->whereExists(function ($sub) {
@@ -99,6 +97,9 @@ class Category extends Model
                     ->where('product_variants.is_active', true)
                     ->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
             });
+        } else {
+            $categoryIds = $this->getDescendantIds();
+            $query->whereIn('products.category_id', $categoryIds);
         }
 
         return $query->count();
@@ -126,10 +127,25 @@ class Category extends Model
 
     public function getAllProductIds(): array
     {
-        $categoryIds = $this->getDescendantIds();
-        return Product::whereIn('category_id', $categoryIds)
-            ->where('is_active', true)
-            ->pluck('id')
+        $query = Product::where('products.is_active', true);
+
+        if ($this->is_miniature) {
+            $query->whereExists(function ($sub) {
+                $sub->selectRaw(1)
+                    ->from('product_variants')
+                    ->whereColumn('product_variants.product_id', 'products.id')
+                    ->where('product_variants.is_active', true)
+                    ->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+            })
+            ->whereHas('category', function ($q) {
+                $q->where('is_active', true);
+            });
+        } else {
+            $categoryIds = $this->getDescendantIds();
+            $query->whereIn('products.category_id', $categoryIds);
+        }
+
+        return $query->pluck('products.id')
             ->toArray();
     }
 }

@@ -19,7 +19,9 @@ class SliderResource extends ModelResource
 {
     protected string $model = Slider::class;
 
-    protected string $title = 'Sliders';
+    protected string $title = 'Слайдеры';
+
+    protected string $column = 'title_ru';
 
     protected string $sortColumn = 'sort_order';
 
