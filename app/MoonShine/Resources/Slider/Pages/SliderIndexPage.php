@@ -36,6 +36,8 @@ class SliderIndexPage extends IndexPage
         return [
             Image::make('Thumbnail', 'background_image')
                 ->disk('public'),
+            Text::make('Тип', 'type')
+                ->sortable(),
             Text::make('Заголовок (RU)', 'title_ru'),
             Number::make('Порядок сортировки', 'sort_order')
                 ->updateOnPreview()
