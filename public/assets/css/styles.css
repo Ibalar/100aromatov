@@ -20925,5 +20925,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
     background-color: #ccc;
     border-radius: 3px;
 }
+.text-black {
+    color: var(--black);
+}
 
 /*# sourceMappingURL=styles.css.map */
