@@ -98,12 +98,6 @@
                     <span class="tooltip">{{ __('В избранное') }}</span>
                 </a>
             </li>
-            <li class="compare">
-                <a href="#compare" data-bs-toggle="offcanvas" class="hover-tooltip box-icon">
-                    <span class="icon icon-ArrowsLeftRight"></span>
-                    <span class="tooltip">{{ __('Сравнить') }}</span>
-                </a>
-            </li>
             <li>
                 <a href="#quickView" data-bs-toggle="offcanvas" class="hover-tooltip box-icon js-quick-view-trigger" data-product-id="{{ $product->id }}">
                     <span class="icon icon-Eye"></span>

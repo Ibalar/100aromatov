@@ -42,10 +42,6 @@ class CategoryController extends Controller
         $sort = $request->get('sort', 'best-selling');
 
         $query = Product::query()
-            ->join('product_variants', function ($join) {
-                $join->on('product_variants.product_id', '=', 'products.id')
-                    ->where('product_variants.is_active', true);
-            })
             ->where('products.is_active', true)
             ->whereExists(function ($sub) {
                 $sub->selectRaw(1)
@@ -57,9 +53,21 @@ class CategoryController extends Controller
                     ->where('sale_variants.price_usd', '>', 0)
                     ->whereColumn('sale_variants.sale_price_usd', '<', 'sale_variants.price_usd');
             })
-            ->groupBy('products.id')
             ->select('products.*')
-            ->selectRaw('MIN(product_variants.price_usd) as min_variant_price, MAX(product_variants.price_usd) as max_variant_price');
+            ->selectSub(
+                DB::table('product_variants as pv')
+                    ->selectRaw('MIN(pv.price_usd)')
+                    ->whereColumn('pv.product_id', 'products.id')
+                    ->where('pv.is_active', true),
+                'min_variant_price'
+            )
+            ->selectSub(
+                DB::table('product_variants as pv')
+                    ->selectRaw('MAX(pv.price_usd)')
+                    ->whereColumn('pv.product_id', 'products.id')
+                    ->where('pv.is_active', true),
+                'max_variant_price'
+            );
 
         if ($minPrice !== null || $maxPrice !== null) {
             $query->whereExists(function ($sub) use ($minPrice, $maxPrice) {
@@ -385,15 +393,29 @@ class CategoryController extends Controller
 
         // Основной запрос продуктов
         $query = Product::query()
-            ->join('product_variants', function ($join) {
-                $join->on('product_variants.product_id', '=', 'products.id')
-                    ->where('product_variants.is_active', true);
-            })
             ->where('products.is_active', true)
             ->whereIn('products.category_id', $categoryIds)
-            ->groupBy('products.id')
+            ->whereExists(function ($sub) {
+                $sub->selectRaw(1)
+                    ->from('product_variants as variants_filter')
+                    ->whereColumn('variants_filter.product_id', 'products.id')
+                    ->where('variants_filter.is_active', true);
+            })
             ->select('products.*') // Важно: только один раз products.*
-            ->selectRaw('MIN(product_variants.price_usd) as min_variant_price, MAX(product_variants.price_usd) as max_variant_price');
+            ->selectSub(
+                DB::table('product_variants as pv')
+                    ->selectRaw('MIN(pv.price_usd)')
+                    ->whereColumn('pv.product_id', 'products.id')
+                    ->where('pv.is_active', true),
+                'min_variant_price'
+            )
+            ->selectSub(
+                DB::table('product_variants as pv')
+                    ->selectRaw('MAX(pv.price_usd)')
+                    ->whereColumn('pv.product_id', 'products.id')
+                    ->where('pv.is_active', true),
+                'max_variant_price'
+            );
 
         // Фильтр по цене
         if ($minPrice !== null || $maxPrice !== null) {
@@ -606,15 +628,29 @@ class CategoryController extends Controller
         }
 
         $query = Product::query()
-            ->join('product_variants', function ($join) {
-                $join->on('product_variants.product_id', '=', 'products.id')
-                    ->where('product_variants.is_active', true);
-            })
             ->where('products.is_active', true)
             ->whereIn('products.category_id', $categoryIds)
-            ->groupBy('products.id')
+            ->whereExists(function ($sub) {
+                $sub->selectRaw(1)
+                    ->from('product_variants as variants_filter')
+                    ->whereColumn('variants_filter.product_id', 'products.id')
+                    ->where('variants_filter.is_active', true);
+            })
             ->select('products.*')
-            ->selectRaw('MIN(product_variants.price_usd) as min_variant_price, MAX(product_variants.price_usd) as max_variant_price');
+            ->selectSub(
+                DB::table('product_variants as pv')
+                    ->selectRaw('MIN(pv.price_usd)')
+                    ->whereColumn('pv.product_id', 'products.id')
+                    ->where('pv.is_active', true),
+                'min_variant_price'
+            )
+            ->selectSub(
+                DB::table('product_variants as pv')
+                    ->selectRaw('MAX(pv.price_usd)')
+                    ->whereColumn('pv.product_id', 'products.id')
+                    ->where('pv.is_active', true),
+                'max_variant_price'
+            );
 
         if ($minPrice !== null || $maxPrice !== null) {
             $query->whereExists(function ($sub) use ($minPrice, $maxPrice) {
