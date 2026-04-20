@@ -3,6 +3,143 @@
 @section('title', __('Главная'))
 
 @section('content')
+    <!-- Infinite Slide -->
+    <div class="infiniteSlide-policy style-2 wow fadeInUp ">
+        <div class="infiniteSlide infiniteSlide-wrapper" data-clone="3">
+            <i class="icon icon-Lightning-1"></i>
+            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
+                {{ __('Весь наш товар - оригинальный') }}
+            </p>
+            <i class="icon icon-Lightning-1"></i>
+            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
+                {{ __('Постоянные акции и распродажи') }}
+            </p>
+            <i class="icon icon-Lightning-1"></i>
+            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
+                {{ __('Профессиональная консультация при выборе или покупке') }}
+            </p>
+            <i class="icon icon-Lightning-1"></i>
+            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
+                {{ __('Выбирайте свой любимый аромат и приходите к нам!') }}
+            </p>
+        </div>
+    </div>
+    <!-- /Infinite Slide -->
+
+    <!-- Slide Show -->
+    <div class="tf-slideshow tf-btn-swiper-main hover-sw-nav">
+        <div dir="ltr" class="swiper tf-swiper sw-slide-show slider_effect_fade" data-loop="true" data-effect="fade"
+             data-delay="3000">
+            <!-- data-auto="true" -->
+            <div class="swiper-wrapper">
+                <!-- item 1 -->
+                <div class="swiper-slide">
+                    <div class="slideshow-wrap">
+                        <div class="sld_image">
+                            <img loading="lazy" width="1920" height="730"
+                                 src="assets/images/slider/fashion-3/slider-1.jpg" alt="Image">
+                        </div>
+                        <div class="sld_content">
+                            <div class="container">
+                                <div class="content-sld_wrap">
+                                    <div class="heading">
+                                        <p class="sub-text_sld text-body-1 text-white fade-item fade-item-1 mb-15">
+                                            WHERE STYLE MEETS MOTION
+                                        </p>
+                                        <p
+                                            class="title_sld text-display fw-medium text-white fade-item fade-item-2">
+                                            Move Smarter & <br class="d-none d-sm-block">
+                                            Step Further
+                                        </p>
+                                    </div>
+                                    <div class="fade-item fade-item-3">
+                                        <a href="shop-default.html" class="tf-btn btn-white">
+                                            Shop Styles
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- item 2 -->
+                <div class="swiper-slide">
+                    <div class="slideshow-wrap">
+                        <div class="sld_image">
+                            <img loading="lazy" width="1920" height="730"
+                                 src="assets/images/slider/fashion-3/slider-2.jpg" alt="Image">
+                        </div>
+                        <div class="sld_content">
+                            <div class="container">
+                                <div class="content-sld_wrap">
+                                    <div class="heading">
+                                        <p class="sub-text_sld text-body-1 text-white fade-item fade-item-1 mb-15">
+                                            BUILT FOR URBAN MOVEMENT
+                                        </p>
+                                        <p
+                                            class="title_sld text-display fw-medium text-white fade-item fade-item-2">
+                                            Refined Shoes <br class="d-none d-sm-block">
+                                            For Daily Wear
+                                        </p>
+                                    </div>
+                                    <div class="fade-item fade-item-3">
+                                        <a href="shop-default.html" class="tf-btn btn-white">
+                                            Shop Styles
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- item 3 -->
+                <div class="swiper-slide">
+                    <div class="slideshow-wrap">
+                        <div class="sld_image">
+                            <img loading="lazy" width="1920" height="730"
+                                 src="assets/images/slider/fashion-3/slider-3.jpg" alt="Image">
+                        </div>
+                        <div class="sld_content">
+                            <div class="container">
+                                <div class="content-sld_wrap">
+                                    <div class="heading">
+                                        <p class="sub-text_sld text-body-1 text-white fade-item fade-item-1 mb-15">
+                                            DESIGNED FOR CITY LIFE
+                                        </p>
+                                        <p
+                                            class="title_sld text-display fw-medium text-white fade-item fade-item-2">
+                                            Comfort That <br class="d-none d-sm-block">
+                                            Moves All Day
+                                        </p>
+                                    </div>
+                                    <div class="fade-item fade-item-3">
+                                        <a href="shop-default.html" class="tf-btn btn-white">
+                                            Shop Styles
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sw-line-default tf-sw-pagination"></div>
+        </div>
+        <div class="group-nav-action">
+            <div class="container-full">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="tf-sw-nav text-white link nav-prev-swiper">
+                        <i class="icon icon-ArrowLongLeft"></i>
+                    </div>
+                    <div class="tf-sw-nav text-white link nav-next-swiper">
+                        <i class="icon icon-ArrowLongRight"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Slide Show -->
+
     <!-- Banner Collection -->
     <section class="section-banner-cls">
         <div class="container-full">
@@ -70,28 +207,7 @@
         </div>
     </section>
     <!-- /Banner Collection -->
-    <!-- Infinite Slide -->
-    <div class="infiniteSlide-policy style-2 wow fadeInUp ">
-        <div class="infiniteSlide infiniteSlide-wrapper" data-clone="3">
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Весь наш товар - оригинальный') }}
-            </p>
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Постоянные акции и распродажи') }}
-            </p>
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Профессиональная консультация при выборе или покупке') }}
-            </p>
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Выбирайте свой любимый аромат и приходите к нам!') }}
-            </p>
-        </div>
-    </div>
-    <!-- /Infinite Slide -->
+
 
     @if(($featuredProducts ?? collect())->isNotEmpty())
         <!-- Top Pick -->
