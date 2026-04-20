@@ -53,64 +53,7 @@
         </section>
     @endif
 
-    <!-- Collection -->
-    <div class="themesFlat">
-        <div class="container">
-            <div dir="ltr" class="swiper tf-swiper" data-preview="3" data-tablet="2" data-mobile-sm="2"
-                 data-mobile="1" data-space-lg="30" data-space-md="20" data-space="10" data-pagination="1"
-                 data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="3">
-                <div class="swiper-wrapper">
-                    <!-- slide 1 -->
-                    <div class="swiper-slide">
-                        <div class="box-image_v02 hover-img wow fadeInLeft">
-                            <a href="shop-default.html" class="box-image_img img-style">
-                                <img loading="lazy" width="450" height="280"
-                                     src="assets/images/section/banner-1.jpg" alt="Image">
-                            </a>
-                            <div class="box-image_content">
-                                <a href="shop-default.html" class="title h4 fw-medium link-underline-text">
-                                    В каталог
-                                </a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- slide 2 -->
-                    <div class="swiper-slide">
-                        <div class="box-image_v02 hover-img wow fadeInLeft" data-wow-delay="0.1s">
-                            <a href="shop-default.html" class="box-image_img img-style">
-                                <img loading="lazy" width="450" height="280"
-                                     src="assets/images/section/banner-2.jpg" alt="Image">
-                            </a>
-                            <div class="box-image_content">
-                                <a href="shop-default.html"
-                                   class="title h4 fw-medium text-white link-underline-white">
-                                    Пробники
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- slide 3 -->
-                    <div class="swiper-slide">
-                        <div class="box-image_v02 hover-img wow fadeInLeft" data-wow-delay="0.2s">
-                            <a href="shop-default.html" class="box-image_img img-style">
-                                <img loading="lazy" width="450" height="280"
-                                     src="assets/images/section/banner-3.jpg" alt="Image">
-                            </a>
-                            <div class="box-image_content">
-                                <a href="shop-default.html" class="title h4 fw-medium link-underline-text">
-                                    Подарочный сертификат
-                                </a>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="sw-dot-default tf-sw-pagination"></div>
-            </div>
-        </div>
-    </div>
-    <!-- /Collection -->
+    <x-banners :banners="$banners" />
 
 
     @if(($featuredProducts ?? collect())->isNotEmpty())

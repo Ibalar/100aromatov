@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Slider extends Model
 {
+    const TYPE_SLIDE = 'slide';
+    const TYPE_BANNER = 'banner';
+
     protected $fillable = [
+        'type',
         'background_image',
         'title_ru',
         'title_be',
@@ -48,5 +52,15 @@ class Slider extends Model
     public function getImageUrlAttribute(): string
     {
         return $this->background_image ? asset('storage/' . $this->background_image) : '';
+    }
+
+    public function scopeSlides($query)
+    {
+        return $query->where('type', self::TYPE_SLIDE);
+    }
+
+    public function scopeBanners($query)
+    {
+        return $query->where('type', self::TYPE_BANNER);
     }
 }

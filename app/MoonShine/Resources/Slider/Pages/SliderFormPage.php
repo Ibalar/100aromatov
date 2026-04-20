@@ -18,6 +18,7 @@ use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Url;
@@ -37,6 +38,13 @@ class SliderFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
+                Select::make('Тип', 'type')
+                    ->options([
+                        'slide' => 'Слайд',
+                        'banner' => 'Баннер',
+                    ])
+                    ->default('slide')
+                    ->required(),
                 Image::make('Фоновое изображение', 'background_image')
                     ->dir('sliders')
                     ->disk('public')

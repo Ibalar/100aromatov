@@ -14,6 +14,13 @@ class HomeController extends Controller
         // Получаем активные слайды для главной страницы
         $slides = Slider::query()
             ->where('is_active', true)
+            ->slides()
+            ->orderBy('sort_order')
+            ->get();
+
+        $banners = Slider::query()
+            ->where('is_active', true)
+            ->banners()
             ->orderBy('sort_order')
             ->get();
 
@@ -60,6 +67,6 @@ class HomeController extends Controller
             ->limit(10)
             ->get(['id', 'slug', 'name', 'logo']);
 
-        return view('home', compact('slides', 'featuredProducts', 'saleProducts', 'homeBrands'));
+        return view('home', compact('slides', 'banners', 'featuredProducts', 'saleProducts', 'homeBrands'));
     }
 }
