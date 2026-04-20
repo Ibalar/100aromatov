@@ -54,7 +54,6 @@
     @endif
 
     <!-- Collection -->
-
     <div class="themesFlat">
         <div class="container">
             <div dir="ltr" class="swiper tf-swiper" data-preview="3" data-tablet="2" data-mobile-sm="2"
