@@ -27,7 +27,6 @@
     <!-- /Infinite Slide -->
 
     <!-- Slide Show -->
-
     <div class="tf-slideshow tf-btn-swiper-main hover-sw-nav">
         <div dir="ltr" class="swiper tf-swiper sw-slide-show slider_effect_fade" data-loop="true" data-effect="fade"
              data-delay="3000">
