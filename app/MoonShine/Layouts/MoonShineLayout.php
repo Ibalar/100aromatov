@@ -24,6 +24,7 @@ use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
 use App\MoonShine\Resources\FilterPage\FilterPageResource;
 use App\MoonShine\Resources\Wishlist\WishlistResource;
 use App\MoonShine\Resources\Setting\SettingResource;
+use App\MoonShine\Resources\Slider\SliderResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -63,6 +64,7 @@ final class MoonShineLayout extends AppLayout
             MenuItem::make(ReviewResource::class, 'Отзывы')->icon('chat-bubble-left-right'),
             MenuItem::make(SettingResource::class, 'Настройки сайта')->icon('cog-8-tooth'),
             ...parent::menu(),
+            MenuItem::make(SliderResource::class, 'Sliders'),
         ];
     }
 

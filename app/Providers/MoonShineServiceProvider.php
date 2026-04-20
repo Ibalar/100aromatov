@@ -23,6 +23,7 @@ use App\MoonShine\Resources\Setting\SettingResource;
 use App\MoonShine\Resources\Order\OrderResource;
 use App\MoonShine\Resources\Page\PageResource;
 use App\MoonShine\Resources\Review\ReviewResource;
+use App\MoonShine\Resources\Slider\SliderResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -48,6 +49,7 @@ class MoonShineServiceProvider extends ServiceProvider
                 OrderResource::class,
                 PageResource::class,
                 ReviewResource::class,
+                SliderResource::class,
             ])
             ->pages([
                 ...$core->getConfig()->getPages(),

@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\Slider;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     public function index(): View
     {
+        // Получаем активные слайды для главной страницы
+        $slides = Slider::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+
         $featuredProducts = Product::query()
             ->active()
             ->where('is_featured', true)
@@ -53,6 +60,6 @@ class HomeController extends Controller
             ->limit(10)
             ->get(['id', 'slug', 'name', 'logo']);
 
-        return view('home', compact('featuredProducts', 'saleProducts', 'homeBrands'));
+        return view('home', compact('slides', 'featuredProducts', 'saleProducts', 'homeBrands'));
     }
 }
