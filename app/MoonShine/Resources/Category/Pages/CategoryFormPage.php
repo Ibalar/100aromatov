@@ -99,6 +99,8 @@ class CategoryFormPage extends FormPage
                         ->default(0)
                         ->sortable(),
                     Switcher::make('Активна', 'is_active'),
+                    Switcher::make('Показывать в меню', 'show_in_menu'),
+                    Switcher::make('Миниатюры (до 10мл)', 'is_miniature'),
                 ]),
                 Tab::make('Описание', [
                     TinyMce::make('Описание RU', 'description_ru'),
