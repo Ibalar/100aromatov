@@ -40,7 +40,7 @@ class SliderFormPage extends FormPage
                     ->dir('sliders')
                     ->disk('public')
                     ->removable()
-                    ->required(),
+                    ->required(fn() => $this->getResource()->isCreateFormPage()),
                 Box::make('Русский язык', [
                     Text::make('Заголовок (RU)', 'title_ru')
                         ->nullable(),
