@@ -30,73 +30,87 @@
     <x-slider :slides="$slides" />
     <!-- /Slide Show -->
 
-    <!-- Banner Collection -->
-    <section class="section-banner-cls">
-        <div class="container-full">
-            <div class="main-section">
-                <div class="col-left">
-                    <div class="banner-image-text type-abs style-14 h-100">
-                        <a href="{{ route('categories.index') }}" class="bn-image img-style radius-20">
-                            <img loading="lazy" width="1170" height="794" src="{{ asset('assets/images/catalog/hero.jpg') }}"
-                                 alt="Image">
-                        </a>
-                        <div class="bn-content">
-                            <a href="#"
-                               class="title text-display fw-medium link-underline-white text-decoration-thickness_3">
-                                {{ __('Широкий') }} <br>
-                                {{ __('выбор') }} <br>
-                                {{ __('парфюмерии') }}
-                            </a>
-                            <h6 class="desc text-body-1 letter-space--1">
-                                {{ __('Приходите к нам за покупками в ТЦ «Немига 3»') }} <br class="d-none d-sm-block">
-                                {{ __('2 этаж, маг. 41.') }}
-                            </h6>
-                            <a href="{{ route('categories.index') }}" class="btn-action tf-btn">
-                                {{ __('В Каталог') }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-right tf-grid-layout md-col-2 lg-col-1 gap-20">
-                    <div class="box-image_v04 type-2">
-                        <a href="{{ route('category.show', 'dlia-zenshhin') }}" class="box-image_img img-style">
-                            <img loading="lazy" width="580" height="387" src="{{ asset('assets/images/catalog/woman.jpg') }}"
-                                 alt="Image">
-                        </a>
-                        <div class="box-image_content wow fadeInUp">
-                            <a href="{{ route('category.show', 'dlia-zenshhin') }}"
-                               class="title h3 fw-medium link-underline-text text-decoration-thickness_3">
-                                {{ __('Для женщин') }}
-                            </a>
-                            <a href="{{ route('category.show', 'dlia-zenshhin') }}" class="btn-action tf-btn-line-2 style-primary">
-                                    <span class="fw-semibold">
-                                        {{ __('Перейти в каталог') }}
-                                    </span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="box-image_v04 type-2">
-                        <a href="{{ route('category.show', 'dlia-muzcin') }}" class="box-image_img img-style">
-                            <img loading="lazy" width="580" height="387" src="{{ asset('assets/images/catalog/men.jpg') }}"
-                                 alt="Image">
-                        </a>
-                        <div class="box-image_content wow fadeInUp">
-                            <a href="{{ route('category.show', 'dlia-muzcin') }}"
-                               class="title h3 fw-medium text-white link-underline-text text-decoration-thickness_3">
-                                {{ __('Для мужчин') }}
-                            </a>
-                            <a href="{{ route('category.show', 'dlia-muzcin') }}" class="btn-action tf-btn-line-2 style-primary">
-                                    <span class="fw-semibold">
-                                        {{ __('Подробнее') }}
-                                    </span>
-                            </a>
-                        </div>
+    @if(($homeBrands ?? collect())->isNotEmpty())
+        <section class="flat-spacing pt-4">
+            <div class="container">
+                <div class="infiniteSlide-brand wow fadeInUp">
+                    <div class="infiniteSlide infiniteSlide-wrapper" data-clone="3">
+                        @foreach($homeBrands as $brand)
+                            <div class="img-brand">
+                                <a href="{{ route('brand.show', $brand->slug) }}" class="d-flex align-items-center justify-content-center">
+                                    <img
+                                        loading="lazy"
+                                        src="{{ asset('storage/' . $brand->logo) }}"
+                                        alt="{{ $brand->name }}"
+                                        style="max-height: 100px; width: auto;"
+                                    >
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
+        </section>
+    @endif
+
+    <!-- Collection -->
+    <div class="themesFlat">
+        <div class="container">
+            <div dir="ltr" class="swiper tf-swiper" data-preview="3" data-tablet="2" data-mobile-sm="2"
+                 data-mobile="1" data-space-lg="30" data-space-md="20" data-space="10" data-pagination="1"
+                 data-pagination-sm="2" data-pagination-md="2" data-pagination-lg="3">
+                <div class="swiper-wrapper">
+                    <!-- slide 1 -->
+                    <div class="swiper-slide">
+                        <div class="box-image_v02 hover-img wow fadeInLeft">
+                            <a href="shop-default.html" class="box-image_img img-style">
+                                <img loading="lazy" width="450" height="280"
+                                     src="assets/images/section/banner-1.jpg" alt="Image">
+                            </a>
+                            <div class="box-image_content">
+                                <a href="shop-default.html" class="title h4 fw-medium link-underline-text">
+                                    В каталог
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- slide 2 -->
+                    <div class="swiper-slide">
+                        <div class="box-image_v02 hover-img wow fadeInLeft" data-wow-delay="0.1s">
+                            <a href="shop-default.html" class="box-image_img img-style">
+                                <img loading="lazy" width="450" height="280"
+                                     src="assets/images/section/banner-2.jpg" alt="Image">
+                            </a>
+                            <div class="box-image_content">
+                                <a href="shop-default.html"
+                                   class="title h4 fw-medium text-white link-underline-white">
+                                    Пробники
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- slide 3 -->
+                    <div class="swiper-slide">
+                        <div class="box-image_v02 hover-img wow fadeInLeft" data-wow-delay="0.2s">
+                            <a href="shop-default.html" class="box-image_img img-style">
+                                <img loading="lazy" width="450" height="280"
+                                     src="assets/images/section/banner-3.jpg" alt="Image">
+                            </a>
+                            <div class="box-image_content">
+                                <a href="shop-default.html" class="title h4 fw-medium link-underline-text">
+                                    Подарочный сертификат
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sw-dot-default tf-sw-pagination"></div>
+            </div>
         </div>
-    </section>
-    <!-- /Banner Collection -->
+    </div>
+    <!-- /Collection -->
 
 
     @if(($featuredProducts ?? collect())->isNotEmpty())
@@ -127,28 +141,7 @@
         <!-- /Top Pick -->
     @endif
 
-    @if(($homeBrands ?? collect())->isNotEmpty())
-        <section class="flat-spacing pt-0">
-            <div class="container">
-                <div class="infiniteSlide-brand wow fadeInUp">
-                    <div class="infiniteSlide infiniteSlide-wrapper" data-clone="3">
-                        @foreach($homeBrands as $brand)
-                            <div class="img-brand">
-                                <a href="{{ route('brand.show', $brand->slug) }}" class="d-flex align-items-center justify-content-center">
-                                    <img
-                                        loading="lazy"
-                                        src="{{ asset('storage/' . $brand->logo) }}"
-                                        alt="{{ $brand->name }}"
-                                        style="max-height: 100px; width: auto;"
-                                    >
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </section>
-    @endif
+
 
     @if(($saleProducts ?? collect())->isNotEmpty())
         <section class="flat-spacing pt-0">

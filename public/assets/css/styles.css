@@ -15590,12 +15590,14 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 .box-image_v02 .box-image_content {
   inset: 20px 15px;
+  align-items: center;
 }
 .box-image_v02 .box-image_img img {
   min-height: 220px;
 }
 .box-image_v02 .title {
   margin-bottom: 4px;
+  margin-top: auto;
 }
 .box-image_v02 .desc {
   margin-bottom: 20px;
