@@ -28,10 +28,14 @@ class Category extends Model
         'seo_text_by',
         'sort_order',
         'is_active',
+        'show_in_menu',
+        'is_miniature',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'show_in_menu' => 'boolean',
+        'is_miniature' => 'boolean',
     ];
 
     /* ================= RELATIONS ================= */
@@ -72,6 +76,7 @@ class Category extends Model
 
         $flushCategoryCache = static function (): void {
             Cache::forget('category_tree_active');
+            Cache::forget('menu_categories');
         };
 
         static::saved($flushCategoryCache);
@@ -83,9 +88,20 @@ class Category extends Model
     public function getProductsCountAttribute()
     {
         $categoryIds = $this->getDescendantIds();
-        return Product::whereIn('category_id', $categoryIds)
-            ->where('is_active', true)
-            ->count();
+        $query = Product::whereIn('category_id', $categoryIds)
+            ->where('is_active', true);
+
+        if ($this->is_miniature) {
+            $query->whereExists(function ($sub) {
+                $sub->selectRaw(1)
+                    ->from('product_variants')
+                    ->whereColumn('product_variants.product_id', 'products.id')
+                    ->where('product_variants.is_active', true)
+                    ->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+            });
+        }
+
+        return $query->count();
     }
 
     /* ================= HELPERS ================= */

@@ -57,9 +57,10 @@ class AppServiceProvider extends ServiceProvider
             $brandColumns = $brands->chunk(10);
             $menuCategories = Cache::remember('menu_categories', 3600, function () {
                 return Category::active()
+                    ->where('show_in_menu', true)
                     ->whereNull('parent_id')
                     ->with(['children' => function ($query) {
-                        $query->active();
+                        $query->active()->where('show_in_menu', true);
                     }])
                     ->get();
             });
