@@ -16,6 +16,7 @@ use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use App\MoonShine\Resources\Slider\SliderResource;
+use MoonShine\Contracts\UI\ActionButtonContract;
 use MoonShine\Support\ListOf;
 use Throwable;
 
@@ -42,14 +43,6 @@ class SliderIndexPage extends IndexPage
             Switcher::make('Активен', 'is_active')
                 ->updateOnPreview(),
         ];
-    }
-
-    /**
-     * @return ListOf<ActionButtonContract>
-     */
-    protected function buttons(): ListOf
-    {
-        return parent::buttons();
     }
 
     /**

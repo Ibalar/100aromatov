@@ -189,11 +189,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Cache::remember('category_tree_active', 3600, function () {
-            return Category::active()
-                ->withCount([
-                    'products as products_count' => fn ($query) => $query->active(),
-                ])
-                ->get();
+            $cats = Category::active()->get();
+            // Подгружаем count через аксессор, чтобы он попал в кэш
+            $cats->each(function ($category) {
+                $category->products_count = $category->products_count;
+            });
+            return $cats;
         });
 
         $tree = $this->buildCategoryTree($categories);
@@ -368,7 +369,17 @@ class CategoryController extends Controller
         $priceRangeForInput = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->whereIn('products.category_id', $categoryIds)
+                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                    $q->whereIn('products.category_id', $categoryIds);
+                })
+                ->when($category->is_miniature, function ($q) {
+                    $q->whereExists(function ($sub) {
+                        $sub->selectRaw(1)
+                            ->from('categories')
+                            ->whereColumn('categories.id', 'products.category_id')
+                            ->where('categories.is_active', true);
+                    });
+                })
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
@@ -398,7 +409,17 @@ class CategoryController extends Controller
         // Основной запрос продуктов
         $query = Product::query()
             ->where('products.is_active', true)
-            ->whereIn('products.category_id', $categoryIds)
+            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                $q->whereIn('products.category_id', $categoryIds);
+            })
+            ->when($category->is_miniature, function ($q) {
+                $q->whereExists(function ($sub) {
+                    $sub->selectRaw(1)
+                        ->from('categories')
+                        ->whereColumn('categories.id', 'products.category_id')
+                        ->where('categories.is_active', true);
+                });
+            })
             ->whereExists(function ($sub) use ($category) {
                 $sub->selectRaw(1)
                     ->from('product_variants as variants_filter')
@@ -510,7 +531,17 @@ class CategoryController extends Controller
         $priceRange = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->whereIn('products.category_id', $categoryIds)
+                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                    $q->whereIn('products.category_id', $categoryIds);
+                })
+                ->when($category->is_miniature, function ($q) {
+                    $q->whereExists(function ($sub) {
+                        $sub->selectRaw(1)
+                            ->from('categories')
+                            ->whereColumn('categories.id', 'products.category_id')
+                            ->where('categories.is_active', true);
+                    });
+                })
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
@@ -532,7 +563,17 @@ class CategoryController extends Controller
             })
             ->where('brands.is_active', true)
             ->where('products.is_active', true)
-            ->whereIn('products.category_id', $categoryIds)
+            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                $q->whereIn('products.category_id', $categoryIds);
+            })
+            ->when($category->is_miniature, function ($q) {
+                $q->whereExists(function ($sub) {
+                    $sub->selectRaw(1)
+                        ->from('categories')
+                        ->whereColumn('categories.id', 'products.category_id')
+                        ->where('categories.is_active', true);
+                });
+            })
             ->groupBy('brands.id', 'brands.name', 'brands.slug')
             ->selectRaw('COUNT(DISTINCT products.id) as products_count')
             ->orderBy('brands.name')
@@ -629,7 +670,17 @@ class CategoryController extends Controller
         $priceRangeForInput = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->whereIn('products.category_id', $categoryIds)
+                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                    $q->whereIn('products.category_id', $categoryIds);
+                })
+                ->when($category->is_miniature, function ($q) {
+                    $q->whereExists(function ($sub) {
+                        $sub->selectRaw(1)
+                            ->from('categories')
+                            ->whereColumn('categories.id', 'products.category_id')
+                            ->where('categories.is_active', true);
+                    });
+                })
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
@@ -658,7 +709,17 @@ class CategoryController extends Controller
 
         $query = Product::query()
             ->where('products.is_active', true)
-            ->whereIn('products.category_id', $categoryIds)
+            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                $q->whereIn('products.category_id', $categoryIds);
+            })
+            ->when($category->is_miniature, function ($q) {
+                $q->whereExists(function ($sub) {
+                    $sub->selectRaw(1)
+                        ->from('categories')
+                        ->whereColumn('categories.id', 'products.category_id')
+                        ->where('categories.is_active', true);
+                });
+            })
             ->whereExists(function ($sub) use ($category) {
                 $sub->selectRaw(1)
                     ->from('product_variants as variants_filter')
@@ -768,7 +829,17 @@ class CategoryController extends Controller
         $priceRange = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->whereIn('products.category_id', $categoryIds)
+                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                    $q->whereIn('products.category_id', $categoryIds);
+                })
+                ->when($category->is_miniature, function ($q) {
+                    $q->whereExists(function ($sub) {
+                        $sub->selectRaw(1)
+                            ->from('categories')
+                            ->whereColumn('categories.id', 'products.category_id')
+                            ->where('categories.is_active', true);
+                    });
+                })
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
@@ -790,7 +861,17 @@ class CategoryController extends Controller
             })
             ->where('brands.is_active', true)
             ->where('products.is_active', true)
-            ->whereIn('products.category_id', $categoryIds)
+            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                $q->whereIn('products.category_id', $categoryIds);
+            })
+            ->when($category->is_miniature, function ($q) {
+                $q->whereExists(function ($sub) {
+                    $sub->selectRaw(1)
+                        ->from('categories')
+                        ->whereColumn('categories.id', 'products.category_id')
+                        ->where('categories.is_active', true);
+                });
+            })
             ->groupBy('brands.id', 'brands.name', 'brands.slug')
             ->selectRaw('COUNT(DISTINCT products.id) as products_count')
             ->orderBy('brands.name')

@@ -9,6 +9,7 @@ use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\Slider\SliderResource;
+use MoonShine\Contracts\UI\ActionButtonContract;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
 use Throwable;
@@ -29,15 +30,8 @@ class SliderDetailPage extends DetailPage
         ];
     }
 
-    protected function buttons(): ListOf
-    {
-        return parent::buttons();
-    }
-
     /**
      * @param  TableBuilder  $component
-     *
-     * @return TableBuilder
      */
     protected function modifyDetailComponent(ComponentContract $component): ComponentContract
     {
