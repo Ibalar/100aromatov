@@ -11,6 +11,10 @@ use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\QueryTags\QueryTag;
 use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
 use App\MoonShine\Resources\Slider\SliderResource;
 use MoonShine\Support\ListOf;
 use Throwable;
@@ -29,7 +33,15 @@ class SliderIndexPage extends IndexPage
     protected function fields(): iterable
     {
         return [
-            ID::make(),
+            ID::make()->sortable(),
+            Image::make('Фоновое изображение', 'background_image')
+                ->disk('public'),
+            Text::make('Заголовок (RU)', 'title_ru'),
+            Number::make('Порядок сортировки', 'sort_order')
+                ->updateOnPreview()
+                ->sortable(),
+            Switcher::make('Активен', 'is_active')
+                ->updateOnPreview(),
         ];
     }
 
