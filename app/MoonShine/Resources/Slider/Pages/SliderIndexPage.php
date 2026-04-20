@@ -33,8 +33,7 @@ class SliderIndexPage extends IndexPage
     protected function fields(): iterable
     {
         return [
-            ID::make()->sortable(),
-            Image::make('Фоновое изображение', 'background_image')
+            Image::make('Thumbnail', 'background_image')
                 ->disk('public'),
             Text::make('Заголовок (RU)', 'title_ru'),
             Number::make('Порядок сортировки', 'sort_order')
