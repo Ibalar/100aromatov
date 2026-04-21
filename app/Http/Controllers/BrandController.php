@@ -172,7 +172,7 @@ class BrandController extends Controller
                 $join->on('products.id', '=', 'variants_filter.product_id')
                     ->where('variants_filter.is_active', true);
             })
-            ->where('categories.is_active', true)
+            ->visible()
             ->where('products.is_active', true)
             ->where('products.brand_id', $brand->id)
             ->groupBy('categories.id', 'categories.slug', 'categories.name_ru', 'categories.name_by')

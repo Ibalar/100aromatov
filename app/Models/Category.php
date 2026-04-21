@@ -67,6 +67,12 @@ class Category extends Model
         return $query->where('categories.is_active', true);
     }
 
+    public function scopeVisible($query)
+    {
+        return $query->where('categories.is_active', true)
+            ->where('categories.show_in_menu', true);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope('sorted', function ($query) {
