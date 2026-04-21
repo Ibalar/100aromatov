@@ -21,6 +21,7 @@ use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 use MoonShine\UI\Fields\Url;
 use Throwable;
 
@@ -51,17 +52,17 @@ class SliderFormPage extends FormPage
                     ->removable()
                     ->required(fn() => $this->getResource()->isCreateFormPage()),
                 Box::make('Русский язык', [
-                    Text::make('Заголовок (RU)', 'title_ru')
+                    Textarea::make('Заголовок (RU)', 'title_ru')
                         ->nullable(),
-                    Text::make('Подзаголовок (RU)', 'subtitle_ru')
+                    Textarea::make('Подзаголовок (RU)', 'subtitle_ru')
                         ->nullable(),
                 ]),
 
 
                 Box::make('Беларуская мова', [
-                    Text::make('Загаловак (BY)', 'title_be')
+                    Textarea::make('Загаловак (BY)', 'title_be')
                         ->nullable(),
-                    Text::make('Падзагаловак (BY)', 'subtitle_be')
+                    Textarea::make('Падзагаловак (BY)', 'subtitle_be')
                         ->nullable(),
                 ]),
 

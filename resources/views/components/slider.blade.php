@@ -21,12 +21,12 @@
                                             <div class="heading">
                                                 <p class="sub-text_sld text-body-1 fade-item fade-item-1 mb-15"
                                                    style="color: {{ $slide->text_color }};">
-                                                    {{ $slide->subtitle }}
+                                                    {!! nl2br($slide->subtitle) !!}
                                                 </p>
                                                 @if($slide->title)
                                                     <p class="title_sld text-display fw-medium fade-item fade-item-2"
                                                        style="color: {{ $slide->text_color }};">
-                                                        {!! nl2br(e($slide->title)) !!}
+                                                        {!! nl2br($slide->title) !!}
                                                     </p>
                                                 @endif
                                             </div>
@@ -34,7 +34,7 @@
                                             <div class="heading">
                                                 <p class="title_sld text-display fw-medium fade-item fade-item-2"
                                                    style="color: {{ $slide->text_color }};">
-                                                    {!! nl2br(e($slide->title)) !!}
+                                                    {!! nl2br($slide->title) !!}
                                                 </p>
                                             </div>
                                         @endif

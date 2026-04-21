@@ -20,7 +20,7 @@
                                         $textClass = $isWhite ? 'text-white link-underline-white' : 'link-underline-text';
                                     @endphp
                                     <div class="title h4 fw-medium {{ $textClass }}">
-                                        {{ $banner->title }}
+                                        {!! nl2br($banner->title) !!}
                                     </div>
                                 </div>
                                 <a href="{{ $banner->button_link ?? '#' }}" class="stretched-link" aria-label="{{ $banner->title }}"></a>
