@@ -339,7 +339,7 @@ class CategoryController extends Controller
                 $query->visible();
             }])
             ->where('slug', $slug)
-            ->visible()
+            ->active()
             ->firstOrFail();
 
         // Включаем текущую категорию и её потомков
@@ -601,7 +601,7 @@ class CategoryController extends Controller
                 $query->visible();
             }])
             ->where('slug', $slug)
-            ->visible()
+            ->active()
             ->firstOrFail();
 
         $activeFilterPage = FilterPage::query()
