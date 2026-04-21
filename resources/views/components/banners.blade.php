@@ -10,19 +10,20 @@
                     @foreach($banners as $banner)
                         <div class="swiper-slide">
                             <div class="box-image_v02 hover-img wow fadeInLeft" data-wow-delay="{{ $loop->index * 0.1 }}s">
-                                <a href="{{ $banner->button_link ?? '#' }}" class="box-image_img img-style">
+                                <div class="box-image_img img-style">
                                     <img loading="lazy" width="450" height="280"
                                          src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Banner' }}">
-                                </a>
+                                </div>
                                 <div class="box-image_content">
                                     @php
                                         $isWhite = strtolower($banner->text_color) === '#ffffff';
                                         $textClass = $isWhite ? 'text-white link-underline-white' : 'link-underline-text';
                                     @endphp
-                                    <a href="{{ $banner->button_link ?? '#' }}" class="title h4 fw-medium {{ $textClass }}">
+                                    <div class="title h4 fw-medium {{ $textClass }}">
                                         {{ $banner->title }}
-                                    </a>
+                                    </div>
                                 </div>
+                                <a href="{{ $banner->button_link ?? '#' }}" class="stretched-link" aria-label="{{ $banner->title }}"></a>
                             </div>
                         </div>
                     @endforeach
