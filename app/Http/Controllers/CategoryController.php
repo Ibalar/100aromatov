@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function sale(Request $request)
     {
         $rootCategories = Cache::remember('sale_root_categories', 3600, function () {
-            return Category::active()
+            return Category::visible()
                 ->whereNull('parent_id')
                 ->withCount([
                     'products as products_count' => fn ($query) => $query->active(),
@@ -189,7 +189,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Cache::remember('category_tree_active', 3600, function () {
-            $cats = Category::active()->get();
+            $cats = Category::visible()->get();
             // Подгружаем count через аксессор, чтобы он попал в кэш
             $cats->each(function ($category) {
                 $category->products_count = $category->products_count;
@@ -336,10 +336,10 @@ class CategoryController extends Controller
     public function show($slug, Request $request)
     {
         $category = Category::with(['parent', 'children' => function ($query) {
-                $query->active();
+                $query->visible();
             }])
             ->where('slug', $slug)
-            ->active()
+            ->visible()
             ->firstOrFail();
 
         // Включаем текущую категорию и её потомков
@@ -397,11 +397,11 @@ class CategoryController extends Controller
         if ($sidebarCategories->isEmpty()) {
             if ($category->parent) {
                 $sidebarCategories = Category::where('parent_id', $category->parent_id)
-                    ->active()
+                    ->visible()
                     ->get();
             } else {
                 $sidebarCategories = Category::whereNull('parent_id')
-                    ->active()
+                    ->visible()
                     ->get();
             }
         }
@@ -598,10 +598,10 @@ class CategoryController extends Controller
     public function showFilter($slug, $filterSlug, Request $request)
     {
         $category = Category::with(['parent', 'children' => function ($query) {
-                $query->active();
+                $query->visible();
             }])
             ->where('slug', $slug)
-            ->active()
+            ->visible()
             ->firstOrFail();
 
         $activeFilterPage = FilterPage::query()
@@ -698,11 +698,11 @@ class CategoryController extends Controller
         if ($sidebarCategories->isEmpty()) {
             if ($category->parent) {
                 $sidebarCategories = Category::where('parent_id', $category->parent_id)
-                    ->active()
+                    ->visible()
                     ->get();
             } else {
                 $sidebarCategories = Category::whereNull('parent_id')
-                    ->active()
+                    ->visible()
                     ->get();
             }
         }
