@@ -91,6 +91,9 @@ $(window).on("load", function () {
             grabCursor: cursorType,
             loop: loop,
             effect: effect,
+            fadeEffect: {
+                crossFade: true,
+            },
             initialSlide: init,
             touchStartPreventDefault: touch,
             autoplay: atPlay
@@ -179,6 +182,9 @@ if ($(".tf-sw-thumbs").length > 0) {
         speed: 800,
         centeredSlides: true,
         effect: thumbEffect,
+        fadeEffect: {
+            crossFade: true,
+        },
         navigation: {
             nextEl: ".group-action-nav_thumb .nav-next-swiper",
             prevEl: ".group-action-nav_thumb .nav-prev-swiper",
