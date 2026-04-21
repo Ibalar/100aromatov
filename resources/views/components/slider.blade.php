@@ -2,7 +2,7 @@
 
 @if($slides->isNotEmpty())
     <div class="tf-slideshow tf-btn-swiper-main hover-sw-nav">
-        <div dir="ltr" class="swiper tf-swiper sw-slide-show slider_effect_fade" data-loop="true" data-effect="fade" data-delay="3000">
+        <div dir="ltr" class="swiper tf-swiper sw-slide-show slider_effect_fade" data-loop="true" data-effect="fade" data-delay="5000">
             <div class="swiper-wrapper">
                 @foreach($slides as $slide)
                     <div class="swiper-slide">
