@@ -36,7 +36,7 @@ class Setting extends Model
     |--------------------------------------------------------------------------
     */
 
-    private static ?self $instance = null;
+    protected static ?self $instance = null;
 
     public static function getSettings(): self
     {

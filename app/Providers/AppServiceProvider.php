@@ -49,7 +49,24 @@ class AppServiceProvider extends ServiceProvider
 
         require_once app_path('Support/helpers.php');
 
-        View::composer('*', function ($view) {
+        $frontendViews = [
+            'brand.*',
+            'brands.*',
+            'cart.*',
+            'categories.*',
+            'checkout.*',
+            'contact',
+            'customer.*',
+            'home',
+            'layouts.app',
+            'pages.*',
+            'products.*',
+            'reviews.*',
+            'welcome',
+            'wishlist.*',
+        ];
+
+        View::composer($frontendViews, function ($view) {
             static $composerData = null;
 
             if ($composerData === null) {
