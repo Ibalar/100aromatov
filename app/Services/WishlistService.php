@@ -14,7 +14,6 @@ class WishlistService
     private const SESSION_SYNCED_KEY = 'wishlist.synced_with_customer';
 
     private ?array $cachedIds = null;
-    private ?int $cachedCount = null;
 
     public function ids(): array
     {
@@ -46,7 +45,6 @@ class WishlistService
     public function add(int $productId): void
     {
         $this->cachedIds = null;
-        $this->cachedCount = null;
 
         $customer = $this->authenticatedCustomer();
 
@@ -69,7 +67,6 @@ class WishlistService
     public function remove(int $productId): void
     {
         $this->cachedIds = null;
-        $this->cachedCount = null;
 
         $customer = $this->authenticatedCustomer();
 
@@ -102,7 +99,6 @@ class WishlistService
     public function clear(): void
     {
         $this->cachedIds = null;
-        $this->cachedCount = null;
 
         $customer = $this->authenticatedCustomer();
 
@@ -119,11 +115,7 @@ class WishlistService
 
     public function count(): int
     {
-        if ($this->cachedCount !== null) {
-            return $this->cachedCount;
-        }
-
-        return $this->cachedCount = count($this->ids());
+        return count($this->ids());
     }
 
     public function items(): Collection
@@ -152,7 +144,6 @@ class WishlistService
     public function syncSessionToCustomer(?Customer $customer = null): void
     {
         $this->cachedIds = null;
-        $this->cachedCount = null;
 
         $customer ??= Auth::guard('customer')->user();
         if (! $customer) {
