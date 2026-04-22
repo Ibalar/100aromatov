@@ -9,6 +9,7 @@ use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\MoonShine\Resources\Category\CategoryResource;
 use App\MoonShine\Resources\FilterPage\FilterPageResource;
+use Illuminate\Support\Facades\Cache;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
@@ -38,18 +39,18 @@ class FilterPageFormPage extends FormPage
      */
     protected function fields(): iterable
     {
-        $brandOptions = Brand::query()
+        $brandOptions = Cache::remember('brand_options', 3600, fn() => Brand::query()
             ->orderBy('name')
             ->pluck('name', 'id')
-            ->toArray();
+            ->toArray());
 
-        $attributeOptions = Attribute::query()
+        $attributeOptions = Cache::remember('attribute_options', 3600, fn() => Attribute::query()
             ->orderBy('sort_order')
             ->orderBy('name_ru')
             ->pluck('name_ru', 'id')
-            ->toArray();
+            ->toArray());
 
-        $attributeValueOptions = AttributeValue::query()
+        $attributeValueOptions = Cache::remember('attribute_value_options', 3600, fn() => AttributeValue::query()
             ->with('attribute:id,name_ru')
             ->orderBy('sort_order')
             ->get()
@@ -60,7 +61,7 @@ class FilterPageFormPage extends FormPage
                     (int) $value->id => sprintf('%s: %s', $attributeName, (string) $value->value_ru),
                 ];
             })
-            ->toArray();
+            ->toArray());
 
         return [
             Box::make([

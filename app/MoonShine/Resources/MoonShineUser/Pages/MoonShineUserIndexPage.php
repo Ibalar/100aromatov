@@ -76,6 +76,6 @@ final class MoonShineUserIndexPage extends IndexPage
      */
     protected function modifyListComponent(ComponentContract $component): TableBuilder
     {
-        return $component->columnSelection();
+        return $component->columnSelection()->simplePagination()->useSharedModal();
     }
 }
