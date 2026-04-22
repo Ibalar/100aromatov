@@ -63,7 +63,7 @@ class PageIndexPage extends IndexPage
 
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
-        return $component->simplePagination()->useSharedModal();
+        return $component->useSharedModal();
     }
 
     /**

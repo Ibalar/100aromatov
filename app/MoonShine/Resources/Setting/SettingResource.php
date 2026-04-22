@@ -20,6 +20,10 @@ class SettingResource extends ModelResource
 {
     protected string $model = Setting::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Настройки';
 
     protected string $column = 'usd_rate';

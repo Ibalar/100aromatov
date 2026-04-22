@@ -35,6 +35,10 @@ class ProductResource extends ModelResource implements HasImportExportContract
     use ImportExportConcern;
 
     protected string $model = Product::class;
+    
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
 
     protected bool $saveQueryState = true;
 
