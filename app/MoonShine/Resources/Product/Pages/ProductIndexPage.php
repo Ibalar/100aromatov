@@ -100,8 +100,7 @@ class ProductIndexPage extends IndexPage
      */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
-        return $component
-            ->useSharedModal();
+        return $component;
     }
 
     protected function modifyDetailButton(ActionButtonContract $button): ActionButtonContract

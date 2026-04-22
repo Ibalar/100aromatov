@@ -81,7 +81,7 @@ class BrandIndexPage extends IndexPage
      */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
-        return $component->useSharedModal();
+        return $component;
     }
 
     /**

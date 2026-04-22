@@ -48,6 +48,6 @@ class ReviewIndexPage extends IndexPage
 
     protected function modifyListComponent(ComponentContract $component): TableBuilder
     {
-        return $component->columnSelection()->useSharedModal();
+        return $component->columnSelection();
     }
 }
