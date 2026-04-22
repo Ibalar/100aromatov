@@ -19,6 +19,10 @@ class WishlistResource extends ModelResource
 {
     protected string $model = Wishlist::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Избранное клиентов';
 
     protected string $column = 'id';

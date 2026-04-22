@@ -31,6 +31,10 @@ class BrandResource extends ModelResource implements HasImportExportContract
 {
     protected string $model = Brand::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Бренды';
 
     protected string $column = 'name';

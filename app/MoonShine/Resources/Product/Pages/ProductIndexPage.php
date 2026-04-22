@@ -101,7 +101,6 @@ class ProductIndexPage extends IndexPage
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
         return $component
-            ->simplePagination()
             ->useSharedModal();
     }
 

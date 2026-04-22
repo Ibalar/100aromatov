@@ -18,6 +18,10 @@ class FilterPageResource extends ModelResource
 {
     protected string $model = FilterPage::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Страницы для фильтра';
 
     protected string $column = 'h1_ru';

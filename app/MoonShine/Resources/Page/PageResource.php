@@ -18,6 +18,10 @@ class PageResource extends ModelResource
 {
     protected string $model = Page::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Информационные страницы';
 
     protected string $column = 'name_ru';

@@ -20,6 +20,10 @@ class ProductVariantResource extends ModelResource
 {
     protected string $model = ProductVariant::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Варианты товара';
 
     /**

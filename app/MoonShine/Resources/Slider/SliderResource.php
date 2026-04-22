@@ -19,6 +19,10 @@ class SliderResource extends ModelResource
 {
     protected string $model = Slider::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Слайдеры';
 
     protected string $column = 'title_ru';

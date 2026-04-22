@@ -18,6 +18,10 @@ class ReviewResource extends ModelResource
 {
     protected string $model = Review::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Отзывы';
 
     protected string $column = 'id';

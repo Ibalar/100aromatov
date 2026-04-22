@@ -20,6 +20,10 @@ class AttributeValueResource extends ModelResource
 {
     protected string $model = AttributeValue::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Значения характеристик';
 
     protected string $column = 'value_ru';

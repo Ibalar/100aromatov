@@ -24,6 +24,10 @@ class MoonShineUserResource extends ModelResource
 {
     protected string $model = MoonshineUser::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $column = 'name';
 
     protected array $with = ['moonshineUserRole'];

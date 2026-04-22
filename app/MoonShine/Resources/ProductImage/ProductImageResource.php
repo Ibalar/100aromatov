@@ -20,6 +20,10 @@ class ProductImageResource extends ModelResource
 {
     protected string $model = ProductImage::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'ProductImages';
     
     /**

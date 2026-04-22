@@ -18,6 +18,10 @@ class OrderResource extends ModelResource
 {
     protected string $model = Order::class;
 
+    protected int $itemsPerPage = 20;
+
+    protected bool $withConfirm = true;
+
     protected string $title = 'Заказы';
 
     protected string $column = 'id';
