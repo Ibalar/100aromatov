@@ -19,6 +19,7 @@ use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
+use Illuminate\Support\Facades\Cache;
 use Throwable;
 
 /**
@@ -63,10 +64,10 @@ class ProductIndexPage extends IndexPage
         return [
             Select::make('Бренд', 'brand_id')
                 ->options(
-                    Brand::query()
+                    Cache::remember('brand_options', 3600, fn() => Brand::query()
                         ->orderBy('name')
                         ->pluck('name', 'id')
-                        ->toArray()
+                        ->toArray())
                 )
                 ->native()
                 ->nullable()
@@ -99,7 +100,9 @@ class ProductIndexPage extends IndexPage
      */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
-        return $component;
+        return $component
+            ->simplePagination()
+            ->useSharedModal();
     }
 
     protected function modifyDetailButton(ActionButtonContract $button): ActionButtonContract

@@ -81,7 +81,7 @@ class AttributeIndexPage extends IndexPage
 
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
-        return $component->columnSelection();
+        return $component->columnSelection()->simplePagination()->useSharedModal();
     }
 
     /**

@@ -78,7 +78,7 @@ class SliderIndexPage extends IndexPage
      */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
-        return $component;
+        return $component->simplePagination()->useSharedModal();
     }
 
     /**
