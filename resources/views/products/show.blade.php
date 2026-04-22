@@ -218,298 +218,296 @@
                                         <span class="fw-semibold">
                                                 {{ __('(2 этаж, магазин 41 "100 Ароматов")') }}
                                             </span>
-                                        {{ __('или заказать доставку товара по городу Минску') }}
-                                    </p>
-                                </div>
-                                <div class="product-delivery">
-                                    <i class="icon icon-Timer"></i>
-                                    <p>
-                                        {{ __('Доставка товара') }}:
-                                        <span class="fw-semibold">
-                                            {{ __('1-3 дня') }}
-                                            </span>
-                                        {{ __('(по Минску)') }},
-                                        {{ __('за пределы МКАД (до 10 км)') }} -
-                                        <span class="fw-semibold">
-                                                {{ __('индивидуально') }}
-                                            </span>
-                                    </p>
-                                </div>
-
+                                    {{-- {{ __('или заказать доставку товара по городу Минску') }} --}}
+                                </p>
+                            </div>
+                            <div class="product-delivery">
+                                <i class="icon icon-Timer"></i>
+                                <p>
+                                    {{ __('Доставка товара') }}:
+                                    <span class="fw-semibold">
+                                        {{ __('Доставка на данный момент не осуществляется') }}
+                                        </span>
+                                </p>
                             </div>
 
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="section-product-description flat-spacing flat-animate-tab pt-0">
-        <div class="container">
-            <ul class="tab-btn-wrap-v1" role="tablist">
-                <li class="nav-tab-item" role="presentation">
-                    <a href="#description" data-bs-toggle="tab" class="tf-btn-tab active" role="tab">
-                        <span class="h5 fw-medium">{{ __('Описание') }}</span>
-                    </a>
-                </li>
-                <li class="nav-tab-item" role="presentation">
-                    <a href="#attributes" data-bs-toggle="tab" class="tf-btn-tab" role="tab">
-                        <span class="h5 fw-medium">{{ __('Характеристики') }}</span>
-                    </a>
-                </li>
-                <li class="nav-tab-item" role="presentation">
-                    <a href="#customer-reviews" data-bs-toggle="tab" class="tf-btn-tab" role="tab">
-                        <span class="h5 fw-medium">{{ __('Отзывы') }}</span>
-                    </a>
-                </li>
-                <li class="nav-tab-item" role="presentation">
-                    <a href="#shipping-returns" data-bs-toggle="tab" class="tf-btn-tab" role="tab">
-                        <span class="h5 fw-medium">{{ __('Доставка и оплата') }}</span>
-                    </a>
-                </li>
-            </ul>
+<section class="section-product-description flat-spacing flat-animate-tab pt-0">
+    <div class="container">
+        <ul class="tab-btn-wrap-v1" role="tablist">
+            <li class="nav-tab-item" role="presentation">
+                <a href="#description" data-bs-toggle="tab" class="tf-btn-tab active" role="tab">
+                    <span class="h5 fw-medium">{{ __('Описание') }}</span>
+                </a>
+            </li>
+            <li class="nav-tab-item" role="presentation">
+                <a href="#attributes" data-bs-toggle="tab" class="tf-btn-tab" role="tab">
+                    <span class="h5 fw-medium">{{ __('Характеристики') }}</span>
+                </a>
+            </li>
+            <li class="nav-tab-item" role="presentation">
+                <a href="#customer-reviews" data-bs-toggle="tab" class="tf-btn-tab" role="tab">
+                    <span class="h5 fw-medium">{{ __('Отзывы') }}</span>
+                </a>
+            </li>
+            <li class="nav-tab-item" role="presentation">
+                <a href="#shipping-returns" data-bs-toggle="tab" class="tf-btn-tab" role="tab">
+                    <span class="h5 fw-medium">{{ __('Доставка и оплата') }}</span>
+                </a>
+            </li>
+        </ul>
 
-            <div class="tab-content">
-                <div class="tab-pane active show" id="description" role="tabpanel">
-                    <div class="tab-content_desc">
-                        @if($product->description_ru || $product->description_by)
-                            <div class="box-desc">
-                                <div class="desc_info cl-text-2">
-                                    {!! localizedField($product, 'description') !!}
-                                </div>
+        <div class="tab-content">
+            <div class="tab-pane active show" id="description" role="tabpanel">
+                <div class="tab-content_desc">
+                    @if($product->description_ru || $product->description_by)
+                        <div class="box-desc">
+                            <div class="desc_info cl-text">
+                                {!! localizedField($product, 'description') !!}
                             </div>
-                        @else
-                            <p class="cl-text-2">{{ __('Описание отсутствует') }}</p>
-                        @endif
-                    </div>
+                        </div>
+                    @else
+                        <p class="cl-text">{{ __('Описание отсутствует') }}</p>
+                    @endif
                 </div>
+            </div>
 
-                <div class="tab-pane" id="attributes" role="tabpanel">
-                    @include('components.product-attributes', ['attributeValues' => $product->attributeValues])
-                </div>
+            <div class="tab-pane" id="attributes" role="tabpanel">
+                @include('components.product-attributes', ['attributeValues' => $product->attributeValues])
+            </div>
 
-                <div class="tab-pane" id="customer-reviews" role="tabpanel">
-                    <div class="product-desc_review">
-                        <div class="box-rating mb-24">
-                            <div class="rating-ratio">
-                                <p class="text-display fw-medium">
-                                    {{ $averageRating !== null ? number_format($averageRating, 1) : '0.0' }}
-                                </p>
-                                <div class="star-wrap normal d-flex align-items-center">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <i class="icon icon-Star fs-24 {{ $averageRating !== null && $i <= round($averageRating) ? 'is-active' : '' }}"></i>
-                                    @endfor
-                                </div>
-                                <p class="rate-number">
-                                    ({{ $reviewsCount }} {{ __('оценок') }})
-                                </p>
+            <div class="tab-pane" id="customer-reviews" role="tabpanel">
+                <div class="product-desc_review">
+                    <div class="box-rating mb-24">
+                        <div class="rating-ratio">
+                            <p class="text-display fw-medium">
+                                {{ $averageRating !== null ? number_format($averageRating, 1) : '0.0' }}
+                            </p>
+                            <div class="star-wrap normal d-flex align-items-center">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="icon icon-Star fs-24 {{ $averageRating !== null && $i <= round($averageRating) ? 'is-active' : '' }}"></i>
+                                @endfor
                             </div>
+                            <p class="rate-number">
+                                ({{ $reviewsCount }} {{ __('оценок') }})
+                            </p>
+                        </div>
 
-                            <div class="rating-progress-list">
-                                @foreach($ratingDistribution as $rating => $distribution)
-                                    <div class="rate-progress-star fw-medium">
-                                        <span class="number-star">{{ $rating }}</span>
-                                        <i class="icon icon-Star fs-20 cl-text-yellow"></i>
-                                        <div class="progress" role="progressbar" aria-valuenow="{{ $distribution['percent'] }}" aria-valuemin="0" aria-valuemax="100">
-                                            <div class="progress-bar" style="width: {{ $distribution['percent'] }}%;"></div>
-                                        </div>
-                                        <span class="number-percent">{{ $distribution['percent'] }}%</span>
+                        <div class="rating-progress-list">
+                            @foreach($ratingDistribution as $rating => $distribution)
+                                <div class="rate-progress-star fw-medium">
+                                    <span class="number-star">{{ $rating }}</span>
+                                    <i class="icon icon-Star fs-20 cl-text-yellow"></i>
+                                    <div class="progress" role="progressbar" aria-valuenow="{{ $distribution['percent'] }}" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar" style="width: {{ $distribution['percent'] }}%;"></div>
                                     </div>
-                                @endforeach
-                            </div>
-
-                            <div class="review-summary-actions">
-                                <a href="#write-review-form" class="action btn-comment-review tf-btn animate-btn">
-                                    {{ __('Оставить отзыв') }}
-                                </a>
-                                <a href="{{ route('reviews.index') }}" class="action tf-btn btn-line ms-12">
-                                    {{ __('Все отзывы') }}
-                                </a>
-                            </div>
+                                    <span class="number-percent">{{ $distribution['percent'] }}%</span>
+                                </div>
+                            @endforeach
                         </div>
 
-                        @if(session('review_success'))
-                            <div class="alert alert-success mb-24">{{ session('review_success') }}</div>
-                        @endif
+                        <div class="review-summary-actions">
+                            <a href="#write-review-form" class="action btn-comment-review tf-btn animate-btn">
+                                {{ __('Оставить отзыв') }}
+                            </a>
+                            <a href="{{ route('reviews.index') }}" class="action tf-btn btn-line ms-12">
+                                {{ __('Все отзывы') }}
+                            </a>
+                        </div>
+                    </div>
 
-                        <div class="box-comment cancel-review-wrap">
-                            <div class="head">
-                                <h4>{{ trans_choice('1 отзыв|:count отзыва|:count отзывов', $reviewsCount, ['count' => $reviewsCount]) }}</h4>
-                            </div>
+                    @if(session('review_success'))
+                        <div class="alert alert-success mb-24">{{ session('review_success') }}</div>
+                    @endif
 
-                            <div class="wg-comment">
-                                <div class="comment-list">
-                                    @forelse($product->reviews as $review)
-                                        <div class="box-comment">
-                                            <div class="comment_info">
-                                                <div class="info_image">
-                                                    <div class="review-avatar">
-                                                        {{ mb_strtoupper(mb_substr($review->author_name, 0, 1)) }}
-                                                    </div>
-                                                </div>
-                                                <div class="info_author">
-                                                    <p class="h6 author__name">{{ $review->author_name }}</p>
-                                                    <p class="author_date text-caption-01 cl-text-3">
-                                                        {{ $review->created_at->format('d.m.Y') }}
-                                                    </p>
+                    <div class="box-comment cancel-review-wrap">
+                        <div class="head">
+                            <h4>{{ trans_choice('1 отзыв|:count отзыва|:count отзывов', $reviewsCount, ['count' => $reviewsCount]) }}</h4>
+                        </div>
+
+                        <div class="wg-comment">
+                            <div class="comment-list">
+                                @forelse($product->reviews as $review)
+                                    <div class="box-comment">
+                                        <div class="comment_info">
+                                            <div class="info_image">
+                                                <div class="review-avatar">
+                                                    {{ mb_strtoupper(mb_substr($review->author_name, 0, 1)) }}
                                                 </div>
                                             </div>
-                                            <div class="comment-star-wrap mt-8 mb-8">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    <i class="icon icon-Star {{ $i <= (int) $review->rating ? 'is-active' : '' }}"></i>
-                                                @endfor
+                                            <div class="info_author">
+                                                <p class="h6 author__name">{{ $review->author_name }}</p>
+                                                <p class="author_date text-caption-01 cl-text-3">
+                                                    {{ $review->created_at->format('d.m.Y') }}
+                                                </p>
                                             </div>
-                                            <p class="comment_text text-body-1">{{ $review->text }}</p>
-                                            @if(filled($review->image))
-                                                <div class="review-image-wrap">
-                                                    <a href="{{ asset('storage/' . $review->image) }}" target="_blank" rel="noopener noreferrer">
-                                                        <img src="{{ asset('storage/' . $review->image) }}" alt="{{ __('Фото к отзыву') }}" class="review-image">
-                                                    </a>
-                                                </div>
-                                            @endif
-                                            @if(filled($review->admin_reply))
-                                                <div class="review-admin-reply">
-                                                    <p class="review-admin-reply__title">{{ __('Ответ администратора') }}</p>
-                                                    <p class="review-admin-reply__text">{{ $review->admin_reply }}</p>
-                                                </div>
-                                            @endif
                                         </div>
-                                    @empty
-                                        <p class="cl-text-2">{{ __('Пока нет отзывов. Будьте первым, кто оставит отзыв.') }}</p>
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="box-write-comment write-review-wrap" id="write-review-form">
-                            <div class="head">
-                                <h5>{{ __('Оставить отзыв:') }}</h5>
-                                <div class="review-form-subtitle">
-                                    {{ __('Отзыв появится на сайте после проверки администратором.') }}
-                                </div>
-                            </div>
-
-                            @auth('customer')
-                                @if($customerReview)
-                                    <div class="alert alert-info mb-16">
-                                        @if($customerReview->is_approved)
-                                            {{ __('Вы уже оставляли отзыв. Повторная отправка обновит его и снова отправит на модерацию.') }}
-                                        @else
-                                            {{ __('Ваш предыдущий отзыв ещё находится на модерации. Вы можете обновить его и отправить заново.') }}
+                                        <div class="comment-star-wrap mt-8 mb-8">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <i class="icon icon-Star {{ $i <= (int) $review->rating ? 'is-active' : '' }}"></i>
+                                            @endfor
+                                        </div>
+                                        <p class="comment_text text-body-1">{{ $review->text }}</p>
+                                        @if(filled($review->image))
+                                            <div class="review-image-wrap">
+                                                <a href="{{ asset('storage/' . $review->image) }}" target="_blank" rel="noopener noreferrer">
+                                                    <img src="{{ asset('storage/' . $review->image) }}" alt="{{ __('Фото к отзыву') }}" class="review-image">
+                                                </a>
+                                            </div>
+                                        @endif
+                                        @if(filled($review->admin_reply))
+                                            <div class="review-admin-reply">
+                                                <p class="review-admin-reply__title">{{ __('Ответ администратора') }}</p>
+                                                <p class="review-admin-reply__text">{{ $review->admin_reply }}</p>
+                                            </div>
                                         @endif
                                     </div>
-                                @endif
+                                @empty
+                                    <p class="cl-text-2">{{ __('Пока нет отзывов. Будьте первым, кто оставит отзыв.') }}</p>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
 
-                                <form method="POST" action="{{ route('product.reviews.store', $product->slug) }}" class="form-rating" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="form-content mb-24">
-                                        <div class="review-rating-select mb-20">
-                                            <span class="tf-lable fw-medium">{{ __('Ваша оценка') }}</span>
-                                            <div class="review-rating-stars">
-                                                @for($i = 5; $i >= 1; $i--)
-                                                    <input
-                                                        type="radio"
-                                                        id="review-rating-{{ $i }}"
-                                                        name="rating"
-                                                        value="{{ $i }}"
-                                                        {{ (int) old('rating', $customerReview?->rating) === $i ? 'checked' : '' }}
-                                                    >
-                                                    <label for="review-rating-{{ $i }}" title="{{ $i }}">★</label>
-                                                @endfor
-                                            </div>
-                                            @error('rating')
-                                                <div class="text-danger mt-1">{{ $message }}</div>
-                                            @enderror
+                    <div class="box-write-comment write-review-wrap" id="write-review-form">
+                        <div class="head">
+                            <h5>{{ __('Оставить отзыв:') }}</h5>
+                            <div class="review-form-subtitle">
+                                {{ __('Отзыв появится на сайте после проверки администратором.') }}
+                            </div>
+                        </div>
+
+                        @auth('customer')
+                            @if($customerReview)
+                                <div class="alert alert-info mb-16">
+                                    @if($customerReview->is_approved)
+                                        {{ __('Вы уже оставляли отзыв. Повторная отправка обновит его и снова отправит на модерацию.') }}
+                                    @else
+                                        {{ __('Ваш предыдущий отзыв ещё находится на модерации. Вы можете обновить его и отправить заново.') }}
+                                    @endif
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('product.reviews.store', $product->slug) }}" class="form-rating" enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-content mb-24">
+                                    <div class="review-rating-select mb-20">
+                                        <span class="tf-lable fw-medium">{{ __('Ваша оценка') }}</span>
+                                        <div class="review-rating-stars">
+                                            @for($i = 5; $i >= 1; $i--)
+                                                <input
+                                                    type="radio"
+                                                    id="review-rating-{{ $i }}"
+                                                    name="rating"
+                                                    value="{{ $i }}"
+                                                    {{ (int) old('rating', $customerReview?->rating) === $i ? 'checked' : '' }}
+                                                >
+                                                <label for="review-rating-{{ $i }}" title="{{ $i }}">★</label>
+                                            @endfor
                                         </div>
+                                        @error('rating')
+                                            <div class="text-danger mt-1">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                                        <div class="tf-grid-layout md-col-2">
-                                            <div class="tf-grid-layout">
-                                                <fieldset class="tf-field">
-                                                    <label class="tf-lable fw-medium">{{ __('Ваше имя') }}</label>
-                                                    <input type="text" value="{{ auth('customer')->user()->full_name }}" readonly>
-                                                </fieldset>
-                                                <fieldset class="tf-field">
-                                                    <label class="tf-lable fw-medium">{{ __('Ваш Email') }}</label>
-                                                    <input type="email" value="{{ auth('customer')->user()->email }}" readonly>
-                                                </fieldset>
-                                            </div>
-
-                                            <fieldset class="tf-field d-flex flex-column">
-                                                <label for="review-text" class="tf-lable fw-medium">{{ __('Отзыв') }}</label>
-                                                <textarea name="text" id="review-text" placeholder="{{ __('Поделитесь впечатлением о товаре') }}" class="h-md-100">{{ old('text', $customerReview?->text) }}</textarea>
-                                                @error('text')
-                                                    <div class="text-danger mt-1">{{ $message }}</div>
-                                                @enderror
+                                    <div class="tf-grid-layout md-col-2">
+                                        <div class="tf-grid-layout">
+                                            <fieldset class="tf-field">
+                                                <label class="tf-lable fw-medium">{{ __('Ваше имя') }}</label>
+                                                <input type="text" value="{{ auth('customer')->user()->full_name }}" readonly>
+                                            </fieldset>
+                                            <fieldset class="tf-field">
+                                                <label class="tf-lable fw-medium">{{ __('Ваш Email') }}</label>
+                                                <input type="email" value="{{ auth('customer')->user()->email }}" readonly>
                                             </fieldset>
                                         </div>
 
-                                        <fieldset class="tf-field mt-20">
-                                            <label for="review-image" class="tf-lable fw-medium">{{ __('Фото к отзыву (необязательно)') }}</label>
-                                            <input type="file" name="image" id="review-image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
-                                            <p class="cl-text-3 text-caption-01 mt-8 mb-0">{{ __('Форматы: JPG, PNG, WEBP. До 5 МБ.') }}</p>
-                                            @error('image')
+                                        <fieldset class="tf-field d-flex flex-column">
+                                            <label for="review-text" class="tf-lable fw-medium">{{ __('Отзыв') }}</label>
+                                            <textarea name="text" id="review-text" placeholder="{{ __('Поделитесь впечатлением о товаре') }}" class="h-md-100">{{ old('text', $customerReview?->text) }}</textarea>
+                                            @error('text')
                                                 <div class="text-danger mt-1">{{ $message }}</div>
                                             @enderror
                                         </fieldset>
                                     </div>
 
-                                    <button type="submit" class="tf-btn animate-btn">
-                                        {{ __('Отправить отзыв') }}
-                                    </button>
-                                </form>
-                            @else
-                                <div class="review-login-note">
-                                    <p class="cl-text-2 mb-12">{{ __('Оставлять отзывы могут только авторизованные покупатели.') }}</p>
-                                    <div class="d-flex flex-wrap gap-12">
-                                        <a href="{{ route('customer.login') }}" class="tf-btn animate-btn">{{ __('Войти') }}</a>
-                                        <a href="{{ route('customer.register') }}" class="tf-btn btn-line">{{ __('Зарегистрироваться') }}</a>
-                                    </div>
+                                    <fieldset class="tf-field mt-20">
+                                        <label for="review-image" class="tf-lable fw-medium">{{ __('Фото к отзыву (необязательно)') }}</label>
+                                        <input type="file" name="image" id="review-image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                                        <p class="cl-text-3 text-caption-01 mt-8 mb-0">{{ __('Форматы: JPG, PNG, WEBP. До 5 МБ.') }}</p>
+                                        @error('image')
+                                            <div class="text-danger mt-1">{{ $message }}</div>
+                                        @enderror
+                                    </fieldset>
                                 </div>
-                            @endauth
-                        </div>
+
+                                <button type="submit" class="tf-btn animate-btn">
+                                    {{ __('Отправить отзыв') }}
+                                </button>
+                            </form>
+                        @else
+                            <div class="review-login-note">
+                                <p class="cl-text-2 mb-12">{{ __('Оставлять отзывы могут только авторизованные покупатели.') }}</p>
+                                <div class="d-flex flex-wrap gap-12">
+                                    <a href="{{ route('customer.login') }}" class="tf-btn animate-btn">{{ __('Войти') }}</a>
+                                    <a href="{{ route('customer.register') }}" class="tf-btn btn-line">{{ __('Зарегистрироваться') }}</a>
+                                </div>
+                            </div>
+                        @endauth
                     </div>
                 </div>
+            </div>
 
-                <div class="tab-pane" id="shipping-returns" role="tabpanel">
-                    <div class="tab-content_desc desc-2 tf-grid-layout sm-col-1">
-                        <div class="box-desc">
-                            <h5 class="desc_title">{{ __('Внимание') }}</h5>
-                            <div class="desc_info">
-                                <p class="cl-text-2">
-                                    {{ __('Представленную на нашем сайте продукцию Вы можете приобрести в Торговом центре "НЕМИГА 3" (2 этаж, магазин 41 "100 Ароматов") или заказать доставку товара по городу Минску.') }}
-                                </p>
-                            </div>
+            <div class="tab-pane" id="shipping-returns" role="tabpanel">
+                <div class="tab-content_desc desc-2 tf-grid-layout sm-col-1">
+                    <div class="box-desc">
+                        <h5 class="desc_title">{{ __('Внимание') }}</h5>
+                        <div class="desc_info">
+                            <p class="cl-text">
+                                {{ __('Представленную на нашем сайте продукцию Вы можете приобрести в Торговом центре "НЕМИГА 3" (2 этаж, магазин 41 "100 Ароматов") или заказать доставку товара по городу Минску.') }}
+                            </p>
                         </div>
-                        <div class="box-desc">
-                            <h5 class="desc_title">{{ __('Доставка товара') }}</h5>
-                            <div class="desc_info">
-                                <p class="cl-text-2">
-                                    {{ __('В настоящее время доставка товара осуществляется только по городу Минску.') }}
-                                </p>
-                                <p class="cl-text-2">
-                                    {{ __('При заказе товара на сумму более 70 рублей - доставка бесплатная, при заказе на сумму менее 70 руб - стоимость доставки 5 руб.') }}
-                                </p>
-                                <p class="cl-text-2">
-                                    {{ __('Доставка за пределы МКАД (до 10 км) обсуждается индивидуально.') }}
-                                </p>
-                                <p class="cl-text-2">
-                                    {{ __('Срок доставки - 1-3 дня.') }}
-                                </p>
+                    </div>
+                    <div class="box-desc">
+                        <h5 class="desc_title">{{ __('Доставка товара') }}</h5>
+                        <div class="desc_info">
+                            <p class="cl-text">
+                                <strong>{{ __('Доставка на данный момент не осуществляется') }}</strong>
+                            </p>
+                            {{--<p class="cl-text-2">
+                                {{ __('В настоящее время доставка товара осуществляется только по городу Минску.') }}
+                            </p>
+                            <p class="cl-text-2">
+                                {{ __('При заказе товара на сумму более 70 рублей - доставка бесплатная, при заказе на сумму менее 70 руб - стоимость доставки 5 руб.') }}
+                            </p>
+                            <p class="cl-text-2">
+                                {{ __('Доставка за пределы МКАД (до 10 км) обсуждается индивидуально.') }}
+                            </p>
+                            <p class="cl-text-2">
+                                {{ __('Срок доставки - 1-3 дня.') }}
+                            </p>--}}
                             </div>
                         </div>
                         <div class="box-desc">
                             <h5 class="desc_title">{{ __('Оплата товара') }}</h5>
-                            <p class="cl-text-2">
+                            <p class="cl-text">
                                 {{ __('Оплата за товар в магазине в ТЦ "Немига 3"') }}
                             </p>
                             <ul class="list">
-                                <li class="cl-text-2">- {{ __('наличными денежными средствами') }}</li>
-                                <li class="cl-text-2">- {{ __('банковской картой (терминал)') }}</li>
-                                <li class="cl-text-2">- {{ __('картами рассрочки "Халва" (рассрочка 2 месяца) и "Картой покупок" Белгазпромбанка (рассрочка 2 месяца)') }}</li>
-                                <li class="cl-text-2">- {{ __('по QR-коду (необходимо наличие интернет-банка на Вашем телефоне/планшете)') }}</li>
-                                <li class="cl-text-2">- {{ __('через ЕРИП (выберите услугу "E-POS - оплата товаров и услуг и введите код 11952-1-1")') }}</li>
-                                <li class="cl-text-2">- {{ __('платежный сервис "Оплати" (необходимо наличие на Вашем устройстве установленного приложения "Оплати")') }}</li>
+                                <li class="cl-text">- {{ __('наличными денежными средствами') }}</li>
+                                <li class="cl-text">- {{ __('банковской картой (терминал)') }}</li>
+                                <li class="cl-text">- {{ __('картами рассрочки "Халва" (рассрочка 2 месяца) и "Картой покупок" Белгазпромбанка (рассрочка 2 месяца)') }}</li>
+                                <li class="cl-text">- {{ __('по QR-коду (необходимо наличие интернет-банка на Вашем телефоне/планшете)') }}</li>
+                                <li class="cl-text">- {{ __('через ЕРИП (выберите услугу "E-POS - оплата товаров и услуг и введите код 11952-1-1")') }}</li>
+                                <li class="cl-text">- {{ __('платежный сервис "Оплати" (необходимо наличие на Вашем устройстве установленного приложения "Оплати")') }}</li>
                             </ul>
                         </div>
                     </div>
