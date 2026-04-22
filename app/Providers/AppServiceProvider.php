@@ -31,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
                 return new LfmImageService($app->make(ImageManagerInterface::class));
             });
         }
+
+        $this->app->singleton(CartService::class);
+        $this->app->singleton(WishlistService::class);
     }
 
     /**
@@ -47,56 +50,62 @@ class AppServiceProvider extends ServiceProvider
         require_once app_path('Support/helpers.php');
 
         View::composer('*', function ($view) {
+            static $composerData = null;
 
-            $brands = Cache::remember('menu_brands', 3600, function () {
-                return Brand::orderBy('name')
-                    ->take(39)
-                    ->get();
-            });
+            if ($composerData === null) {
+                $brands = Cache::remember('menu_brands', 3600, function () {
+                    return Brand::orderBy('name')
+                        ->take(39)
+                        ->get();
+                });
 
-            $brandColumns = $brands->chunk(10);
-            $menuCategories = Cache::remember('menu_categories', 3600, function () {
-                return Category::visible()
-                    ->whereNull('parent_id')
-                    ->with(['children' => function ($query) {
-                        $query->visible();
-                    }])
-                    ->get();
-            });
+                $brandColumns = $brands->chunk(10);
+                $menuCategories = Cache::remember('menu_categories', 3600, function () {
+                    return Category::visible()
+                        ->whereNull('parent_id')
+                        ->with(['children' => function ($query) {
+                            $query->visible();
+                        }])
+                        ->get();
+                });
 
-            $categoryColumns = $menuCategories->chunk(4);
+                $categoryColumns = $menuCategories->chunk(4);
 
-            $menuPages = Cache::remember('menu_pages', 3600, function () {
-                return Page::query()
-                    ->menu()
-                    ->orderBy('sort_order')
-                    ->orderBy('name_ru')
-                    ->get(['id', 'slug', 'name_ru', 'name_by']);
-            });
+                $menuPages = Cache::remember('menu_pages', 3600, function () {
+                    return Page::query()
+                        ->menu()
+                        ->orderBy('sort_order')
+                        ->orderBy('name_ru')
+                        ->get(['id', 'slug', 'name_ru', 'name_by']);
+                });
 
-            $brandColumns = $brandColumns->map(function ($column, $index) use ($brandColumns) {
-                if ($index === $brandColumns->count() - 1) {
-                    return $column->take(9);
+                $brandColumns = $brandColumns->map(function ($column, $index) use ($brandColumns) {
+                    if ($index === $brandColumns->count() - 1) {
+                        return $column->take(9);
+                    }
+                    return $column;
+                });
+
+                $cartCount = 0;
+                if (app()->bound('request') && request()->hasSession()) {
+                    $cartCount = app(CartService::class)->getSummary()['total_qty'];
                 }
-                return $column;
-            });
 
-            $cartCount = 0;
-            if (app()->bound('request') && request()->hasSession()) {
-                $cartCount = app(CartService::class)->getSummary()['total_qty'];
+                $siteSettings = Setting::getSettings();
+
+                $composerData = [
+                    'brandColumns' => $brandColumns,
+                    'categoryColumns' => $categoryColumns,
+                    'menuPages' => $menuPages,
+                    'cartCount' => $cartCount,
+                    'siteSettings' => $siteSettings,
+                    'customerAuth' => Auth::guard('customer')->check(),
+                    'wishlistCount' => app(WishlistService::class)->count(),
+                    'wishlistIds' => app(WishlistService::class)->ids(),
+                ];
             }
 
-            $siteSettings = Setting::getSettings();
-
-            $view->with('brandColumns', $brandColumns);
-            $view->with('categoryColumns', $categoryColumns);
-            $view->with('menuPages', $menuPages);
-            $view->with('cartCount', $cartCount);
-            $view->with('siteSettings', $siteSettings);
-            $view->with('customerAuth', Auth::guard('customer')->check());
-            $view->with('wishlistCount', app(WishlistService::class)->count());
-            $view->with('wishlistIds', app(WishlistService::class)->ids());
-
+            $view->with($composerData);
         });
     }
 }
