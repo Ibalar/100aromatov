@@ -36,9 +36,15 @@ class Setting extends Model
     |--------------------------------------------------------------------------
     */
 
+    private static ?self $instance = null;
+
     public static function getSettings(): self
     {
-        return static::firstOrCreate([]);
+        if (static::$instance === null) {
+            static::$instance = static::firstOrCreate([]);
+        }
+
+        return static::$instance;
     }
 
     public function setPhonesAttribute($value): void

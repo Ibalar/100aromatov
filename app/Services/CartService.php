@@ -10,6 +10,9 @@ class CartService
 {
     private const SESSION_KEY = 'cart.items';
 
+    private ?Collection $cachedItems = null;
+    private ?array $cachedSummary = null;
+
     public function getRaw(): array
     {
         return session(self::SESSION_KEY, []);
@@ -17,6 +20,9 @@ class CartService
 
     public function add(int $variantId, int $qty = 1): void
     {
+        $this->cachedItems = null;
+        $this->cachedSummary = null;
+
         $qty = max(1, $qty);
         $variant = ProductVariant::query()
             ->whereKey($variantId)
@@ -34,6 +40,9 @@ class CartService
 
     public function setQty(int $variantId, int $qty): void
     {
+        $this->cachedItems = null;
+        $this->cachedSummary = null;
+
         $cart = $this->getRaw();
         $variant = ProductVariant::query()
             ->whereKey($variantId)
@@ -51,6 +60,9 @@ class CartService
 
     public function remove(int $variantId): void
     {
+        $this->cachedItems = null;
+        $this->cachedSummary = null;
+
         $cart = $this->getRaw();
         unset($cart[$variantId]);
         session([self::SESSION_KEY => $cart]);
@@ -58,14 +70,21 @@ class CartService
 
     public function clear(): void
     {
+        $this->cachedItems = null;
+        $this->cachedSummary = null;
+
         session()->forget(self::SESSION_KEY);
     }
 
     public function getItems(): Collection
     {
+        if ($this->cachedItems !== null) {
+            return $this->cachedItems;
+        }
+
         $raw = $this->getRaw();
         if (empty($raw)) {
-            return collect();
+            return $this->cachedItems = collect();
         }
 
         $settings = Setting::getSettings();
@@ -121,16 +140,20 @@ class CartService
             ]);
         }
 
-        return $items;
+        return $this->cachedItems = $items;
     }
 
     public function getSummary(): array
     {
+        if ($this->cachedSummary !== null) {
+            return $this->cachedSummary;
+        }
+
         $items = $this->getItems();
         $totalQty = $items->sum('qty');
         $totalByn = round((float) $items->sum('line_byn'), 2);
 
-        return [
+        return $this->cachedSummary = [
             'items' => $items,
             'total_qty' => $totalQty,
             'total_byn' => $totalByn,

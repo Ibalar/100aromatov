@@ -13,12 +13,19 @@ class WishlistService
     private const SESSION_KEY = 'wishlist.product_ids';
     private const SESSION_SYNCED_KEY = 'wishlist.synced_with_customer';
 
+    private ?array $cachedIds = null;
+    private ?int $cachedCount = null;
+
     public function ids(): array
     {
+        if ($this->cachedIds !== null) {
+            return $this->cachedIds;
+        }
+
         $customer = $this->authenticatedCustomer();
 
         if ($customer) {
-            return Wishlist::query()
+            return $this->cachedIds = Wishlist::query()
                 ->where('customer_id', $customer->id)
                 ->orderBy('id')
                 ->pluck('product_id')
@@ -28,25 +35,19 @@ class WishlistService
                 ->toArray();
         }
 
-        return $this->sessionIds();
+        return $this->cachedIds = $this->sessionIds();
     }
 
     public function has(int $productId): bool
     {
-        $customer = $this->authenticatedCustomer();
-
-        if ($customer) {
-            return Wishlist::query()
-                ->where('customer_id', $customer->id)
-                ->where('product_id', $productId)
-                ->exists();
-        }
-
-        return in_array($productId, $this->sessionIds(), true);
+        return in_array($productId, $this->ids(), true);
     }
 
     public function add(int $productId): void
     {
+        $this->cachedIds = null;
+        $this->cachedCount = null;
+
         $customer = $this->authenticatedCustomer();
 
         if ($customer) {
@@ -67,6 +68,9 @@ class WishlistService
 
     public function remove(int $productId): void
     {
+        $this->cachedIds = null;
+        $this->cachedCount = null;
+
         $customer = $this->authenticatedCustomer();
 
         if ($customer) {
@@ -97,6 +101,9 @@ class WishlistService
 
     public function clear(): void
     {
+        $this->cachedIds = null;
+        $this->cachedCount = null;
+
         $customer = $this->authenticatedCustomer();
 
         if ($customer) {
@@ -112,15 +119,11 @@ class WishlistService
 
     public function count(): int
     {
-        $customer = $this->authenticatedCustomer();
-
-        if ($customer) {
-            return Wishlist::query()
-                ->where('customer_id', $customer->id)
-                ->count();
+        if ($this->cachedCount !== null) {
+            return $this->cachedCount;
         }
 
-        return count($this->sessionIds());
+        return $this->cachedCount = count($this->ids());
     }
 
     public function items(): Collection
@@ -148,6 +151,9 @@ class WishlistService
 
     public function syncSessionToCustomer(?Customer $customer = null): void
     {
+        $this->cachedIds = null;
+        $this->cachedCount = null;
+
         $customer ??= Auth::guard('customer')->user();
         if (! $customer) {
             return;
