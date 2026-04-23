@@ -93,7 +93,7 @@
                             <ul class="footer-menu-list">
                                 @foreach($shopLinks as $link)
                                     <li>
-                                        <a href="{{ $link['url'] }}" class="cl-text-2 link" @if(str_starts_with($link['url'], 'http')) target="_blank" rel="noopener noreferrer" @endif>
+                                        <a href="{{ $link['url'] }}" class="cl-text-2 link" @if(str_starts_with($link['url'], 'http')) rel="noopener noreferrer" @endif>
                                             {{ $link['title'] }}
                                         </a>
                                     </li>

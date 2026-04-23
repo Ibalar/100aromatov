@@ -113,21 +113,7 @@
                                     </div>
                                 </div>
 
-                                <div class="product-infor-price mb-12">
-                                    @if($defaultVariant)
-                                        <h4 class="price-on-sale" id="main-product-price">
-                                            {{ $defaultVariantIsPreorder ? __('Под заказ') : formatPriceByn($defaultVariant->final_price_usd) }}
-                                        </h4>
-                                        @if($defaultVariant->sale_price_usd && ! $defaultVariantIsPreorder)
-                                            <div class="br-line type-vertical"></div>
-                                            <p class="cl-text-3 text-decoration-line-through" id="main-product-sale-price">{{ formatPriceByn($defaultVariant->price_usd) }}</p>
-                                        @else
-                                            <p class="cl-text-3 text-decoration-line-through" id="main-product-sale-price" style="display:none;"></p>
-                                        @endif
-                                    @else
-                                        <h4 class="price-on-sale">{{ __('Цена по запросу') }}</h4>
-                                    @endif
-                                </div>
+
 
                                 @if($product->brand)
                                     <p class="product-infor-desc cl-text-2 mb-8">
@@ -152,9 +138,25 @@
                                     </span>
                                 </div>
 
-                                <p class="product-infor-desc cl-text-2 mb-3 mt-3">
+                                <p class="product-infor-desc cl-text-2 mb-20 mt-3">
                                     {{ __('Уважаемые покупатели. Информация о товаре предоставлена для ознакомления и не является публичной офертой. Для уточнения актуальной стоимости — свяжитесь с консультантом в магазине.') }}
                                 </p>
+
+                                <div class="product-infor-price">
+                                    @if($defaultVariant)
+                                        <h4 class="price-on-sale text-primary" id="main-product-price">
+                                            {{ $defaultVariantIsPreorder ? __('Под заказ') : formatPriceByn($defaultVariant->final_price_usd) }}
+                                        </h4>
+                                        @if($defaultVariant->sale_price_usd && ! $defaultVariantIsPreorder)
+                                            <div class="br-line type-vertical"></div>
+                                            <p class="cl-text-3 text-decoration-line-through" id="main-product-sale-price">{{ formatPriceByn($defaultVariant->price_usd) }}</p>
+                                        @else
+                                            <p class="cl-text-3 text-decoration-line-through" id="main-product-sale-price" style="display:none;"></p>
+                                        @endif
+                                    @else
+                                        <h4 class="price-on-sale">{{ __('Цена по запросу') }}</h4>
+                                    @endif
+                                </div>
 
                             </div>
 
