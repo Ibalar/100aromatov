@@ -101,7 +101,7 @@ class Category extends Model
                     ->from('product_variants')
                     ->whereColumn('product_variants.product_id', 'products.id')
                     ->where('product_variants.is_active', true)
-                    ->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+                    ->whereRaw('CAST(product_variants.volume_ml AS DECIMAL) <= 10');
             });
         } else {
             $categoryIds = $this->getDescendantIds();
@@ -141,7 +141,7 @@ class Category extends Model
                     ->from('product_variants')
                     ->whereColumn('product_variants.product_id', 'products.id')
                     ->where('product_variants.is_active', true)
-                    ->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+                    ->whereRaw('CAST(product_variants.volume_ml AS DECIMAL) <= 10');
             })
             ->whereHas('category', function ($q) {
                 $q->where('is_active', true);

@@ -383,7 +383,7 @@ class CategoryController extends Controller
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
-                    $q->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+                    $q->whereRaw('CAST(product_variants.volume_ml AS DECIMAL) <= 10');
                 })
                 ->selectRaw('COALESCE(MIN(NULLIF(product_variants.price_usd, 0)), MIN(product_variants.price_usd)) as min_price, MAX(product_variants.price_usd) as max_price')
                 ->first();
@@ -426,7 +426,7 @@ class CategoryController extends Controller
                     ->whereColumn('variants_filter.product_id', 'products.id')
                     ->where('variants_filter.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(variants_filter.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(variants_filter.volume_ml AS DECIMAL) <= 10');
                     });
             })
             ->select('products.*') // Важно: только один раз products.*
@@ -436,7 +436,7 @@ class CategoryController extends Controller
                     ->whereColumn('pv.product_id', 'products.id')
                     ->where('pv.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(pv.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(pv.volume_ml AS DECIMAL) <= 10');
                     }),
                 'min_variant_price'
             )
@@ -446,7 +446,7 @@ class CategoryController extends Controller
                     ->whereColumn('pv.product_id', 'products.id')
                     ->where('pv.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(pv.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(pv.volume_ml AS DECIMAL) <= 10');
                     }),
                 'max_variant_price'
             );
@@ -459,7 +459,7 @@ class CategoryController extends Controller
                     ->whereColumn('price_filter_variants.product_id', 'products.id')
                     ->where('price_filter_variants.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(price_filter_variants.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(price_filter_variants.volume_ml AS DECIMAL) <= 10');
                     })
                     ->when(
                         $minPrice !== null && $minPrice !== '',
@@ -501,7 +501,7 @@ class CategoryController extends Controller
                     $q->select('id','product_id','volume_ml','price_usd','sale_price_usd','is_active')
                         ->where('is_active', true)
                         ->when($category->is_miniature, function ($q) {
-                            $q->whereRaw('CAST(volume_ml AS REAL) <= 10');
+                            $q->whereRaw('CAST(volume_ml AS DECIMAL) <= 10');
                         })
                         ->orderBy('price_usd');
                 },
@@ -545,7 +545,7 @@ class CategoryController extends Controller
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
-                    $q->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+                    $q->whereRaw('CAST(product_variants.volume_ml AS DECIMAL) <= 10');
                 })
                 ->selectRaw('COALESCE(MIN(NULLIF(product_variants.price_usd, 0)), MIN(product_variants.price_usd)) as min_price, MAX(product_variants.price_usd) as max_price')
                 ->first();
@@ -558,7 +558,7 @@ class CategoryController extends Controller
                 $join->on('products.id', '=', 'variants_filter.product_id')
                     ->where('variants_filter.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(variants_filter.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(variants_filter.volume_ml AS DECIMAL) <= 10');
                     });
             })
             ->where('brands.is_active', true)
@@ -684,7 +684,7 @@ class CategoryController extends Controller
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
-                    $q->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+                    $q->whereRaw('CAST(product_variants.volume_ml AS DECIMAL) <= 10');
                 })
                 ->selectRaw('COALESCE(MIN(NULLIF(product_variants.price_usd, 0)), MIN(product_variants.price_usd)) as min_price, MAX(product_variants.price_usd) as max_price')
                 ->first();
@@ -726,7 +726,7 @@ class CategoryController extends Controller
                     ->whereColumn('variants_filter.product_id', 'products.id')
                     ->where('variants_filter.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(variants_filter.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(variants_filter.volume_ml AS DECIMAL) <= 10');
                     });
             })
             ->select('products.*')
@@ -736,7 +736,7 @@ class CategoryController extends Controller
                     ->whereColumn('pv.product_id', 'products.id')
                     ->where('pv.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(pv.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(pv.volume_ml AS DECIMAL) <= 10');
                     }),
                 'min_variant_price'
             )
@@ -746,7 +746,7 @@ class CategoryController extends Controller
                     ->whereColumn('pv.product_id', 'products.id')
                     ->where('pv.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(pv.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(pv.volume_ml AS DECIMAL) <= 10');
                     }),
                 'max_variant_price'
             );
@@ -758,7 +758,7 @@ class CategoryController extends Controller
                     ->whereColumn('price_filter_variants.product_id', 'products.id')
                     ->where('price_filter_variants.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(price_filter_variants.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(price_filter_variants.volume_ml AS DECIMAL) <= 10');
                     })
                     ->when(
                         $minPrice !== null && $minPrice !== '',
@@ -801,7 +801,7 @@ class CategoryController extends Controller
                     $q->select('id','product_id','volume_ml','price_usd','sale_price_usd','is_active')
                         ->where('is_active', true)
                         ->when($category->is_miniature, function ($q) {
-                            $q->whereRaw('CAST(volume_ml AS REAL) <= 10');
+                            $q->whereRaw('CAST(volume_ml AS DECIMAL) <= 10');
                         })
                         ->orderBy('price_usd');
                 },
@@ -843,7 +843,7 @@ class CategoryController extends Controller
                 ->where('products.is_active', true)
                 ->where('product_variants.is_active', true)
                 ->when($category->is_miniature, function ($q) {
-                    $q->whereRaw('CAST(product_variants.volume_ml AS REAL) <= 10');
+                    $q->whereRaw('CAST(product_variants.volume_ml AS DECIMAL) <= 10');
                 })
                 ->selectRaw('COALESCE(MIN(NULLIF(product_variants.price_usd, 0)), MIN(product_variants.price_usd)) as min_price, MAX(product_variants.price_usd) as max_price')
                 ->first();
@@ -856,7 +856,7 @@ class CategoryController extends Controller
                 $join->on('products.id', '=', 'variants_filter.product_id')
                     ->where('variants_filter.is_active', true)
                     ->when($category->is_miniature, function ($q) {
-                        $q->whereRaw('CAST(variants_filter.volume_ml AS REAL) <= 10');
+                        $q->whereRaw('CAST(variants_filter.volume_ml AS DECIMAL) <= 10');
                     });
             })
             ->where('brands.is_active', true)
