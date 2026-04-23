@@ -1,6 +1,6 @@
 <div class="modal fade" id="productAvailabilityModal" tabindex="-1" aria-labelledby="productAvailabilityModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content py-4 px-4">
             <div class="modal-heading d-flex align-items-center justify-content-between">
                 <h4 class="title-pop" id="productAvailabilityModalLabel">{{ __('Уточнить наличие') }}</h4>
                 <span class="cs-pointer d-flex link" data-bs-dismiss="modal">
