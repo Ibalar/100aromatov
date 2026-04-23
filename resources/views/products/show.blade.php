@@ -137,11 +137,9 @@
                                         @endif
                                     </span>
                                 </div>
-
                                 <p class="product-infor-desc cl-text-2 mb-20 mt-3">
                                     {{ __('Уважаемые покупатели. Информация о товаре предоставлена для ознакомления и не является публичной офертой. Для уточнения актуальной стоимости — свяжитесь с консультантом в магазине.') }}
                                 </p>
-
                                 <div class="product-infor-price">
                                     @if($defaultVariant)
                                         <h4 class="price-on-sale text-primary" id="main-product-price">
