@@ -30,14 +30,14 @@
         $shopLinks = collect([
             $salePage ? ['title' => __('Акции'), 'url' => route('pages.show', $salePage->slug)] : null,
             $shopPage ? ['title' => __('Наш магазин'), 'url' => route('pages.show', $shopPage->slug)] : null,
-            $contactsPage ? ['title' => __('Контакты'), 'url' => route('pages.show', $contactsPage->slug)] : null,
+            $contactsPage ? ['title' => __('Контакты'), 'url' => route('contacts.index')] : null,
         ])->filter()->values();
 
         if ($shopLinks->isEmpty()) {
             $shopLinks = collect([
                 ['title' => __('Каталог'), 'url' => route('categories.index')],
                 ['title' => __('Бренды'), 'url' => route('brands.index')],
-                ['title' => __('Контакты'), 'url' => filled($siteSettings->address_map_url ?? null) ? $siteSettings->address_map_url : route('home')],
+                ['title' => __('Контакты'), 'url' => route('contacts.index')],
             ]);
         }
 
