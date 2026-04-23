@@ -47,7 +47,7 @@
                                 <h6>{{ __('Телефон') }}:</h6>
                                 <div class="wd-full d-grid gap-4">
                                     @forelse($contactPhones as $phone)
-                                        <a href="{{ phoneHref($phone['number'] ?? null) }}" class="cl-text-2 link d-inline-flex align-items-center gap-2">
+                                        <a href="{{ phoneHref($phone['number'] ?? null) }}" class="cl-text link d-inline-flex align-items-center gap-2">
                                             <span>
                                                 {{ $phone['number'] }}
                                                 @if($phone['label'])
@@ -64,7 +64,7 @@
                                 <h6>Email:</h6>
                                 <p>
                                     @if($email)
-                                        <a href="mailto:{{ $email }}" class="cl-text-2 link">{{ $email }}</a>
+                                        <a href="mailto:{{ $email }}" class="cl-text link">{{ $email }}</a>
                                     @else
                                         <span class="cl-text-2">-</span>
                                     @endif
@@ -74,7 +74,7 @@
                                 <h6>{{ __('Адрес') }}:</h6>
                                 <p>
                                     @if($address !== '')
-                                        <a href="{{ $mapLink }}" target="_blank" rel="noopener noreferrer" class="cl-text-2 link">
+                                        <a href="{{ $mapLink }}" target="_blank" rel="noopener noreferrer" class="cl-text link">
                                             {{ $address }}
                                         </a>
                                     @else
@@ -99,9 +99,9 @@
                     <h4 class="mb-8">{{ __('Реквизиты') }}</h4>
                     <div class="wd-full d-grid gap-8">
                         @if($requisites !== '')
-                            <div class="cl-text-2" style="white-space: pre-line;">{{ $requisites }}</div>
+                            <div class="cl-text" style="white-space: pre-line;">{{ $requisites }}</div>
                         @else
-                            <div class="cl-text-2">-</div>
+                            <div class="cl-text">-</div>
                         @endif
                     </div>
                 </div>

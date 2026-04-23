@@ -31,7 +31,7 @@
                     <div class="static-page-content">
 
                         @if($pageDescription)
-                            <div class="cl-text-2 text-body-1">
+                            <div class="cl-text text-body-1">
                                 {!! $pageDescription !!}
                             </div>
                         @endif

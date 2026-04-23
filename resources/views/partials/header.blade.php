@@ -67,7 +67,7 @@
             </div>
             <div class="header-left d-none d-xl-flex">
                 <a href="/" class="logo-site">
-                    <img loading="lazy" width="130" height="35" src="{{ asset('assets/images/logo/logo.png') }}" alt="100aromatov.by">
+                    <img loading="lazy" width="203" height="56" src="{{ asset('assets/images/logo/logo.png') }}" alt="100aromatov.by">
                 </a>
                 <nav class="box-navigation">
                     <ul class="box-nav-menu">
