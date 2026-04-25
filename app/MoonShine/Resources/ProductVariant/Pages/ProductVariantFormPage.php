@@ -6,6 +6,7 @@ namespace App\MoonShine\Resources\ProductVariant\Pages;
 
 use App\MoonShine\Resources\Product\ProductResource;
 use App\MoonShine\Resources\ProductVariant\ProductVariantResource;
+use Illuminate\Validation\Rule;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
@@ -13,7 +14,6 @@ use MoonShine\Contracts\UI\FormBuilderContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Support\ListOf;
-use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Number;
@@ -34,14 +34,20 @@ class ProductVariantFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
-                BelongsTo::make('Товар', 'product', resource: ProductResource::class),
 
-                Text::make('SKU', 'sku'),
+                BelongsTo::make('Товар', 'product', resource: ProductResource::class)
+                    ->required(),
+
+                Text::make('SKU', 'sku')
+                    ->required(),
                 Text::make('Объем ML', 'volume_ml'),
 
                 Number::make('Цена USD', 'price_usd')
+                    ->required()
+                    ->min(0)
                     ->step(0.01),
                 Number::make('Акционная цена USD', 'sale_price_usd')
+                    ->min(0)
                     ->step(0.01),
 
                 Switcher::make('Тестер', 'is_tester'),
@@ -67,7 +73,25 @@ class ProductVariantFormPage extends FormPage
 
     protected function rules(DataWrapperContract $item): array
     {
-        return [];
+        return [
+            'product_id' => ['required', 'exists:products,id'],
+            'sku' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('product_variants', 'sku')->ignore($item->getKey()),
+            ],
+            'volume_ml' => ['nullable', 'string', 'max:255'],
+            'price_usd' => ['required', 'numeric', 'min:0'],
+            'sale_price_usd' => ['nullable', 'numeric', 'min:0', 'lt:price_usd'],
+            'is_tester' => ['nullable', 'boolean'],
+            'is_raspiv' => ['nullable', 'boolean'],
+            'is_unboxed' => ['nullable', 'boolean'],
+            'is_gift_wrapped' => ['nullable', 'boolean'],
+            'is_exclusive' => ['nullable', 'boolean'],
+            'is_deodorant' => ['nullable', 'boolean'],
+            'is_active' => ['nullable', 'boolean'],
+        ];
     }
 
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract

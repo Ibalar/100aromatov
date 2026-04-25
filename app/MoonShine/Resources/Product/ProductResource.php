@@ -13,6 +13,7 @@ use App\MoonShine\Resources\Product\Pages\ProductDetailPage;
 use App\MoonShine\Resources\Product\Pages\ProductFormPage;
 use App\MoonShine\Resources\Product\Pages\ProductIndexPage;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -99,6 +100,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
             Text::make('price_usd', 'price_usd')->fromRaw(
                 static fn (mixed $raw) => blank($raw) ? null : (float) $raw
             ),
+            Text::make('variants', 'variants'),
             Text::make('is_active', 'is_active')->fromRaw(
                 static fn (mixed $raw) => ProductResource::toBoolean($raw)
             ),
@@ -123,41 +125,21 @@ class ProductResource extends ModelResource implements HasImportExportContract
         return [
             ID::make('ID', 'id'),
             Text::make('name_ru', 'name_ru'),
-            Text::make('name_by', 'name_by'),
-            Text::make('Slug', 'slug'),
-            Text::make('gender', 'gender'),
-            Text::make('gender_by', 'gender_by'),
-            Text::make('concentration', 'concentration'),
-            Text::make('concentration_by', 'concentration_by'),
-            Text::make('country', 'country'),
-            Text::make('country_by', 'country_by'),
             Text::make(
-                'images',
-                formatted: static fn (Product $product) => $product->images()
-                    ->orderBy('sort_order')
-                    ->get()
-                    ->map(static fn (ProductImage $image) => asset('storage/' . $image->path))
-                    ->implode('|')
+                'variants',
+                formatted: static fn (Product $product) => $product->variants()
+                    ->orderByDesc('is_active')
+                    ->orderBy('id')
+                    ->get(['sku', 'volume_ml', 'price_usd', 'sale_price_usd'])
+                    ->map(static fn (ProductVariant $variant): array => [
+                        'sku' => $variant->sku,
+                        'volume_ml' => $variant->volume_ml,
+                        'price_usd' => $variant->price_usd,
+                        'sale_price_usd' => $variant->sale_price_usd,
+                    ])
+                    ->values()
+                    ->toJson(JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             ),
-            Text::make('description_ru', 'description_ru'),
-            Text::make('description_by', 'description_by'),
-            Text::make('sku', formatted: static fn (Product $product) => $product->variants()
-                ->where('is_active', true)
-                ->orderBy('id')
-                ->value('sku')),
-            Text::make('volume_ml', formatted: static fn (Product $product) => $product->variants()
-                ->where('is_active', true)
-                ->orderBy('id')
-                ->value('volume_ml')),
-            Text::make('price_usd', formatted: static fn (Product $product) => $product->variants()
-                ->where('is_active', true)
-                ->orderBy('id')
-                ->value('price_usd')),
-            Text::make('is_active', formatted: static fn (Product $product) => (int) $product->is_active),
-            Text::make('is_featured', formatted: static fn (Product $product) => (int) $product->is_featured),
-            Text::make('brand', formatted: static fn (Product $product) => $product->brand_id),
-            Text::make('category', formatted: static fn (Product $product) => $product->category_id),
-            Text::make('old_url', 'old_url'),
         ];
     }
 
@@ -185,18 +167,42 @@ class ProductResource extends ModelResource implements HasImportExportContract
             unset($data['images']);
         }
 
-        if (array_key_exists('sku', $data) || array_key_exists('price_usd', $data) || array_key_exists('volume_ml', $data)) {
+        if (
+            array_key_exists('sku', $data)
+            || array_key_exists('price_usd', $data)
+            || array_key_exists('volume_ml', $data)
+            || array_key_exists('variants', $data)
+        ) {
             $importKey = $this->getImportImageKey($data);
 
             if ($importKey !== null) {
-                $this->pendingVariants[$importKey] = [
+                $variants = [];
+
+                $singleVariant = [
                     'sku' => $data['sku'] ?? null,
                     'volume_ml' => $data['volume_ml'] ?? null,
                     'price_usd' => $data['price_usd'] ?? null,
                 ];
+
+                if (
+                    ! blank($singleVariant['sku'] ?? null)
+                    || ! blank($singleVariant['volume_ml'] ?? null)
+                    || ! blank($singleVariant['price_usd'] ?? null)
+                ) {
+                    $variants[] = $singleVariant;
+                }
+
+                $variants = [
+                    ...$variants,
+                    ...$this->parseVariantsColumn($data['variants'] ?? null),
+                ];
+
+                if ($variants !== []) {
+                    $this->pendingVariants[$importKey] = $variants;
+                }
             }
 
-            unset($data['sku'], $data['volume_ml'], $data['price_usd']);
+            unset($data['sku'], $data['volume_ml'], $data['price_usd'], $data['variants']);
         }
 
         return $data;
@@ -285,57 +291,160 @@ class ProductResource extends ModelResource implements HasImportExportContract
             return;
         }
 
-        $variantData = $this->pendingVariants[$importKey];
+        $variantRows = $this->pendingVariants[$importKey];
 
         unset($this->pendingVariants[$importKey]);
 
-        $sku = blank($variantData['sku'] ?? null) ? null : (string) $variantData['sku'];
-        $volume = $variantData['volume_ml'] ?? null;
-        $price = $variantData['price_usd'] ?? null;
-
-        if ($sku === null && $volume === null && $price === null) {
+        if (! is_array($variantRows)) {
             return;
         }
 
-        $variant = null;
+        foreach ($variantRows as $variantData) {
+            if (! is_array($variantData)) {
+                continue;
+            }
 
-        if ($sku !== null) {
-            $variant = $product->variants()->where('sku', $sku)->first();
+            $sku = blank($variantData['sku'] ?? null) ? null : trim((string) $variantData['sku']);
+            $volume = blank($variantData['volume_ml'] ?? null) ? null : (string) $variantData['volume_ml'];
+            $price = blank($variantData['price_usd'] ?? null) ? null : (float) $variantData['price_usd'];
+
+            if ($sku === null && $volume === null && $price === null) {
+                continue;
+            }
+
+            // Compatibility requirement: variant with SKU equal to product id must be skipped.
+            if ($sku !== null && $sku === (string) $product->id) {
+                continue;
+            }
+
+            $variant = null;
+
+            if ($sku !== null) {
+                $variant = ProductVariant::query()->where('sku', $sku)->first();
+
+                // SKU is globally unique. If it belongs to another product, skip this row.
+                if ($variant instanceof ProductVariant && (int) $variant->product_id !== (int) $product->id) {
+                    Log::warning('Product variant import skipped due to SKU conflict', [
+                        'product_id' => $product->id,
+                        'sku' => $sku,
+                        'existing_variant_id' => $variant->id,
+                        'existing_product_id' => $variant->product_id,
+                    ]);
+
+                    continue;
+                }
+            }
+
+            if (! $variant instanceof ProductVariant) {
+                $variant = $product->variants()->make([
+                    'is_active' => true,
+                ]);
+            }
+
+            if ($sku !== null) {
+                $variant->sku = $sku;
+            }
+
+            if ($price !== null) {
+                $variant->price_usd = $price;
+            }
+
+            if ($volume !== null) {
+                $variant->volume_ml = $volume;
+            }
+
+            if (! $variant->exists && blank($variant->sku)) {
+                continue;
+            }
+
+            if (! $variant->exists && blank($variant->price_usd)) {
+                continue;
+            }
+
+            $variant->is_active = true;
+            $variant->product()->associate($product);
+
+            try {
+                $variant->save();
+            } catch (QueryException $e) {
+                // Defensive fallback: do not fail the whole import because of one conflicting row.
+                Log::warning('Product variant import save failed', [
+                    'product_id' => $product->id,
+                    'sku' => $sku,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @return list<array{sku: string|null, volume_ml: string|int|float|null, price_usd: float|int|string|null}>
+     */
+    protected function parseVariantsColumn(mixed $raw): array
+    {
+        if (blank($raw)) {
+            return [];
         }
 
-        if (! $variant instanceof ProductVariant) {
-            $variant = $product->variants()->where('is_active', true)->orderBy('id')->first();
+        $rawString = trim((string) $raw);
+        if ($rawString === '') {
+            return [];
         }
 
-        if (! $variant instanceof ProductVariant) {
-            $variant = $product->variants()->make([
-                'is_active' => true,
-            ]);
+        // Preferred format: JSON array of objects.
+        $decoded = json_decode($rawString, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            $rows = array_is_list($decoded) ? $decoded : [$decoded];
+
+            return collect($rows)
+                ->filter(static fn (mixed $row): bool => is_array($row))
+                ->map(static function (array $row): array {
+                    return [
+                        'sku' => blank($row['sku'] ?? null) ? null : trim((string) $row['sku']),
+                        'volume_ml' => blank($row['volume_ml'] ?? null) ? null : (string) $row['volume_ml'],
+                        'price_usd' => blank($row['price_usd'] ?? null) ? null : (float) $row['price_usd'],
+                    ];
+                })
+                ->values()
+                ->all();
         }
 
-        if ($sku !== null) {
-            $variant->sku = $sku;
+        // Backward-compatible format from legacy dumps:
+        // [{sku:1248,volume_ml:100,price_usd:0.00|sku:3129,volume_ml:30,price_usd:0.00}]
+        $normalized = trim($rawString);
+        $normalized = preg_replace('/^\[\{?/', '', $normalized) ?? $normalized;
+        $normalized = preg_replace('/\}?\]$/', '', $normalized) ?? $normalized;
+
+        if ($normalized === '') {
+            return [];
         }
 
-        if ($price !== null) {
-            $variant->price_usd = $price;
-        }
+        $chunks = preg_split('/\|(?=sku:)/', $normalized) ?: [];
 
-        if ($volume !== null) {
-            $variant->volume_ml = $volume;
-        }
+        return collect($chunks)
+            ->map(static fn (string $chunk): string => trim($chunk))
+            ->filter()
+            ->map(static function (string $chunk): ?array {
+                $pattern = '/^sku:(.*?),volume_ml:(.*),price_usd:(.*)$/u';
 
-        if (! $variant->exists && blank($variant->sku)) {
-            return;
-        }
+                if (! preg_match($pattern, $chunk, $matches)) {
+                    return null;
+                }
 
-        if (! $variant->exists && blank($variant->price_usd)) {
-            return;
-        }
+                $sku = trim((string) $matches[1]);
+                $volume = trim((string) $matches[2]);
+                $priceRaw = trim((string) $matches[3]);
+                $priceNormalized = str_replace(',', '.', $priceRaw);
 
-        $variant->is_active = true;
-        $variant->product()->associate($product);
-        $variant->save();
+                return [
+                    'sku' => $sku === '' ? null : $sku,
+                    'volume_ml' => $volume === '' ? null : $volume,
+                    'price_usd' => $priceNormalized === '' ? null : (float) $priceNormalized,
+                ];
+            })
+            ->filter(static fn (?array $row): bool => is_array($row))
+            ->values()
+            ->all();
     }
 
     protected function getImportImageKey(array $data): ?string

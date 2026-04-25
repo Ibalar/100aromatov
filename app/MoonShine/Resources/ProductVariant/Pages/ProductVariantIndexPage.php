@@ -14,6 +14,7 @@ use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use Throwable;
 
@@ -31,9 +32,10 @@ class ProductVariantIndexPage extends IndexPage
     {
         return [
             ID::make(),
-            Text::make('SKU', 'sku'),
+            Text::make('SKU', 'sku')->sortable(),
             Text::make('Объем ML', 'volume_ml'),
             Number::make('Цена USD', 'price_usd'),
+            Switcher::make('Тестер', 'is_tester')->updateOnPreview(),
         ];
     }
 

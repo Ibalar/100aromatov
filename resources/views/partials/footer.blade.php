@@ -261,11 +261,13 @@
         left: 24px;
         bottom: 84px;
         z-index: 10020;
+        width: 70px;
+        height: 70px;
     }
 
     #wcw-wrap .messenger-fab {
-        width: 90px;
-        height: 90px;
+        width: 70px;
+        height: 70px;
         border: 0;
         border-radius: 50%;
         background: #1A2A2D;
@@ -281,8 +283,8 @@
         position: absolute;
         opacity: 0;
         transform: scale(0.6);
-        width: 54px;
-        height: 54px;
+        width: 42px;
+        height: 42px;
     }
 
     #wcw-wrap .messenger-fab__icon-item.is-active {
@@ -332,23 +334,7 @@
 
     @media (max-width: 991px) {
         #wcw-wrap.messenger-widget {
-            left: 12px;
-            bottom: 132px;
-        }
-
-        #wcw-wrap .messenger-fab {
-            width: 90px;
-            height: 90px;
-        }
-
-        #wcw-wrap .messenger-fab__icon-item {
-            width: 54px;
-            height: 54px;
-        }
-
-        #wcw-wrap .messenger-widget__panel {
-            bottom: 106px;
-            min-width: 270px;
+            display: none !important;
         }
     }
 </style>
