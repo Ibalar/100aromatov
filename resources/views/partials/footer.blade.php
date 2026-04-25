@@ -68,6 +68,15 @@
             ->merge($accountLinks)
             ->unique('url')
             ->values();
+
+        $messengers = collect([
+            ['key' => 'instagram', 'title' => 'Instagram', 'url' => trim((string) ($siteSettings->instagram_url ?? '')), 'abbr' => 'I'],
+            ['key' => 'telegram', 'title' => 'Telegram', 'url' => trim((string) ($siteSettings->telegram_url ?? '')), 'abbr' => 'T'],
+            ['key' => 'viber', 'title' => 'Viber', 'url' => trim((string) ($siteSettings->viber_url ?? '')), 'abbr' => 'V'],
+            ['key' => 'whatsapp', 'title' => 'WhatsApp', 'url' => trim((string) ($siteSettings->whatsapp_url ?? '')), 'abbr' => 'W'],
+        ])
+            ->filter(fn (array $item): bool => filled($item['url']))
+            ->values();
     @endphp
     <div class="br-line fake-class top-0"></div>
     <div class="footer-inner flat-spacing">
@@ -150,13 +159,18 @@
                                 @endif
                             @endif
 
-
-
-                            @if(filled($siteSettings->instagram_url ?? null))
-                                <div class="d-flex align-items-center gap-20">
-                                    <a href="{{ $siteSettings->instagram_url }}" target="_blank" rel="noopener noreferrer" class="d-flex">
-                                        <i class="fs-20 link icon icon-InstagramLogo"></i>
-                                    </a>
+                            @if($messengers->isNotEmpty())
+                                <div class="d-flex align-items-center gap-12">
+                                    @foreach($messengers as $messenger)
+                                        <a href="{{ $messenger['url'] }}"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="messenger-icon messenger-icon--{{ $messenger['key'] }}"
+                                           aria-label="{{ $messenger['title'] }}"
+                                           title="{{ $messenger['title'] }}">
+                                            @include('partials.messenger-icon', ['key' => $messenger['key']])
+                                        </a>
+                                    @endforeach
                                 </div>
                             @endif
                         </div>
@@ -167,7 +181,6 @@
                         <div class="cl-text-2 mb-12" style="white-space: pre-line;">{{ $siteSettings->requisites }}</div>
                     @endif
                 </div>
-
             </div>
         </div>
     </div>
@@ -179,9 +192,216 @@
                     © 2018-{{ date('Y') }} {{ __('Все права защищены.') }}
                 </p>
                 <ul class="tf-list payment-list">
-                    <li class="cl-text-2">Разработка сайта <a class="text-white ps-2" href="https://webart.by"> WebArt BY</a></li>
+                    <li class="cl-text-2">Разработка сайта <a class="text-white ps-2" href="https://webart.by">WebArt BY</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </footer>
+
+@if($messengers->isNotEmpty())
+    <div id="wcw-wrap" class="messenger-widget" data-messenger-widget>
+        <button type="button" class="messenger-fab" data-messenger-fab aria-expanded="false" aria-label="{{ __('Открыть мессенджеры') }}">
+            @foreach($messengers as $index => $messenger)
+                <span class="messenger-fab__icon-item messenger-icon messenger-icon--{{ $messenger['key'] }} @if($index === 0) is-active @endif" data-messenger-rotating-icon>
+                    @include('partials.messenger-icon', ['key' => $messenger['key']])
+                </span>
+            @endforeach
+        </button>
+        <div class="messenger-widget__panel" data-messenger-panel>
+            @foreach($messengers as $messenger)
+                <a href="{{ $messenger['url'] }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="messenger-widget__item"
+                   aria-label="{{ $messenger['title'] }}">
+                    <span class="messenger-icon messenger-icon--{{ $messenger['key'] }}">
+                        @include('partials.messenger-icon', ['key' => $messenger['key']])
+                    </span>
+                    <span class="messenger-widget__label">{{ $messenger['title'] }}</span>
+                </a>
+            @endforeach
+        </div>
+    </div>
+@endif
+
+<style>
+    .messenger-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        line-height: 1;
+        transition: transform .2s ease, opacity .2s ease;
+    }
+
+    .messenger-icon__svg {
+        width: 100%;
+        height: 100%;
+        display: inline-flex;
+    }
+
+    .messenger-icon--telegram {
+        background: transparent;
+    }
+
+    .messenger-icon--viber {
+        background: transparent;
+    }
+
+    .messenger-icon--whatsapp {
+        background: transparent;
+    }
+
+    #wcw-wrap.messenger-widget {
+        position: fixed;
+        left: 24px;
+        bottom: 84px;
+        z-index: 10020;
+    }
+
+    #wcw-wrap .messenger-fab {
+        width: 90px;
+        height: 90px;
+        border: 0;
+        border-radius: 50%;
+        background: #1A2A2D;
+        box-shadow: 0 20px 46px rgba(0, 0, 0, 0.38);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+    }
+
+    #wcw-wrap .messenger-fab__icon-item {
+        position: absolute;
+        opacity: 0;
+        transform: scale(0.6);
+        width: 54px;
+        height: 54px;
+    }
+
+    #wcw-wrap .messenger-fab__icon-item.is-active {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    #wcw-wrap .messenger-widget__panel {
+        position: absolute;
+        left: 0;
+        bottom: 106px;
+        min-width: 320px;
+        border-radius: 18px;
+        background: #111;
+        padding: 14px;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    }
+
+    #wcw-wrap.messenger-widget.is-open .messenger-widget__panel {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    #wcw-wrap .messenger-widget__item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: #fff;
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    #wcw-wrap .messenger-widget__item:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    #wcw-wrap .messenger-widget__label {
+        font-size: 20px;
+        line-height: 1.2;
+    }
+
+    @media (max-width: 991px) {
+        #wcw-wrap.messenger-widget {
+            left: 12px;
+            bottom: 132px;
+        }
+
+        #wcw-wrap .messenger-fab {
+            width: 90px;
+            height: 90px;
+        }
+
+        #wcw-wrap .messenger-fab__icon-item {
+            width: 54px;
+            height: 54px;
+        }
+
+        #wcw-wrap .messenger-widget__panel {
+            bottom: 106px;
+            min-width: 270px;
+        }
+    }
+</style>
+
+@once
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const widget = document.querySelector('#wcw-wrap[data-messenger-widget]');
+
+                if (!widget) {
+                    return;
+                }
+
+                const button = widget.querySelector('[data-messenger-fab]');
+                const panel = widget.querySelector('[data-messenger-panel]');
+                const rotatingIcons = Array.from(widget.querySelectorAll('[data-messenger-rotating-icon]'));
+                let activeIndex = 0;
+
+                const setExpandedState = function (expanded) {
+                    widget.classList.toggle('is-open', expanded);
+                    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                };
+
+                if (rotatingIcons.length > 1) {
+                    window.setInterval(function () {
+                        rotatingIcons[activeIndex].classList.remove('is-active');
+                        activeIndex = (activeIndex + 1) % rotatingIcons.length;
+                        rotatingIcons[activeIndex].classList.add('is-active');
+                    }, 1800);
+                }
+
+                button.addEventListener('click', function () {
+                    const isOpen = widget.classList.contains('is-open');
+                    setExpandedState(!isOpen);
+                });
+
+                panel.addEventListener('click', function () {
+                    setExpandedState(false);
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (!widget.contains(event.target)) {
+                        setExpandedState(false);
+                    }
+                });
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        setExpandedState(false);
+                    }
+                });
+            });
+        </script>
+    @endpush
+@endonce

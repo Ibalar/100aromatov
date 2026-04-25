@@ -48,6 +48,12 @@ class SettingFormPage extends FormPage
                     Box::make([
                         Text::make('Email', 'email')
                             ->hint('Например: info@example.com'),
+                        Text::make('Telegram URL', 'telegram_url')
+                            ->hint('Например: https://t.me/username или https://t.me/+invite'),
+                        Text::make('Viber URL', 'viber_url')
+                            ->hint('Например: viber://chat?number=%2B375XXXXXXXXX или https://invite.viber.com/...'),
+                        Text::make('WhatsApp URL', 'whatsapp_url')
+                            ->hint('Например: https://wa.me/375XXXXXXXXX'),
                         Json::make('Телефоны', 'phones')
                             ->fields([
                                 Text::make('Подпись оператора', 'label')
@@ -97,6 +103,9 @@ class SettingFormPage extends FormPage
     {
         return [
             'email' => ['nullable', 'email'],
+            'telegram_url' => ['nullable', 'string', 'max:255'],
+            'viber_url' => ['nullable', 'string', 'max:255'],
+            'whatsapp_url' => ['nullable', 'string', 'max:255'],
         ];
     }
 
