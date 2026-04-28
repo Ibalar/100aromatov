@@ -36,6 +36,13 @@
                                     <input type="text" name="phone" value="{{ old('phone') }}" required>
                                 </fieldset>
                                 <fieldset class="tf-field mb-12">
+                                    <label class="tf-lable fw-medium">{{ __('Перезвонить?') }}</label>
+                                    <select name="call_preference" required>
+                                        <option value="call_me" @selected(old('call_preference', 'call_me') === 'call_me')>{{ __('Перезвоните') }}</option>
+                                        <option value="no_call" @selected(old('call_preference') === 'no_call')>{{ __('Перезванивать не нужно') }}</option>
+                                    </select>
+                                </fieldset>
+                                <fieldset class="tf-field mb-12">
                                     <label class="tf-lable fw-medium">{{ __('Email') }}</label>
                                     <input type="email" name="email" value="{{ old('email') }}">
                                 </fieldset>

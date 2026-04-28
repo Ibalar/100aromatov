@@ -33,6 +33,7 @@ class OrderFormPage extends FormPage
                 ID::make(),
                 Text::make('Статус', 'status'),
                 Text::make('Телефон', 'phone'),
+                Text::make('Перезвон', 'call_preference'),
                 Text::make('Email', 'email'),
                 Text::make('Сумма BYN', 'total_byn'),
                 Text::make('Сумма USD', 'total_usd'),

@@ -18,6 +18,7 @@ class Order extends Model
         'promo_code',
         'discount_usd',
         'phone',
+        'call_preference',
         'email',
     ];
 

@@ -67,6 +67,7 @@ class OrderService
                 'promo_code' => $promo?->code,
                 'discount_usd' => $discountUsd,
                 'phone' => $data['phone'],
+                'call_preference' => $data['call_preference'] ?? 'call_me',
                 'email' => $data['email'] ?? null,
             ]);
 
@@ -117,6 +118,10 @@ class OrderService
         $totalByn = number_format((float) $order->total_byn, 2, ',', ' ');
         $message = "<b>Новый заказ #{$order->id}</b>\n";
         $message .= "Телефон: " . $this->escape($order->phone) . "\n";
+        $callPreference = $order->call_preference === 'no_call'
+            ? 'РџРµСЂРµР·РІР°РЅРёРІР°С‚СЊ РЅРµ РЅСѓР¶РЅРѕ'
+            : 'РџРµСЂРµР·РІРѕРЅРёС‚Рµ';
+        $message .= "РџРµСЂРµР·РІРѕРЅ: " . $this->escape($callPreference) . "\n";
         if ($order->email) {
             $message .= "Email: " . $this->escape($order->email) . "\n";
         }

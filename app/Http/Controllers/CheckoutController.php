@@ -23,6 +23,7 @@ class CheckoutController extends Controller
     {
         $data = $request->validate([
             'phone' => 'required|string',
+            'call_preference' => 'required|in:call_me,no_call',
             'email' => 'nullable|email',
             'promo_code' => 'nullable|string|max:64',
         ]);
@@ -54,6 +55,7 @@ class CheckoutController extends Controller
 
         $order = $service->create([
             'phone' => $data['phone'],
+            'call_preference' => $data['call_preference'],
             'email' => $data['email'] ?? null,
             'promo_code' => $data['promo_code'] ?? null,
             'items' => $items,

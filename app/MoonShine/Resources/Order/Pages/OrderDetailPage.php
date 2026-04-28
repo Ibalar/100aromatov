@@ -9,7 +9,6 @@ use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\Support\ListOf;
-use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Textarea;
 use MoonShine\UI\Fields\Text;
@@ -29,6 +28,7 @@ class OrderDetailPage extends DetailPage
             ID::make(),
             Text::make('Статус', 'status'),
             Text::make('Телефон', 'phone'),
+            Text::make('Перезвон', 'call_preference'),
             Text::make('Email', 'email'),
             Text::make('Сумма BYN', 'total_byn'),
             Text::make('Сумма USD', 'total_usd'),

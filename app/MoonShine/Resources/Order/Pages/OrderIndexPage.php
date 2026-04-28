@@ -29,6 +29,7 @@ class OrderIndexPage extends IndexPage
             ID::make()->sortable(),
             Text::make('Статус', 'status')->sortable(),
             Text::make('Телефон', 'phone')->sortable(),
+            Text::make('Перезвон', 'call_preference'),
             Text::make('Email', 'email'),
             Text::make('Сумма BYN', 'total_byn')->sortable(),
             Text::make('Промокод', 'promo_code'),
@@ -41,6 +42,7 @@ class OrderIndexPage extends IndexPage
         return [
             Text::make('Статус', 'status'),
             Text::make('Телефон', 'phone'),
+            Text::make('Перезвон', 'call_preference'),
         ];
     }
 
