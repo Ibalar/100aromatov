@@ -22,7 +22,7 @@ use MoonShine\Laravel\Pages\LoginPage;
 use MoonShine\Laravel\Pages\ProfilePage;
 
 return [
-    'title' => env('MOONSHINE_TITLE', 'WebArt.BY'),
+    'title' => env('MOONSHINE_TITLE', 'WebArt Panel'),
     'logo' => '/moonshine/logo.svg',
     'logo_small' => '/moonshine/logo.svg',
 

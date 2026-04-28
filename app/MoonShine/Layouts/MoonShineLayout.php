@@ -64,10 +64,10 @@ final class MoonShineLayout extends AppLayout
             ])->icon('shopping-cart'),
             MenuItem::make(ReviewResource::class, 'Отзывы')->icon('chat-bubble-left-right'),
             MenuItem::make(SettingResource::class, 'Настройки сайта')->icon('cog-8-tooth'),
-            MenuGroup::make('Access', [
-                MenuItem::make(url('/admin/resource/user-resource/index-page'), 'Users'),
-                MenuItem::make(url('/admin/resource/role-resource/index-page'), 'Roles'),
-                MenuItem::make(url('/admin/resource/permission-resource/index-page'), 'Permissions'),
+            MenuGroup::make('Доступы', [
+                MenuItem::make(url('/admin/resource/user-resource/index-page'), 'Пользователи'),
+                MenuItem::make(url('/admin/resource/role-resource/index-page'), 'Роли'),
+                MenuItem::make(url('/admin/resource/permission-resource/index-page'), 'Разрешения'),
             ])->icon('lock-closed'),
         ];
     }

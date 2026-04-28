@@ -46,7 +46,9 @@ class ProductIndexPage extends IndexPage
                         $field->getData()?->getKey()
                     ),
                     blank: false
-                ),
+                )
+                ->withoutTextWrap()
+                ->sortable(),
         ];
     }
 

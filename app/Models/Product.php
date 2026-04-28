@@ -42,6 +42,16 @@ class Product extends Model
         'max_price' => 'decimal:2',
     ];
 
+    public function setNameRuAttribute(?string $value): void
+    {
+        $this->attributes['name_ru'] = $this->decodeHtmlEntities($value);
+    }
+
+    public function setNameByAttribute(?string $value): void
+    {
+        $this->attributes['name_by'] = $this->decodeHtmlEntities($value);
+    }
+
     /* ================= RELATIONS ================= */
 
     public function brand(): BelongsTo
@@ -132,5 +142,14 @@ class Product extends Model
             'min_price' => $prices->isEmpty() ? null : $prices->min(),
             'max_price' => $prices->isEmpty() ? null : $prices->max(),
         ]);
+    }
+
+    private function decodeHtmlEntities(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 }
