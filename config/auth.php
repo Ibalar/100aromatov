@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'moonshine' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
         'customer' => [
             'driver' => 'session',
             'provider' => 'customers',

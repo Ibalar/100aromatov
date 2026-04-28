@@ -12,12 +12,15 @@ use App\MoonShine\Resources\ProductImage\Pages\ProductImageDetailPage;
 
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Contracts\Core\PageContract;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<ProductImage, ProductImageIndexPage, ProductImageFormPage, ProductImageDetailPage>
  */
 class ProductImageResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = ProductImage::class;
 
     protected int $itemsPerPage = 20;

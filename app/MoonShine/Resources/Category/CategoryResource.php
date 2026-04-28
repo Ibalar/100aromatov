@@ -15,12 +15,15 @@ use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Support\Enums\Action;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\ListOf;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Category, CategoryIndexPage, CategoryFormPage, CategoryDetailPage>
  */
 class CategoryResource extends TreeResource
 {
+    use WithRolePermissions;
+
     protected string $model = Category::class;
     protected string $title = 'Категории';
     protected string $column = 'name_ru';

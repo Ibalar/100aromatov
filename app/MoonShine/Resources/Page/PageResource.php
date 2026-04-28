@@ -10,12 +10,15 @@ use App\MoonShine\Resources\Page\Pages\PageFormPage;
 use App\MoonShine\Resources\Page\Pages\PageIndexPage;
 use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Laravel\Resources\ModelResource;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Page, PageIndexPage, PageFormPage, PageDetailPage>
  */
 class PageResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = Page::class;
 
     protected int $itemsPerPage = 20;

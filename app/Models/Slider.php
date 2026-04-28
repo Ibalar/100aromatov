@@ -45,7 +45,22 @@ class Slider extends Model
     // Проверка наличия кнопки
     public function hasButton(): bool
     {
-        return !empty($this->button_link);
+        return !empty(trim((string) $this->button_link));
+    }
+
+    public function getButtonUrlAttribute(): ?string
+    {
+        $link = trim((string) $this->button_link);
+
+        if ($link === '') {
+            return null;
+        }
+
+        if (filter_var($link, FILTER_VALIDATE_URL)) {
+            return $link;
+        }
+
+        return $link;
     }
 
     // Получение URL изображения

@@ -11,12 +11,15 @@ use App\MoonShine\Resources\Slider\Pages\SliderDetailPage;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Support\Enums\SortDirection;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Slider, SliderIndexPage, SliderFormPage, SliderDetailPage>
  */
 class SliderResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = Slider::class;
 
     protected int $itemsPerPage = 20;

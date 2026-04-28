@@ -86,7 +86,7 @@
                 </button>
             @elseif($hasSingleVariant && $defaultVariant)
                 <button type="button" class="tf-btn btn-white small w-100 js-add-to-cart" data-variant-id="{{ $defaultVariant->id }}" data-qty="1">
-                    {{ __('Отложить') }}
+                                {{ __('Забронировать') }}
                 </button>
             @else
                 <a href="{{ route('product.show', $product->slug) }}" class="tf-btn btn-white small w-100">

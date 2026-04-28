@@ -106,6 +106,31 @@ Route::middleware(['moonshine', MoonShineAuthenticate::class])
         Lfm::routes();
     });
 
+Route::prefix($moonshinePrefix)->group(function () use ($moonshinePrefix): void {
+    $base = '/' . trim($moonshinePrefix, '/');
+
+    Route::redirect(
+        '/resource/moon-shine-user-resource/moon-shine-user-index-page',
+        $base . '/resource/user-resource/index-page',
+        301
+    );
+    Route::redirect(
+        '/resource/moon-shine-user-role-resource/moon-shine-user-role-index-page',
+        $base . '/resource/role-resource/index-page',
+        301
+    );
+    Route::redirect(
+        '/resource/moon-shine-user-resource/moon-shine-user-form-page/{resourceItem}',
+        $base . '/resource/user-resource/form-page/{resourceItem}',
+        301
+    );
+    Route::redirect(
+        '/resource/moon-shine-user-role-resource/moon-shine-user-role-form-page/{resourceItem}',
+        $base . '/resource/role-resource/form-page/{resourceItem}',
+        301
+    );
+});
+
 Route::get('/{path}', [ProductController::class, 'redirectByOldUrl'])
     ->where('path', '.*')
     ->name('product.redirect.old');

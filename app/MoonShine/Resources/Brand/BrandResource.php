@@ -23,12 +23,15 @@ use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
 use MoonShine\Support\Enums\SortDirection;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Brand, BrandIndexPage, BrandFormPage, BrandDetailPage>
  */
 class BrandResource extends ModelResource implements HasImportExportContract
 {
+    use WithRolePermissions;
+
     protected string $model = Brand::class;
 
     protected int $itemsPerPage = 20;

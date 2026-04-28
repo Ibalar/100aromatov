@@ -12,12 +12,15 @@ use App\MoonShine\Resources\Attribute\Pages\AttributeDetailPage;
 
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Contracts\Core\PageContract;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Attribute, AttributeIndexPage, AttributeFormPage, AttributeDetailPage>
  */
 class AttributeResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = Attribute::class;
 
     protected int $itemsPerPage = 20;

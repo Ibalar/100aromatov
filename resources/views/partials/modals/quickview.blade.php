@@ -91,7 +91,7 @@
                                 class="btn-action-price tf-btn type-xl animate-btn w-100 js-add-to-cart js-quickview-add-to-cart"
                                 data-qty="1"
                             >
-                                {{ __('Отложить') }}
+                                {{ __('Забронировать') }}
                                 <span class="d-none d-sm-block d-md-none d-lg-block">&nbsp;-&nbsp;</span>
                                 <span class="price-add d-none d-sm-block d-md-none d-lg-block" data-quickview-button-price></span>
                             </button>

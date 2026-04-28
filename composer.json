@@ -14,6 +14,8 @@
         "moonshine/moonshine": "^4.8",
         "moonshine/ru": "^1.0",
         "moonshine/tinymce": "^2.0",
+        "spatie/laravel-permission": "^6.2",
+        "sweet1s/moonshine-roles-permissions": "^4.0.0",
         "unisharp/laravel-filemanager": "^2.13"
     },
     "require-dev": {

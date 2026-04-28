@@ -10,12 +10,15 @@ use App\MoonShine\Resources\Order\Pages\OrderFormPage;
 use App\MoonShine\Resources\Order\Pages\OrderIndexPage;
 use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Laravel\Resources\ModelResource;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Order, OrderIndexPage, OrderFormPage, OrderDetailPage>
  */
 class OrderResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = Order::class;
 
     protected int $itemsPerPage = 20;
@@ -38,4 +41,3 @@ class OrderResource extends ModelResource
         ];
     }
 }
-

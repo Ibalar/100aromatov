@@ -11,12 +11,15 @@ use App\MoonShine\Resources\Wishlist\Pages\WishlistIndexPage;
 use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\Ability;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Wishlist, WishlistIndexPage, WishlistFormPage, WishlistDetailPage>
  */
 class WishlistResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = Wishlist::class;
 
     protected int $itemsPerPage = 20;

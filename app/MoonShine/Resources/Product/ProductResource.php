@@ -27,12 +27,14 @@ use MoonShine\ImportExport\Traits\ImportExportConcern;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Product, ProductIndexPage, ProductFormPage, ProductDetailPage>
  */
 class ProductResource extends ModelResource implements HasImportExportContract
 {
+    use WithRolePermissions;
     use ImportExportConcern;
 
     protected string $model = Product::class;

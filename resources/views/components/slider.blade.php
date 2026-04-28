@@ -41,7 +41,7 @@
 
                                         @if($slide->hasButton())
                                             <div class="fade-item fade-item-3">
-                                                <a href="{{ $slide->button_link }}" class="tf-btn btn-white">
+                                                <a href="{{ $slide->button_url }}" class="tf-btn btn-white">
                                                     Подробнее
                                                 </a>
                                             </div>

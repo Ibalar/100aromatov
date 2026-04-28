@@ -12,12 +12,15 @@ use App\MoonShine\Resources\Setting\Pages\SettingDetailPage;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Support\Enums\Ability;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<Setting, SettingIndexPage, SettingFormPage, SettingDetailPage>
  */
 class SettingResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = Setting::class;
 
     protected int $itemsPerPage = 20;

@@ -12,12 +12,15 @@ use App\MoonShine\Resources\ProductVariant\Pages\ProductVariantDetailPage;
 
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Contracts\Core\PageContract;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<ProductVariant, ProductVariantIndexPage, ProductVariantFormPage, ProductVariantDetailPage>
  */
 class ProductVariantResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = ProductVariant::class;
 
     protected int $itemsPerPage = 20;

@@ -56,6 +56,7 @@ final class MoonShineLayout extends AppLayout
                 MenuItem::make(AttributeValueResource::class, 'Значения характеристик'),
                 MenuItem::make(FilterPageResource::class, 'Страницы для фильтра'),
             ])->icon('adjustments-vertical'),
+            MenuItem::make(SliderResource::class, 'Слайдер и баннеры')->icon('film'),
             MenuItem::make(PageResource::class, 'Статические страницы')->icon('computer-desktop'),
             MenuGroup::make('Заказы и статистика', [
                 MenuItem::make(OrderResource::class, 'Заказы'),
@@ -63,8 +64,11 @@ final class MoonShineLayout extends AppLayout
             ])->icon('shopping-cart'),
             MenuItem::make(ReviewResource::class, 'Отзывы')->icon('chat-bubble-left-right'),
             MenuItem::make(SettingResource::class, 'Настройки сайта')->icon('cog-8-tooth'),
-            ...parent::menu(),
-            MenuItem::make(SliderResource::class, 'Sliders'),
+            MenuGroup::make('Access', [
+                MenuItem::make(url('/admin/resource/user-resource/index-page'), 'Users'),
+                MenuItem::make(url('/admin/resource/role-resource/index-page'), 'Roles'),
+                MenuItem::make(url('/admin/resource/permission-resource/index-page'), 'Permissions'),
+            ])->icon('lock-closed'),
         ];
     }
 

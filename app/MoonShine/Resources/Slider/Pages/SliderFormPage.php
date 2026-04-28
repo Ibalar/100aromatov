@@ -22,7 +22,6 @@ use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Textarea;
-use MoonShine\UI\Fields\Url;
 use Throwable;
 
 
@@ -71,9 +70,9 @@ class SliderFormPage extends FormPage
                     ->default('#ffffff')
                     ->required(),
 
-                Url::make('Ссылка кнопки', 'button_link')
+                Text::make('Ссылка кнопки', 'button_link')
                     ->nullable()
-                    ->placeholder('Например: /category/shoes или /product/5'),
+                    ->placeholder('Например: /category/shoes или https://example.com/page'),
 
                 Number::make('Порядок сортировки', 'sort_order')
                     ->default(0)
@@ -87,7 +86,26 @@ class SliderFormPage extends FormPage
 
     protected function rules(DataWrapperContract $item): array
     {
-        return [];
+        return [
+            'button_link' => [
+                'nullable',
+                'string',
+                'max:2048',
+                static function (string $attribute, mixed $value, \Closure $fail): void {
+                    $link = trim((string) $value);
+
+                    if ($link === '') {
+                        return;
+                    }
+
+                    if (filter_var($link, FILTER_VALIDATE_URL) || str_starts_with($link, '/')) {
+                        return;
+                    }
+
+                    $fail('Поле "Ссылка кнопки" должно содержать абсолютный URL (https://...) или относительный путь (/...).');
+                },
+            ],
+        ];
     }
 
     /**

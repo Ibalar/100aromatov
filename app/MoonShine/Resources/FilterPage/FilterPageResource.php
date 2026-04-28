@@ -10,12 +10,15 @@ use App\MoonShine\Resources\FilterPage\Pages\FilterPageFormPage;
 use App\MoonShine\Resources\FilterPage\Pages\FilterPageIndexPage;
 use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Laravel\Resources\ModelResource;
+use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
  * @extends ModelResource<FilterPage, FilterPageIndexPage, FilterPageFormPage, FilterPageDetailPage>
  */
 class FilterPageResource extends ModelResource
 {
+    use WithRolePermissions;
+
     protected string $model = FilterPage::class;
 
     protected int $itemsPerPage = 20;

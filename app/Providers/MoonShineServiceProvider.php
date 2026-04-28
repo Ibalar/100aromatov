@@ -8,8 +8,6 @@ use Illuminate\Support\ServiceProvider;
 use MoonShine\Contracts\Core\DependencyInjection\CoreContract;
 use MoonShine\Laravel\DependencyInjection\MoonShine;
 use MoonShine\Laravel\DependencyInjection\MoonShineConfigurator;
-use App\MoonShine\Resources\MoonShineUser\MoonShineUserResource;
-use App\MoonShine\Resources\MoonShineUserRole\MoonShineUserRoleResource;
 use App\MoonShine\Resources\Category\CategoryResource;
 use App\MoonShine\Resources\Brand\BrandResource;
 use App\MoonShine\Resources\Product\ProductResource;
@@ -24,6 +22,9 @@ use App\MoonShine\Resources\Order\OrderResource;
 use App\MoonShine\Resources\Page\PageResource;
 use App\MoonShine\Resources\Review\ReviewResource;
 use App\MoonShine\Resources\Slider\SliderResource;
+use Sweet1s\MoonshineRBAC\Resource\PermissionResource;
+use Sweet1s\MoonshineRBAC\Resource\RoleResource;
+use Sweet1s\MoonshineRBAC\Resource\UserResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -34,8 +35,9 @@ class MoonShineServiceProvider extends ServiceProvider
     {
         $core
             ->resources([
-                MoonShineUserResource::class,
-                MoonShineUserRoleResource::class,
+                UserResource::class,
+                RoleResource::class,
+                PermissionResource::class,
                 CategoryResource::class,
                 BrandResource::class,
                 ProductResource::class,

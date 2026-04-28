@@ -83,7 +83,7 @@
                 @elseif($hasSingleVariant && $defaultVariant)
                     <a href="#;" class="hover-tooltip box-icon js-add-to-cart" data-variant-id="{{ $defaultVariant->id }}" data-qty="1">
                         <span class="icon icon-Handbag"></span>
-                        <span class="tooltip">{{ __('Отложить') }}</span>
+                                    <span class="tooltip">{{ __('Забронировать') }}</span>
                     </a>
                 @else
                     <a href="{{ route('product.show', $product->slug) }}" class="hover-tooltip box-icon">
