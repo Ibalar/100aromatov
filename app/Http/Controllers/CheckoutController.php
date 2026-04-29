@@ -26,7 +26,21 @@ class CheckoutController extends Controller
             'call_preference' => 'required|in:call_me,no_call',
             'email' => 'nullable|email',
             'promo_code' => 'nullable|string|max:64',
+            'website' => 'nullable|size:0',
+            'form_started_at' => 'required|integer',
         ]);
+
+        if (now()->timestamp - (int) $data['form_started_at'] < 2) {
+            return back()->withErrors([
+                'phone' => __('Форма отправлена слишком быстро. Попробуйте еще раз.'),
+            ])->withInput();
+        }
+
+        if (! isValidBelarusMobilePhone($data['phone'])) {
+            return back()->withErrors([
+                'phone' => __('Введите корректный номер телефона белорусского оператора.'),
+            ])->withInput();
+        }
 
         $items = $request->input('items');
         if (empty($items)) {
@@ -54,7 +68,7 @@ class CheckoutController extends Controller
         ]);
 
         $order = $service->create([
-            'phone' => $data['phone'],
+            'phone' => formatBelarusMobilePhone($data['phone']) ?? $data['phone'],
             'call_preference' => $data['call_preference'],
             'email' => $data['email'] ?? null,
             'promo_code' => $data['promo_code'] ?? null,

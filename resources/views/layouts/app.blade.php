@@ -259,6 +259,75 @@
 @if(filled($siteSettings->metrics_body_end_code ?? null))
     {!! $siteSettings->metrics_body_end_code !!}
 @endif
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const prefix = '375';
+
+        function toDigits(value) {
+            return (value || '').replace(/\D/g, '');
+        }
+
+        function normalize(value) {
+            let digits = toDigits(value);
+
+            if (digits.startsWith('80') && digits.length >= 11) {
+                digits = '375' + digits.slice(2);
+            } else if (digits.startsWith('0') && digits.length >= 10) {
+                digits = '375' + digits.slice(1);
+            } else if (!digits.startsWith(prefix)) {
+                if (digits.length <= 9) {
+                    digits = prefix + digits;
+                } else if (digits.length > 9) {
+                    digits = prefix + digits.slice(-9);
+                }
+            }
+
+            return digits.slice(0, 12);
+        }
+
+        function formatBelarusPhone(value) {
+            const digits = normalize(value);
+            if (!digits.startsWith(prefix)) {
+                return '+375';
+            }
+
+            const local = digits.slice(3);
+            const a = local.slice(0, 2);
+            const b = local.slice(2, 5);
+            const c = local.slice(5, 7);
+            const d = local.slice(7, 9);
+
+            let out = '+375';
+            if (a) out += ' (' + a;
+            if (a.length === 2) out += ')';
+            if (b) out += ' ' + b;
+            if (c) out += '-' + c;
+            if (d) out += '-' + d;
+
+            return out;
+        }
+
+        document.querySelectorAll('input[data-phone-by]').forEach(function (input) {
+            input.placeholder = input.placeholder || '+375 (29) 123-45-67';
+
+            const apply = function () {
+                input.value = formatBelarusPhone(input.value);
+            };
+
+            input.addEventListener('input', apply);
+            input.addEventListener('blur', apply);
+            input.addEventListener('focus', function () {
+                if (!input.value) {
+                    input.value = '+375';
+                }
+            });
+
+            if (input.value) {
+                apply();
+            }
+        });
+    });
+</script>
 @stack('scripts')
 </body>
 </html>

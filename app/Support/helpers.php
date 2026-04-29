@@ -95,3 +95,53 @@ if (! function_exists('settingPhoneIconUrl')) {
         return asset('storage/' . ltrim($path, '/'));
     }
 }
+
+if (! function_exists('normalizeBelarusPhone')) {
+    function normalizeBelarusPhone(?string $phone): ?string
+    {
+        $digits = preg_replace('/\D+/', '', (string) $phone) ?? '';
+
+        if ($digits === '') {
+            return null;
+        }
+
+        if (str_starts_with($digits, '80') && strlen($digits) === 11) {
+            $digits = '375' . substr($digits, 2);
+        } elseif (strlen($digits) === 9) {
+            $digits = '375' . $digits;
+        }
+
+        return $digits;
+    }
+}
+
+if (! function_exists('isValidBelarusMobilePhone')) {
+    function isValidBelarusMobilePhone(?string $phone): bool
+    {
+        $normalized = normalizeBelarusPhone($phone);
+
+        if (! $normalized) {
+            return false;
+        }
+
+        return (bool) preg_match('/^375(25|29|33|44)\d{7}$/', $normalized);
+    }
+}
+
+if (! function_exists('formatBelarusMobilePhone')) {
+    function formatBelarusMobilePhone(?string $phone): ?string
+    {
+        $normalized = normalizeBelarusPhone($phone);
+
+        if (! $normalized || ! isValidBelarusMobilePhone($normalized)) {
+            return null;
+        }
+
+        $operator = substr($normalized, 3, 2);
+        $part1 = substr($normalized, 5, 3);
+        $part2 = substr($normalized, 8, 2);
+        $part3 = substr($normalized, 10, 2);
+
+        return "+375 ({$operator}) {$part1}-{$part2}-{$part3}";
+    }
+}

@@ -43,7 +43,7 @@
                                 <div class="col-md-6">
                                     <fieldset class="tf-field">
                                         <label class="tf-lable fw-medium">{{ __('Телефон') }}</label>
-                                        <input type="text" name="phone" value="{{ old('phone', $customer->phone) }}">
+                                        <input type="text" name="phone" value="{{ old('phone', $customer->phone) }}" inputmode="tel" autocomplete="tel" data-phone-by>
                                     </fieldset>
                                 </div>
                                 <div class="col-md-6">

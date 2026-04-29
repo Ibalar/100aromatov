@@ -44,6 +44,16 @@ class CustomerAccountController extends Controller
             'email' => 'required|email|unique:customers,email,' . $customer->id,
         ]);
 
+        if (filled($data['phone'] ?? null) && ! isValidBelarusMobilePhone($data['phone'])) {
+            return back()->withErrors([
+                'phone' => __('Введите корректный номер телефона белорусского оператора.'),
+            ])->withInput();
+        }
+
+        if (filled($data['phone'] ?? null)) {
+            $data['phone'] = formatBelarusMobilePhone($data['phone']) ?? $data['phone'];
+        }
+
         $customer->update($data);
 
         return back()->with('status', __('Профиль обновлен'));
@@ -79,4 +89,3 @@ class CustomerAccountController extends Controller
         return view('customer.account.addresses', compact('customer'));
     }
 }
-

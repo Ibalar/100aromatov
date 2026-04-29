@@ -18,7 +18,27 @@ class ProductAvailabilityInquiryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
             'comment' => ['nullable', 'string', 'max:2000'],
+            'website' => ['nullable', 'size:0'],
+            'form_started_at' => ['required', 'integer'],
         ]);
+
+        if (now()->timestamp - (int) $validated['form_started_at'] < 2) {
+            return back()
+                ->withErrors([
+                    'phone' => __('Форма отправлена слишком быстро. Попробуйте еще раз.'),
+                ], 'availabilityInquiry')
+                ->withInput();
+        }
+
+        if (! isValidBelarusMobilePhone($validated['phone'])) {
+            return back()
+                ->withErrors([
+                    'phone' => __('Введите корректный номер телефона белорусского оператора.'),
+                ], 'availabilityInquiry')
+                ->withInput();
+        }
+
+        $validated['phone'] = formatBelarusMobilePhone($validated['phone']) ?? $validated['phone'];
 
         $product = Product::query()->findOrFail($validated['product_id']);
         $variant = ! empty($validated['variant_id'])

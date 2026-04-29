@@ -23,6 +23,8 @@
 
                 <form action="{{ route('product.availability-inquiry.store') }}" method="POST" class="tf-grid-layout gap-16">
                     @csrf
+                    <input type="hidden" name="website" value="">
+                    <input type="hidden" name="form_started_at" value="{{ now()->timestamp }}">
                     <input type="hidden" name="product_id" value="{{ old('product_id') }}" data-availability-product-id>
                     <input type="hidden" name="variant_id" value="{{ old('variant_id') }}" data-availability-variant-id>
                     <input type="hidden" value="{{ old('product_name') }}" data-availability-product-name-input>
@@ -38,7 +40,7 @@
 
                     <fieldset class="tf-field">
                         <label class="tf-lable fw-medium">{{ __('Телефон') }}</label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" required>
+                        <input type="text" name="phone" value="{{ old('phone') }}" inputmode="tel" autocomplete="tel" data-phone-by required>
                         @error('phone', 'availabilityInquiry')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror

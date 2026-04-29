@@ -30,10 +30,15 @@
                         <h4 class="mb-16">{{ __('Контактные данные') }}</h4>
                         <form method="POST" action="{{ route('checkout.store') }}">
                             @csrf
+                            <input type="hidden" name="website" value="">
+                            <input type="hidden" name="form_started_at" value="{{ now()->timestamp }}">
                             <div class="form-content">
                                 <fieldset class="tf-field mb-12">
                                     <label class="tf-lable fw-medium">{{ __('Телефон') }} *</label>
-                                    <input type="text" name="phone" value="{{ old('phone') }}" required>
+                                    <input type="text" name="phone" value="{{ old('phone') }}" inputmode="tel" autocomplete="tel" data-phone-by required>
+                                    @error('phone')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </fieldset>
                                 <fieldset class="tf-field mb-12">
                                     <label class="tf-lable fw-medium">{{ __('Перезвонить?') }}</label>

@@ -46,11 +46,14 @@ Route::get('/product/{product}/quick-view', [ProductController::class, 'quickVie
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 Route::post('/product/{slug}/reviews', [ReviewController::class, 'store'])
     ->middleware('auth:customer')
+    ->middleware('throttle:3,10')
     ->name('product.reviews.store');
 Route::post('/reviews', [ReviewController::class, 'storeStore'])
     ->middleware('auth:customer')
+    ->middleware('throttle:3,10')
     ->name('reviews.store');
 Route::post('/product-availability-inquiry', [ProductAvailabilityInquiryController::class, 'store'])
+    ->middleware('throttle:5,10')
     ->name('product.availability-inquiry.store');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -63,7 +66,9 @@ Route::prefix('/cart')->name('cart.')->group(function () {
 });
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::post('/checkout', [CheckoutController::class, 'store'])
+    ->middleware('throttle:5,10')
+    ->name('checkout.store');
 
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 Route::prefix('/wishlist')->name('wishlist.')->group(function () {
@@ -74,9 +79,13 @@ Route::prefix('/wishlist')->name('wishlist.')->group(function () {
 
 Route::middleware('guest:customer')->group(function () {
     Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
-    Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login.store');
+    Route::post('/login', [CustomerAuthController::class, 'login'])
+        ->middleware('throttle:5,10')
+        ->name('customer.login.store');
     Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
-    Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register.store');
+    Route::post('/register', [CustomerAuthController::class, 'register'])
+        ->middleware('throttle:3,10')
+        ->name('customer.register.store');
 });
 
 Route::middleware('auth:customer')->group(function () {
