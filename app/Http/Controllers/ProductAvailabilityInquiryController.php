@@ -18,6 +18,7 @@ class ProductAvailabilityInquiryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
             'comment' => ['nullable', 'string', 'max:2000'],
+            'privacy_policy' => ['accepted'],
             'website' => ['nullable', 'size:0'],
             'form_started_at' => ['required', 'integer'],
         ]);

@@ -26,6 +26,7 @@ class CheckoutController extends Controller
             'call_preference' => 'required|in:call_me,no_call',
             'email' => 'nullable|email',
             'promo_code' => 'nullable|string|max:64',
+            'privacy_policy' => 'accepted',
             'website' => 'nullable|size:0',
             'form_started_at' => 'required|integer',
         ]);

@@ -55,6 +55,15 @@
                                     <label class="tf-lable fw-medium">{{ __('Промокод') }}</label>
                                     <input type="text" name="promo_code" value="{{ old('promo_code') }}">
                                 </fieldset>
+                                <fieldset class="mb-16">
+                                    <label class="d-flex align-items-start gap-8">
+                                        <input type="checkbox" name="privacy_policy" value="1" @checked(old('privacy_policy')) required>
+                                        <span>Я согласен(на) с <a href="/pages/privacy-policy" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a></span>
+                                    </label>
+                                    @error('privacy_policy')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
+                                </fieldset>
                             </div>
                             <button type="submit" class="tf-btn animate-btn">{{ __('Подтвердить бронь') }}</button>
                         </form>

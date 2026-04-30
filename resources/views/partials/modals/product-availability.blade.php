@@ -54,6 +54,16 @@
                         @enderror
                     </fieldset>
 
+                    <fieldset>
+                        <label class="d-flex align-items-start gap-8">
+                            <input type="checkbox" name="privacy_policy" value="1" @checked(old('privacy_policy')) required>
+                            <span>Я согласен(на) с <a href="/pages/privacy-policy" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a></span>
+                        </label>
+                        @error('privacy_policy', 'availabilityInquiry')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    </fieldset>
+
                     <button type="submit" class="tf-btn animate-btn w-100">
                         {{ __('Отправить') }}
                     </button>
@@ -119,7 +129,14 @@
             const hasInquirySuccess = @json(session()->has('availability_inquiry_success'));
 
             if ((hasInquiryErrors || hasInquirySuccess) && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-                bootstrap.Modal.getOrCreateInstance(modalElement).show();
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+                modalInstance.show();
+
+                if (hasInquirySuccess) {
+                    setTimeout(function () {
+                        modalInstance.hide();
+                    }, 3000);
+                }
             }
         });
     </script>

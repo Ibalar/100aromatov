@@ -118,16 +118,20 @@ class OrderService
         $totalByn = number_format((float) $order->total_byn, 2, ',', ' ');
         $message = "<b>Новый заказ #{$order->id}</b>\n";
         $message .= "Телефон: " . $this->escape($order->phone) . "\n";
+
         $callPreference = $order->call_preference === 'no_call'
-            ? 'РџРµСЂРµР·РІР°РЅРёРІР°С‚СЊ РЅРµ РЅСѓР¶РЅРѕ'
-            : 'РџРµСЂРµР·РІРѕРЅРёС‚Рµ';
-        $message .= "РџРµСЂРµР·РІРѕРЅ: " . $this->escape($callPreference) . "\n";
+            ? 'Перезванивать не нужно'
+            : 'Перезвоните';
+        $message .= "Перезвон: " . $this->escape($callPreference) . "\n";
+
         if ($order->email) {
             $message .= "Email: " . $this->escape($order->email) . "\n";
         }
+
         if ($order->promo_code) {
             $message .= "Промокод: " . $this->escape($order->promo_code) . "\n";
         }
+
         $message .= "Сумма: {$totalByn} BYN\n\n";
         $message .= "<b>Позиции:</b>\n";
 
