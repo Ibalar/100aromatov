@@ -39,8 +39,8 @@ class ReviewFormPage extends FormPage
                     formatted: static fn ($product) => localizedField($product, 'name'),
                     resource: ProductResource::class,
                 )->nullable(),
-                Text::make('Автор', formatted: static fn (Review $review) => $review->author_name)
-                    ->previewMode(),
+                Text::make('Имя пользователя', 'reviewer_name')
+                    ->hint('Отображается на сайте как автор отзыва'),
                 Text::make('Email автора', formatted: static fn (Review $review) => $review->customer?->email ?? '')
                     ->previewMode(),
                 Number::make('Оценка', 'rating')->min(1)->max(5),
@@ -72,7 +72,11 @@ class ReviewFormPage extends FormPage
 
     protected function rules(DataWrapperContract $item): array
     {
-        return [];
+        return [
+            'reviewer_name' => ['nullable', 'string', 'max:255'],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'text' => ['required', 'string'],
+        ];
     }
 
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract

@@ -54,6 +54,9 @@
                                 <fieldset class="tf-field mb-16">
                                     <label class="tf-lable fw-medium">{{ __('Промокод') }}</label>
                                     <input type="text" name="promo_code" value="{{ old('promo_code') }}">
+                                    @error('promo_code')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </fieldset>
                                 <fieldset class="mb-16">
                                     <label class="d-flex align-items-start gap-8">

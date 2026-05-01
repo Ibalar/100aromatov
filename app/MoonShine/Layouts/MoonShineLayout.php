@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Layouts;
 
-use App\MoonShine\Resources\Order\OrderResource;
-use App\MoonShine\Resources\Page\PageResource;
-use App\MoonShine\Resources\Review\ReviewResource;
-use MoonShine\Laravel\Layouts\AppLayout;
-use MoonShine\ColorManager\Palettes\PurplePalette;
-use MoonShine\ColorManager\ColorManager;
-use MoonShine\Contracts\ColorManager\ColorManagerContract;
-use MoonShine\Contracts\ColorManager\PaletteContract;
-use App\MoonShine\Resources\Category\CategoryResource;
-use MoonShine\MenuManager\MenuGroup;
-use MoonShine\MenuManager\MenuItem;
-use App\MoonShine\Resources\Brand\BrandResource;
-use App\MoonShine\Resources\Product\ProductResource;
-use App\MoonShine\Resources\ProductVariant\ProductVariantResource;
-use App\MoonShine\Resources\ProductImage\ProductImageResource;
 use App\MoonShine\Resources\Attribute\AttributeResource;
 use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
+use App\MoonShine\Resources\Brand\BrandResource;
+use App\MoonShine\Resources\Category\CategoryResource;
 use App\MoonShine\Resources\FilterPage\FilterPageResource;
-use App\MoonShine\Resources\Wishlist\WishlistResource;
+use App\MoonShine\Resources\Order\OrderResource;
+use App\MoonShine\Resources\Page\PageResource;
+use App\MoonShine\Resources\Product\ProductResource;
+use App\MoonShine\Resources\ProductImage\ProductImageResource;
+use App\MoonShine\Resources\ProductVariant\ProductVariantResource;
+use App\MoonShine\Resources\PromoCode\PromoCodeResource;
+use App\MoonShine\Resources\Review\ReviewResource;
 use App\MoonShine\Resources\Setting\SettingResource;
 use App\MoonShine\Resources\Slider\SliderResource;
+use App\MoonShine\Resources\Wishlist\WishlistResource;
+use MoonShine\ColorManager\ColorManager;
+use MoonShine\ColorManager\Palettes\PurplePalette;
+use MoonShine\Contracts\ColorManager\ColorManagerContract;
+use MoonShine\Contracts\ColorManager\PaletteContract;
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\MenuManager\MenuGroup;
+use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -32,7 +33,6 @@ final class MoonShineLayout extends AppLayout
      * @var null|class-string<PaletteContract>
      */
     protected ?string $palette = PurplePalette::class;
-
 
     protected function assets(): array
     {
@@ -60,6 +60,7 @@ final class MoonShineLayout extends AppLayout
             MenuItem::make(PageResource::class, 'Статические страницы')->icon('computer-desktop'),
             MenuGroup::make('Заказы и статистика', [
                 MenuItem::make(OrderResource::class, 'Заказы'),
+                MenuItem::make(PromoCodeResource::class, 'Промокоды'),
                 MenuItem::make(WishlistResource::class, 'Списки избранного'),
             ])->icon('shopping-cart'),
             MenuItem::make(ReviewResource::class, 'Отзывы')->icon('chat-bubble-left-right'),

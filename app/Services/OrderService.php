@@ -12,6 +12,7 @@ use App\Models\{
 };
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
@@ -41,17 +42,31 @@ class OrderService
 
             $discountUsd = 0;
             $promo = null;
+            $customerId = auth('customer')->id();
+            $webUserId = auth('web')->id();
 
             if (!empty($data['promo_code'])) {
+                $promoCode = mb_strtoupper(trim((string) $data['promo_code']));
 
-                $promo = PromoCode::where('code', $data['promo_code'])
+                $promo = PromoCode::query()
+                    ->whereRaw('UPPER(code) = ?', [$promoCode])
                     ->lockForUpdate()
                     ->first();
 
-                if ($promo && $promo->canBeUsedBy(auth()->id(), $totalUsd)) {
+                if (! $promo) {
+                    throw ValidationException::withMessages([
+                        'promo_code' => 'Промокод не найден.',
+                    ]);
+                }
+
+                $promoValidationError = $promo->getValidationError($customerId, $totalUsd);
+
+                if ($promoValidationError === null) {
                     $discountUsd = $promo->calculateDiscount($totalUsd);
                 } else {
-                    $promo = null;
+                    throw ValidationException::withMessages([
+                        'promo_code' => $promoValidationError,
+                    ]);
                 }
             }
 
@@ -59,7 +74,7 @@ class OrderService
             $totalByn = $settings->convertUsdToByn($totalUsdFinal);
 
             $order = Order::create([
-                'user_id' => auth()->id(),
+                'user_id' => $webUserId,
                 'customer_id' => auth('customer')->id(),
                 'status' => 'new',
                 'total_usd' => $totalUsdFinal,
@@ -78,7 +93,8 @@ class OrderService
 
                 PromoCodeUsage::create([
                     'promo_code_id' => $promo->id,
-                    'user_id' => auth()->id(),
+                    'user_id' => $webUserId,
+                    'customer_id' => $customerId,
                     'order_id' => $order->id,
                 ]);
             }

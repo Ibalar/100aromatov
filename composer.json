@@ -57,6 +57,9 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "test:local": [
+            "D:/osp_6.3.5/modules/PHP-8.4/PHP/php.exe vendor/bin/phpunit --configuration phpunit.xml"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

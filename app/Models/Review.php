@@ -10,6 +10,7 @@ class Review extends Model
     protected $fillable = [
         'user_id',
         'customer_id',
+        'reviewer_name',
         'product_id',
         'rating',
         'text',
@@ -47,6 +48,10 @@ class Review extends Model
 
     public function getAuthorNameAttribute(): string
     {
+        if (filled($this->reviewer_name)) {
+            return (string) $this->reviewer_name;
+        }
+
         if ($this->customer) {
             return $this->customer->full_name;
         }

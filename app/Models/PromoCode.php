@@ -66,30 +66,43 @@ class PromoCode extends Model
         return $this->hasMany(PromoCodeUsage::class);
     }
 
-    public function canBeUsedBy(?int $userId, float $orderAmount): bool
+    public function canBeUsedBy(?int $customerId, float $orderAmount): bool
+    {
+        return $this->getValidationError($customerId, $orderAmount) === null;
+    }
+
+    public function getValidationError(?int $customerId, float $orderAmount): ?string
     {
         if (!$this->is_active) {
-            return false;
+            return 'Промокод отключен.';
+        }
+
+        if ($this->active_from && $this->active_from->isFuture()) {
+            return 'Промокод еще не активен.';
+        }
+
+        if ($this->active_to && $this->active_to->isPast()) {
+            return 'Срок действия промокода истек.';
         }
 
         if ($this->min_order_usd && $orderAmount < $this->min_order_usd) {
-            return false;
+            return 'Сумма заказа меньше минимальной для этого промокода.';
         }
 
         if ($this->usage_limit && $this->used_count >= $this->usage_limit) {
-            return false;
+            return 'Лимит использований этого промокода исчерпан.';
         }
 
-        if ($this->usage_per_user && $userId) {
+        if ($this->usage_per_user && $customerId) {
             $userCount = $this->usages()
-                ->where('user_id', $userId)
+                ->where('customer_id', $customerId)
                 ->count();
 
             if ($userCount >= $this->usage_per_user) {
-                return false;
+                return 'Вы уже использовали этот промокод максимальное количество раз.';
             }
         }
 
-        return true;
+        return null;
     }
 }

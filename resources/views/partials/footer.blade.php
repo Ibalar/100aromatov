@@ -202,6 +202,8 @@
 @if($messengers->isNotEmpty())
     <div id="wcw-wrap" class="messenger-widget" data-messenger-widget>
         <button type="button" class="messenger-fab" data-messenger-fab aria-expanded="false" aria-label="{{ __('Открыть мессенджеры') }}">
+            <span class="messenger-fab__wave messenger-fab__wave--1" aria-hidden="true"></span>
+            <span class="messenger-fab__wave messenger-fab__wave--2" aria-hidden="true"></span>
             @foreach($messengers as $index => $messenger)
                 <span class="messenger-fab__icon-item messenger-icon messenger-icon--{{ $messenger['key'] }} @if($index === 0) is-active @endif" data-messenger-rotating-icon>
                     @include('partials.messenger-icon', ['key' => $messenger['key']])
@@ -263,6 +265,7 @@
         z-index: 10020;
         width: 70px;
         height: 70px;
+        overflow: visible;
     }
 
     #wcw-wrap .messenger-fab {
@@ -277,6 +280,33 @@
         justify-content: center;
         cursor: pointer;
         position: relative;
+        overflow: visible;
+        z-index: 2;
+    }
+
+    #wcw-wrap .messenger-fab__wave {
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        border: 2px solid rgba(67, 217, 173, 0.85);
+        pointer-events: none;
+        transform: scale(1);
+        opacity: 0;
+        animation: messengerFabWave 2.4s ease-out infinite;
+        z-index: 0;
+    }
+
+    #wcw-wrap .messenger-fab__wave--2 {
+        animation-delay: 1.2s;
+    }
+
+    #wcw-wrap.messenger-widget.is-open .messenger-fab {
+        box-shadow: 0 20px 46px rgba(0, 0, 0, 0.38);
+    }
+
+    #wcw-wrap.messenger-widget.is-open .messenger-fab__wave {
+        animation: none;
+        opacity: 0;
     }
 
     #wcw-wrap .messenger-fab__icon-item {
@@ -285,6 +315,7 @@
         transform: scale(0.6);
         width: 42px;
         height: 42px;
+        z-index: 1;
     }
 
     #wcw-wrap .messenger-fab__icon-item.is-active {
@@ -330,6 +361,17 @@
     #wcw-wrap .messenger-widget__label {
         font-size: 20px;
         line-height: 1.2;
+    }
+
+    @keyframes messengerFabWave {
+        0% {
+            transform: scale(1);
+            opacity: 0.85;
+        }
+        100% {
+            transform: scale(1.6);
+            opacity: 0;
+        }
     }
 
     @media (max-width: 991px) {
