@@ -62,8 +62,14 @@ class Order extends Model
         return $this->items->map(function (OrderItem $item): string {
             $lineTotal = number_format((float) $item->price_byn_snapshot * $item->qty, 2, ',', ' ');
             $price = number_format((float) $item->price_byn_snapshot, 2, ',', ' ');
+            $volume = filled($item->volume_ml_snapshot) ? "{$item->volume_ml_snapshot} ml" : null;
+            $variantMeta = array_filter([
+                $item->sku_snapshot ? "SKU: {$item->sku_snapshot}" : null,
+                $volume ? "Объем: {$volume}" : null,
+            ]);
+            $variantSummary = $variantMeta !== [] ? ' | ' . implode(' | ', $variantMeta) : '';
 
-            return "{$item->name_snapshot} | SKU: {$item->sku_snapshot} | {$item->qty} x {$price} BYN = {$lineTotal} BYN";
+            return "{$item->name_snapshot}{$variantSummary} | {$item->qty} x {$price} BYN = {$lineTotal} BYN";
         })->implode("\n");
     }
 

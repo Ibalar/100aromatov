@@ -21,6 +21,12 @@ class CheckoutController extends Controller
 
     public function store(Request $request, OrderService $service, CartService $cartService)
     {
+        $request->merge([
+            'email' => filled(trim((string) $request->input('email')))
+                ? trim((string) $request->input('email'))
+                : null,
+        ]);
+
         $data = $request->validate([
             'phone' => 'required|string',
             'call_preference' => 'required|in:call_me,no_call',

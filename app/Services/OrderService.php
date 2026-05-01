@@ -68,7 +68,8 @@ class OrderService
                 'discount_usd' => $discountUsd,
                 'phone' => $data['phone'],
                 'call_preference' => $data['call_preference'] ?? 'call_me',
-                'email' => $data['email'] ?? null,
+                // Keep order creation working even if production schema has email as NOT NULL.
+                'email' => $data['email'] ?? '',
             ]);
 
             if ($promo) {
@@ -90,6 +91,7 @@ class OrderService
                     'order_id' => $order->id,
                     'name_snapshot' => $item['variant']->product->name_ru,
                     'sku_snapshot' => $item['variant']->sku,
+                    'volume_ml_snapshot' => $item['variant']->volume_ml,
                     'qty' => $item['qty'],
                     'price_byn_snapshot' => $priceByn,
                 ]);
@@ -138,9 +140,26 @@ class OrderService
         foreach ($order->items as $item) {
             $name = $this->escape($item->name_snapshot);
             $sku = $this->escape($item->sku_snapshot);
+            $volume = filled($item->volume_ml_snapshot)
+                ? $this->escape((string) $item->volume_ml_snapshot) . ' ml'
+                : null;
             $price = number_format((float) $item->price_byn_snapshot, 2, ',', ' ');
             $line = number_format((float) $item->price_byn_snapshot * $item->qty, 2, ',', ' ');
-            $message .= "• {$name} (SKU: {$sku})\n";
+            $variantMeta = [];
+
+            if ($sku !== '') {
+                $variantMeta[] = "SKU: {$sku}";
+            }
+
+            if ($volume !== null) {
+                $variantMeta[] = "Объем: {$volume}";
+            }
+
+            $message .= "• {$name}";
+            if ($variantMeta !== []) {
+                $message .= ' (' . implode(', ', $variantMeta) . ')';
+            }
+            $message .= "\n";
             $message .= "  {$item->qty} x {$price} BYN = {$line} BYN\n";
         }
 

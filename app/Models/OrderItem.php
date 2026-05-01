@@ -11,6 +11,7 @@ class OrderItem extends Model
         'order_id',
         'name_snapshot',
         'sku_snapshot',
+        'volume_ml_snapshot',
         'qty',
         'price_byn_snapshot',
     ];

@@ -31,8 +31,20 @@
                                 @if($order->items->count())
                                     <div class="small cl-text-2">
                                         @foreach($order->items as $item)
-                                            <div>{{ $item->name_snapshot }} ({{ $item->sku_snapshot }}) × {{ $item->qty }}</div>
-                                        @endforeach
+                                @php
+                                    $variantMeta = array_filter([
+                                        filled($item->sku_snapshot ?? null) ? 'SKU: ' . $item->sku_snapshot : null,
+                                        filled($item->volume_ml_snapshot ?? null) ? 'Объем: ' . $item->volume_ml_snapshot . ' ml' : null,
+                                    ]);
+                                @endphp
+                                <div>
+                                    {{ $item->name_snapshot }}
+                                    @if($variantMeta)
+                                        ({{ implode(', ', $variantMeta) }})
+                                    @endif
+                                    × {{ $item->qty }}
+                                </div>
+                            @endforeach
                                     </div>
                                 @endif
                             </div>
@@ -47,4 +59,3 @@
         </div>
     </section>
 @endsection
-
