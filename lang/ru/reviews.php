@@ -24,4 +24,7 @@ return [
     'share_store_impression' => 'Поделитесь впечатлением о магазине',
     'review_photo_optional' => 'Фото к отзыву (необязательно)',
     'review_photo_formats' => 'Форматы: JPG, PNG, WEBP. До 5 МБ.',
+    'leave_review_on_maps' => 'Или оставьте отзыв на картах',
+    'leave_review_google' => 'Оставить отзыв в Google',
+    'leave_review_yandex' => 'Оставить отзыв в Яндекс Картах',
 ];

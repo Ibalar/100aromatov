@@ -159,6 +159,33 @@
                                 @endif
                             @endif
 
+                            @php
+                                $yandexRating = $siteSettings->yandex_rating !== null ? number_format((float) $siteSettings->yandex_rating, 1, '.', '') : null;
+                                $yandexReviewsCount = $siteSettings->yandex_reviews_count;
+                                $yandexReviewsUrl = trim((string) ($siteSettings->yandex_reviews_url ?? ''));
+                            @endphp
+
+                            @if($yandexRating !== null)
+                                @if($yandexReviewsUrl !== '')
+                                    <a href="{{ $yandexReviewsUrl }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="cl-text-2 link mb-12 d-inline-block">
+                                        {{ __('Яндекс Карты') }}: ★ {{ $yandexRating }}
+                                        @if($yandexReviewsCount !== null)
+                                            ({{ $yandexReviewsCount }} {{ __('отзывов') }})
+                                        @endif
+                                    </a>
+                                @else
+                                    <p class="cl-text-2 mb-12">
+                                        {{ __('Яндекс Карты') }}: ★ {{ $yandexRating }}
+                                        @if($yandexReviewsCount !== null)
+                                            ({{ $yandexReviewsCount }} {{ __('отзывов') }})
+                                        @endif
+                                    </p>
+                                @endif
+                            @endif
+
                             @if($messengers->isNotEmpty())
                                 <div class="d-flex align-items-center gap-12">
                                     @foreach($messengers as $messenger)

@@ -71,6 +71,16 @@ class SettingFormPage extends FormPage
                         Text::make('Ссылка на карту', 'address_map_url')
                             ->hint('Необязательно. Например ссылка на Google Maps или Яндекс Карты'),
                         Text::make('Instagram URL', 'instagram_url'),
+                        Text::make('Google Reviews URL', 'google_reviews_url')
+                            ->hint('Прямая ссылка на форму отзыва в Google'),
+                        Text::make('Yandex Reviews URL', 'yandex_reviews_url')
+                            ->hint('Прямая ссылка на форму отзыва в Яндекс Картах'),
+                        Number::make('Рейтинг Яндекс Карт', 'yandex_rating')
+                            ->step(0.1)
+                            ->hint('Например: 4.9'),
+                        Number::make('Количество отзывов (Яндекс)', 'yandex_reviews_count')
+                            ->step(1)
+                            ->hint('Например: 127'),
                         Textarea::make('Реквизиты', 'requisites')
                             ->hint('Можно указать УНП, расчетный счет, банк и другие данные'),
                     ]),
@@ -106,6 +116,10 @@ class SettingFormPage extends FormPage
             'telegram_url' => ['nullable', 'string', 'max:255'],
             'viber_url' => ['nullable', 'string', 'max:255'],
             'whatsapp_url' => ['nullable', 'string', 'max:255'],
+            'google_reviews_url' => ['nullable', 'url', 'max:255'],
+            'yandex_reviews_url' => ['nullable', 'url', 'max:255'],
+            'yandex_rating' => ['nullable', 'numeric', 'min:0', 'max:5'],
+            'yandex_reviews_count' => ['nullable', 'integer', 'min:0'],
         ];
     }
 

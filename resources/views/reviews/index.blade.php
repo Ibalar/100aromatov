@@ -73,7 +73,7 @@
                     @endforelse
 
                     @if($reviews->hasPages())
-                        <div class="mt-24">
+                        <div class="mt-20">
                             {{ $reviews->links() }}
                         </div>
                     @endif
@@ -155,6 +155,29 @@
                             </div>
                         </div>
                     @endauth
+
+                    @php
+                        $googleReviewsUrl = trim((string) ($siteSettings->google_reviews_url ?? ''));
+                        $yandexReviewsUrl = trim((string) ($siteSettings->yandex_reviews_url ?? ''));
+                    @endphp
+
+                    @if($googleReviewsUrl !== '' || $yandexReviewsUrl !== '')
+                        <div class="external-reviews-links">
+                            <p class="external-reviews-links__title mb-10">{{ __('reviews.leave_review_on_maps') }}</p>
+                            <div class="d-flex flex-column gap-10">
+                                @if($googleReviewsUrl !== '')
+                                    <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="tf-btn btn-line w-100">
+                                        {{ __('reviews.leave_review_google') }}
+                                    </a>
+                                @endif
+                                @if($yandexReviewsUrl !== '')
+                                    <a href="{{ $yandexReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="tf-btn btn-line w-100">
+                                        {{ __('reviews.leave_review_yandex') }}
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
                 </aside>
             </div>
         </div>
@@ -293,6 +316,16 @@
 
     .review-admin-reply__title {
         margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .external-reviews-links {
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid #eee;
+    }
+
+    .external-reviews-links__title {
         font-weight: 600;
     }
 

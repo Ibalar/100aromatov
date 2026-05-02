@@ -22,6 +22,10 @@ class Setting extends Model
         'address',
         'address_map_url',
         'instagram_url',
+        'google_reviews_url',
+        'yandex_reviews_url',
+        'yandex_rating',
+        'yandex_reviews_count',
         'requisites',
         'metrics_head_code',
         'metrics_body_start_code',
@@ -30,6 +34,8 @@ class Setting extends Model
 
     protected $casts = [
         'usd_rate' => 'decimal:4',
+        'yandex_rating' => 'decimal:2',
+        'yandex_reviews_count' => 'integer',
         'phones' => 'array',
     ];
 
