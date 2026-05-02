@@ -33,3 +33,40 @@
         </div>
     </div>
 </section>
+
+@php
+    $breadcrumbs = [];
+    $position = 1;
+
+    $breadcrumbs[] = [
+        '@type' => 'ListItem',
+        'position' => $position++,
+        'name' => __('Главная'),
+        'item' => url('/'),
+    ];
+
+    foreach ($items as $item) {
+        if (! filled($item['title'] ?? null)) {
+            continue;
+        }
+
+        $breadcrumbs[] = array_filter([
+            '@type' => 'ListItem',
+            'position' => $position++,
+            'name' => (string) $item['title'],
+            'item' => filled($item['url'] ?? null) ? $item['url'] : request()->url(),
+        ], static fn ($value) => $value !== null);
+    }
+
+    $breadcrumbSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => $breadcrumbs,
+    ];
+@endphp
+
+@pushOnce('schema_org')
+    <script type="application/ld+json">
+        {!! json_encode($breadcrumbSchema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+@endPushOnce

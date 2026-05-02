@@ -8,6 +8,7 @@ use App\MoonShine\Resources\Attribute\AttributeResource;
 use App\MoonShine\Resources\AttributeValue\AttributeValueResource;
 use App\MoonShine\Resources\Brand\BrandResource;
 use App\MoonShine\Resources\Category\CategoryResource;
+use App\MoonShine\Resources\FeedExportProfile\FeedExportProfileResource;
 use App\MoonShine\Resources\FilterPage\FilterPageResource;
 use App\MoonShine\Resources\Order\OrderResource;
 use App\MoonShine\Resources\Page\PageResource;
@@ -64,6 +65,7 @@ final class MoonShineLayout extends AppLayout
                 MenuItem::make(WishlistResource::class, 'Списки избранного'),
             ])->icon('shopping-cart'),
             MenuItem::make(ReviewResource::class, 'Отзывы')->icon('chat-bubble-left-right'),
+            MenuItem::make(FeedExportProfileResource::class, 'Фиды Google/Yandex')->icon('arrow-down-tray'),
             MenuItem::make(SettingResource::class, 'Настройки сайта')->icon('cog-8-tooth'),
             MenuGroup::make('Доступы', [
                 MenuItem::make(url('/admin/resource/user-resource/index-page'), 'Пользователи'),

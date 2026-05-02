@@ -18,7 +18,26 @@
         $mapLink = $addressMapUrl !== '' ? $addressMapUrl : ('https://www.google.com/maps?q=' . urlencode($address !== '' ? $address : 'Minsk'));
         $isEmbedMap = $addressMapUrl !== '' && (str_contains($addressMapUrl, 'google.com/maps/embed') || str_contains($addressMapUrl, 'yandex.ru/map-widget'));
         $mapEmbedUrl = $isEmbedMap ? $addressMapUrl : ('https://www.google.com/maps?q=' . urlencode($address !== '' ? $address : 'Minsk') . '&output=embed');
+
+        $faqItems = [
+            [
+                'q' => __('Где находится магазин?'),
+                'a' => $address !== '' ? $address : __('Адрес можно уточнить по телефону.'),
+            ],
+            [
+                'q' => __('Как связаться с магазином?'),
+                'a' => $contactPhones->isNotEmpty()
+                    ? $contactPhones->pluck('number')->implode(', ')
+                    : __('Свяжитесь с нами через форму обратной связи или социальные сети.'),
+            ],
+            [
+                'q' => __('Есть ли самовывоз?'),
+                'a' => __('Да, вы можете оформить заказ на сайте и забрать его в магазине после подтверждения.'),
+            ],
+        ];
     @endphp
+
+    <x-faq-schema :items="$faqItems" />
 
     <section class="section-page-title text-center flat-spacing-2 pb-0">
         <div class="container">

@@ -14,11 +14,14 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\AdminFeedExportController;
 use Illuminate\Support\Facades\Route;
 use MoonShine\Laravel\Http\Middleware\Authenticate as MoonShineAuthenticate;
 use UniSharp\LaravelFilemanager\Lfm;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.xml');
 Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
 
 Route::get('/language/{lang}', [LanguageController::class, 'switch'])
@@ -138,6 +141,11 @@ Route::prefix($moonshinePrefix)->group(function () use ($moonshinePrefix): void 
         $base . '/resource/role-resource/form-page/{resourceItem}',
         301
     );
+
+    Route::middleware(['moonshine', MoonShineAuthenticate::class])->group(function (): void {
+        Route::get('/feed-profiles/{profile}/download', [AdminFeedExportController::class, 'download'])
+            ->name('admin.feed-profiles.download');
+    });
 });
 
 Route::get('/{path}', [ProductController::class, 'redirectByOldUrl'])

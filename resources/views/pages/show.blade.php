@@ -15,7 +15,38 @@
     @php
         $pageName = localizedField($page, 'name');
         $pageDescription = localizedField($page, 'description');
+        $slug = mb_strtolower((string) $page->slug);
+
+        $faqItems = [];
+
+        if (
+            str_contains($slug, 'dostav')
+            || str_contains($slug, 'delivery')
+            || str_contains($slug, 'oplata')
+            || str_contains($slug, 'payment')
+            || str_contains($slug, 'zakaz')
+            || str_contains($slug, 'order')
+        ) {
+            $faqItems = [
+                [
+                    'q' => __('Как оформить заказ?'),
+                    'a' => __('Выберите товар, добавьте его в корзину и подтвердите заказ через форму оформления.'),
+                ],
+                [
+                    'q' => __('Как оплатить заказ?'),
+                    'a' => __('Доступные варианты оплаты указаны на этой странице.'),
+                ],
+                [
+                    'q' => __('Какие сроки доставки?'),
+                    'a' => __('Сроки и условия доставки зависят от вашего города и подтверждаются при обработке заказа.'),
+                ],
+            ];
+        }
     @endphp
+
+    @if($faqItems !== [])
+        <x-faq-schema :items="$faqItems" />
+    @endif
 
     <x-breadcrumbs
         :title="$pageName"

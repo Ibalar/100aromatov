@@ -30,6 +30,7 @@ use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 use Throwable;
 
 /**
@@ -106,6 +107,22 @@ class ProductFormPage extends FormPage
                     Flex::make([
                         Text::make('Пол RU', 'gender'),
                         Text::make('Пол BY', 'gender_by'),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
+                ]),
+                Tab::make('SEO', [
+                    Flex::make([
+                        Text::make('SEO Title RU', 'seo_title_ru'),
+                        Text::make('SEO Title BY', 'seo_title_by'),
+                    ])
+                        ->unwrap()
+                        ->justifyAlign('between')
+                        ->itemsAlign('start'),
+                    Flex::make([
+                        Textarea::make('SEO Description RU', 'seo_description_ru'),
+                        Textarea::make('SEO Description BY', 'seo_description_by'),
                     ])
                         ->unwrap()
                         ->justifyAlign('between')

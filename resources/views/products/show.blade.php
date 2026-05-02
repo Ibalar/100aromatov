@@ -1,13 +1,29 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
-@section('title', localizedField($product, 'name') . ' - ' . config('app.name'))
-@section('meta_description', localizedField($product, 'seo_description') ?: Str::limit(strip_tags(localizedField($product, 'description')), 160))
+@php
+    $seoTitle = trim((string) localizedField($product, 'seo_title'));
+    $fallbackTitle = trim((string) localizedField($product, 'name'));
+    $pageTitle = ($seoTitle !== '' ? $seoTitle : $fallbackTitle) . ' - ' . config('app.name');
+
+    $seoDescription = trim((string) localizedField($product, 'seo_description'));
+    $fallbackDescription = trim(preg_replace('/\s+/u', ' ', strip_tags((string) localizedField($product, 'description'))) ?? '');
+    $metaDescription = $seoDescription !== ''
+        ? $seoDescription
+        : Str::limit($fallbackDescription, 160, '...');
+    $metaImage = $product->images->first()?->path
+        ? asset('storage/' . $product->images->first()->path)
+        : asset('assets/images/logo/logo.png');
+@endphp
+
+@section('title', $pageTitle)
+@section('meta_description', $metaDescription)
+@section('meta_image', $metaImage)
 
 @push('schema_org')
     <x-schema-org
         type="product"
-        :title="localizedField($product, 'name') . ' - ' . config('app.name')"
-        :description="localizedField($product, 'seo_description') ?: localizedField($product, 'description')"
+        :title="$pageTitle"
+        :description="$metaDescription"
         :product="$product"
     />
 @endpush

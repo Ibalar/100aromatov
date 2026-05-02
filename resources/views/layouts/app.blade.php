@@ -13,6 +13,7 @@
 
     <meta name="description" content="@yield('meta_description', 'Интернет-магазин')">
     <x-seo-meta />
+    <x-structured-data-global />
 
     <!-- CSRF -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
