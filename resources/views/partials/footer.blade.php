@@ -107,6 +107,11 @@
                                         </a>
                                     </li>
                                 @endforeach
+                                <li>
+                                    <a href="{{ route('pages.show', 'podarocnyi-sertifikat') }}" class="cl-text-2 link">
+                                        {{ __('Подарочный сертификат') }}
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
