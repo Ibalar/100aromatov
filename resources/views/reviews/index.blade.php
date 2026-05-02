@@ -111,7 +111,7 @@
                                     @endfor
                                 </div>
                                 @error('rating')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                <div class="text-danger mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -129,7 +129,7 @@
                                 <label for="store-review-text" class="tf-lable fw-medium">{{ __('reviews.review') }}</label>
                                 <textarea name="text" id="store-review-text" placeholder="{{ __('reviews.share_store_impression') }}">{{ old('text', $customerStoreReview?->text) }}</textarea>
                                 @error('text')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                <div class="text-danger mt-1">{{ $message }}</div>
                                 @enderror
                             </fieldset>
 
@@ -138,7 +138,7 @@
                                 <input type="file" name="image" id="store-review-image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
                                 <p class="cl-text-3 text-caption-01 mt-8 mb-0">{{ __('reviews.review_photo_formats') }}</p>
                                 @error('image')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                <div class="text-danger mt-1">{{ $message }}</div>
                                 @enderror
                             </fieldset>
 
@@ -155,6 +155,29 @@
                             </div>
                         </div>
                     @endauth
+
+                    <div class="review-rules mb-20">
+                        <p class="mb-8">{{ __('reviews.rules_intro_short') }}</p>
+                        <details class="review-rules__more">
+                            <summary>{{ __('reviews.rules_read_full') }}</summary>
+                            <ul class="review-rules__list mb-10 mt-10">
+                                <li>{{ __('reviews.rules_item_1') }}</li>
+                                <li>{{ __('reviews.rules_item_2') }}</li>
+                                <li>{{ __('reviews.rules_item_3') }}</li>
+                                <li>{{ __('reviews.rules_item_4') }}</li>
+                                <li>{{ __('reviews.rules_item_5') }}</li>
+                                <li>{{ __('reviews.rules_item_6') }}</li>
+                                <li>{{ __('reviews.rules_item_7') }}</li>
+                                <li>{{ __('reviews.rules_item_8') }}</li>
+                                <li>{{ __('reviews.rules_item_9') }}</li>
+                                <li>{{ __('reviews.rules_item_10') }}</li>
+                                <li>{{ __('reviews.rules_item_11') }}</li>
+                                <li>{{ __('reviews.rules_item_12') }}</li>
+                                <li>{{ __('reviews.rules_item_13') }}</li>
+                            </ul>
+                            <p class="mb-0">{{ __('reviews.rules_outro') }}</p>
+                        </details>
+                    </div>
 
                     @php
                         $googleReviewsUrl = trim((string) ($siteSettings->google_reviews_url ?? ''));
@@ -178,6 +201,10 @@
                             </div>
                         </div>
                     @endif
+
+
+
+
                 </aside>
             </div>
         </div>
@@ -323,6 +350,31 @@
         margin-top: 20px;
         padding-top: 16px;
         border-top: 1px solid #eee;
+    }
+
+    .review-rules {
+        padding: 14px 16px;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        background: #fafafa;
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    .review-rules__list {
+        padding-left: 18px;
+        margin: 0;
+    }
+
+    .review-rules__list li + li {
+        margin-top: 6px;
+    }
+
+    .review-rules__more summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: #181818;
+        user-select: none;
     }
 
     .external-reviews-links__title {

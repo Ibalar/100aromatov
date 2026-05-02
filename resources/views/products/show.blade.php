@@ -400,6 +400,28 @@
                                 {{ __('Отзыв появится на сайте после проверки администратором.') }}
                             </div>
                         </div>
+                        <div class="review-rules mb-20">
+                            <p class="mb-8">{{ __('reviews.rules_intro_short') }}</p>
+                            <details class="review-rules__more">
+                                <summary>{{ __('reviews.rules_read_full') }}</summary>
+                                <ul class="review-rules__list mb-10 mt-10">
+                                    <li>{{ __('reviews.rules_item_1') }}</li>
+                                    <li>{{ __('reviews.rules_item_2') }}</li>
+                                    <li>{{ __('reviews.rules_item_3') }}</li>
+                                    <li>{{ __('reviews.rules_item_4') }}</li>
+                                    <li>{{ __('reviews.rules_item_5') }}</li>
+                                    <li>{{ __('reviews.rules_item_6') }}</li>
+                                    <li>{{ __('reviews.rules_item_7') }}</li>
+                                    <li>{{ __('reviews.rules_item_8') }}</li>
+                                    <li>{{ __('reviews.rules_item_9') }}</li>
+                                    <li>{{ __('reviews.rules_item_10') }}</li>
+                                    <li>{{ __('reviews.rules_item_11') }}</li>
+                                    <li>{{ __('reviews.rules_item_12') }}</li>
+                                    <li>{{ __('reviews.rules_item_13') }}</li>
+                                </ul>
+                                <p class="mb-0">{{ __('reviews.rules_outro') }}</p>
+                            </details>
+                        </div>
 
                         @auth('customer')
                             @if($customerReview)
@@ -639,6 +661,31 @@
     .review-form-subtitle {
         color: #777;
         margin-top: 6px;
+    }
+
+    .review-rules {
+        padding: 14px 16px;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        background: #fafafa;
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    .review-rules__list {
+        padding-left: 18px;
+        margin: 0;
+    }
+
+    .review-rules__list li + li {
+        margin-top: 6px;
+    }
+
+    .review-rules__more summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: #181818;
+        user-select: none;
     }
 
     .review-rating-select {
