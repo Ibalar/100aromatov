@@ -49,6 +49,7 @@ class ProductIndexPage extends IndexPage
                 )
                 ->withoutTextWrap()
                 ->sortable(),
+            Switcher::make('Активен', 'is_active'),
         ];
     }
 
