@@ -112,7 +112,7 @@
 
                             <div class="canvas-body">
                                 <form method="GET" action="{{ $currentCategoryUrl }}" class="filter-form">
-                                    <input type="hidden" name="sort" value="{{ $sort ?? request('sort', 'best-selling') }}">
+                                    <input type="hidden" name="sort" value="{{ $sort ?? request('sort', 'a-z') }}">
 
                                     @if($sidebarCategories->isNotEmpty())
                                         <div class="widget-facet">
@@ -201,7 +201,7 @@
                                         'price-low-high' => __('Цена: по возрастанию'),
                                         'price-high-low' => __('Цена: по убыванию'),
                                     ];
-                                    $currentSort = $sort ?? request('sort', 'best-selling');
+                                    $currentSort = $sort ?? request('sort', 'a-z');
                                 @endphp
                                 <div class="btn-select">
                                     <span class="text-sort-value">{{ $sortOptions[$currentSort] ?? __('По популярности') }}</span>
@@ -367,7 +367,10 @@
                         return;
                     }
 
-                    sortInput.value = this.dataset.sortValue || 'best-selling';
+                    sortInput.value = this.dataset.sortValue || 'a-z';
+                    form.querySelectorAll('input[name="min_price"], input[name="max_price"], input[name="min_price_byn"], input[name="max_price_byn"]').forEach((input) => {
+                        input.value = '';
+                    });
                     submitForm();
                 });
             });

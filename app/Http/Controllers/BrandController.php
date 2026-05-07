@@ -73,7 +73,7 @@ class BrandController extends Controller
         $attributeFilters = $request->get('attributes', []);
         $categoryFilter = array_values(array_filter((array) $request->input('category', []), static fn ($value) => $value !== ''));
 
-        $sort = $request->get('sort', 'best-selling');
+        $sort = $request->get('sort', 'a-z');
 
         $query = Product::query()
             ->active()
@@ -146,12 +146,12 @@ class BrandController extends Controller
             ->paginate(24)
             ->withQueryString();
 
-        $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {
+        $filterableAttributes = Cache::remember('filterable_attributes_alpha_v1', 3600, function () {
             return Attribute::where('is_filterable', true)
                 ->with(['values' => function ($q) {
-                    $q->orderBy('sort_order');
+                    $q->orderBy('value_ru');
                 }])
-                ->orderBy('sort_order')
+                ->orderBy('name_ru')
                 ->get();
         });
 

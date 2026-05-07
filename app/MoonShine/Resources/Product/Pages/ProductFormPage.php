@@ -197,11 +197,7 @@ class ProductFormPage extends FormPage
 
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract
     {
-        return $component
-            ->customAttributes([
-                'id' => $this->getTopSubmitFormId(),
-            ])
-            ->hideSubmit();
+        return $component;
     }
 
     protected function modifyDetailButton(ActionButtonContract $button): ActionButtonContract

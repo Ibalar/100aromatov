@@ -110,7 +110,7 @@
 
                             <div class="canvas-body">
                                 <form method="GET" action="{{ route('brand.show', $brand->slug) }}" class="filter-form">
-                                    <input type="hidden" name="sort" value="{{ $sort ?? request('sort', 'best-selling') }}">
+                                    <input type="hidden" name="sort" value="{{ $sort ?? request('sort', 'a-z') }}">
 
                                     @if($categories->isNotEmpty())
                                         <div class="widget-facet">
@@ -177,10 +177,10 @@
                                         'price-low-high' => $sortPriceAscLabel,
                                         'price-high-low' => $sortPriceDescLabel,
                                     ];
-                                    $currentSort = $sort ?? request('sort', 'best-selling');
+                                    $currentSort = $sort ?? request('sort', 'a-z');
                                 @endphp
                                 <div class="btn-select">
-                                    <span class="text-sort-value">{{ $sortOptions[$currentSort] ?? $sortPopularLabel }}</span>
+                                    <span class="text-sort-value">{{ $sortOptions[$currentSort] ?? $sortAzLabel }}</span>
                                     <span class="icon icon-CaretDown"></span>
                                 </div>
                                 <div class="dropdown-menu">
@@ -280,7 +280,10 @@
                         return;
                     }
 
-                    sortInput.value = this.dataset.sortValue || 'best-selling';
+                    sortInput.value = this.dataset.sortValue || 'a-z';
+                    form.querySelectorAll('input[name=\"min_price\"], input[name=\"max_price\"], input[name=\"min_price_byn\"], input[name=\"max_price_byn\"]').forEach((input) => {
+                        input.value = '';
+                    });
                     submitForm();
                 });
             });

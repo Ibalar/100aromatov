@@ -39,7 +39,7 @@ class CategoryController extends Controller
 
         $attributeFilters = $request->get('attributes', []);
         $brandFilter = array_values(array_filter((array) $request->input('brand', []), static fn ($value) => $value !== ''));
-        $sort = $request->get('sort', 'best-selling');
+        $sort = $request->get('sort', 'a-z');
 
         $query = Product::query()
             ->where('products.is_active', true)
@@ -132,12 +132,12 @@ class CategoryController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {
+        $filterableAttributes = Cache::remember('filterable_attributes_alpha_v1', 3600, function () {
             return Attribute::where('is_filterable', true)
                 ->with(['values' => function ($q) {
-                    $q->orderBy('sort_order');
+                    $q->orderBy('value_ru');
                 }])
-                ->orderBy('sort_order')
+                ->orderBy('name_ru')
                 ->get();
         });
 
@@ -192,7 +192,7 @@ class CategoryController extends Controller
             $cats = Category::visible()->get();
             // Подгружаем count через аксессор, чтобы он попал в кэш
             $cats->each(function ($category) {
-                $category->products_count = $category->products_count;
+                $category->setAttribute('products_count', $category->products_count);
             });
             return $cats;
         });
@@ -216,7 +216,7 @@ class CategoryController extends Controller
 
         $attributeFilters = $request->get('attributes', []);
         $brandFilter = array_values(array_filter((array) $request->input('brand', []), static fn ($value) => $value !== ''));
-        $sort = $request->get('sort', 'best-selling');
+        $sort = $request->get('sort', 'a-z');
 
         $query = Product::active()
             ->whereExists(function ($sub) {
@@ -290,12 +290,12 @@ class CategoryController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {
+        $filterableAttributes = Cache::remember('filterable_attributes_alpha_v1', 3600, function () {
             return Attribute::where('is_filterable', true)
                 ->with(['values' => function ($q) {
-                    $q->orderBy('sort_order');
+                    $q->orderBy('value_ru');
                 }])
-                ->orderBy('sort_order')
+                ->orderBy('name_ru')
                 ->get();
         });
 
@@ -362,7 +362,7 @@ class CategoryController extends Controller
 
         $attributeFilters = $request->get('attributes', []);
         $brandFilter = array_values(array_filter((array) $request->input('brand', []), static fn ($value) => $value !== ''));
-        $sort = $request->get('sort', 'best-selling');
+        $sort = $request->get('sort', 'a-z');
 
         sort($categoryIds);
         $cacheKey = 'price_range_category_' . ($category->is_miniature ? 'mini_' : '') . implode('_', $categoryIds);
@@ -518,10 +518,10 @@ class CategoryController extends Controller
             ->withQueryString();
 
         // Атрибуты для фильтров
-        $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {
+        $filterableAttributes = Cache::remember('filterable_attributes_alpha_v1', 3600, function () {
             return Attribute::where('is_filterable', true)
-                ->with(['values' => function ($q) { $q->orderBy('sort_order'); }])
-                ->orderBy('sort_order')
+                ->with(['values' => function ($q) { $q->orderBy('value_ru'); }])
+                ->orderBy('name_ru')
                 ->get();
         });
 
@@ -663,7 +663,7 @@ class CategoryController extends Controller
                 (array) ($filterData['brand'] ?? [])
             )));
 
-        $sort = $request->get('sort', 'best-selling');
+        $sort = $request->get('sort', 'a-z');
 
         sort($categoryIds);
         $cacheKey = 'price_range_category_' . ($category->is_miniature ? 'mini_' : '') . implode('_', $categoryIds);
@@ -817,10 +817,10 @@ class CategoryController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        $filterableAttributes = Cache::remember('filterable_attributes', 3600, function () {
+        $filterableAttributes = Cache::remember('filterable_attributes_alpha_v1', 3600, function () {
             return Attribute::where('is_filterable', true)
-                ->with(['values' => function ($q) { $q->orderBy('sort_order'); }])
-                ->orderBy('sort_order')
+                ->with(['values' => function ($q) { $q->orderBy('value_ru'); }])
+                ->orderBy('name_ru')
                 ->get();
         });
 
