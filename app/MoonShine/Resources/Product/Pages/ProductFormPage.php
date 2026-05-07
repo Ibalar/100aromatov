@@ -167,10 +167,10 @@ class ProductFormPage extends FormPage
     {
         $buttons = [
             $this->makeCatalogButton(),
-            $this->makeSaveButton(),
         ];
 
         if ($this->isItemExists()) {
+            $buttons[] = $this->makeSaveButton();
             $buttons[] = $this->modifyDetailButton(
                 $this->getResource()->getDetailButton()
             );
@@ -197,6 +197,14 @@ class ProductFormPage extends FormPage
 
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract
     {
+        $component = $component->customAttributes([
+            'id' => $this->getTopSubmitFormId(),
+        ]);
+
+        if ($this->isItemExists()) {
+            return $component->hideSubmit();
+        }
+
         return $component;
     }
 
