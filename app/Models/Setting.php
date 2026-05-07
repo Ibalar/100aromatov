@@ -30,6 +30,7 @@ class Setting extends Model
         'metrics_head_code',
         'metrics_body_start_code',
         'metrics_body_end_code',
+        'infinite_slide_items',
     ];
 
     protected $casts = [
@@ -37,6 +38,7 @@ class Setting extends Model
         'yandex_rating' => 'decimal:2',
         'yandex_reviews_count' => 'integer',
         'phones' => 'array',
+        'infinite_slide_items' => 'array',
     ];
 
     /*
@@ -94,6 +96,59 @@ class Setting extends Model
                 'number' => $phone['number'] ?? null,
                 'icon' => $phone['icon'] ?? null,
             ])
+            ->values()
+            ->all();
+    }
+
+    public function setInfiniteSlideItemsAttribute($value): void
+    {
+        $items = collect(is_iterable($value) ? $value : [])
+            ->map(function ($item) {
+                $item = is_array($item) ? $item : [];
+
+                $icon = trim((string) ($item['icon'] ?? 'icon-Lightning-1'));
+                $textRu = trim((string) ($item['text_ru'] ?? ''));
+                $textBy = trim((string) ($item['text_by'] ?? ''));
+
+                return [
+                    'icon' => $icon !== '' ? $icon : 'icon-Lightning-1',
+                    'text_ru' => $textRu,
+                    'text_by' => $textBy,
+                ];
+            })
+            ->filter(fn (array $item): bool => filled($item['text_ru']) || filled($item['text_by']))
+            ->values()
+            ->all();
+
+        $this->attributes['infinite_slide_items'] = $items === [] ? null : json_encode($items, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function getInfiniteSlideItemsAttribute($value): array
+    {
+        if (blank($value)) {
+            return [];
+        }
+
+        $items = is_array($value) ? $value : json_decode((string) $value, true);
+
+        if (! is_array($items)) {
+            return [];
+        }
+
+        return collect($items)
+            ->filter(fn ($item): bool => is_array($item))
+            ->map(function (array $item): array {
+                $icon = trim((string) ($item['icon'] ?? 'icon-Lightning-1'));
+                $textRu = trim((string) ($item['text_ru'] ?? ''));
+                $textBy = trim((string) ($item['text_by'] ?? ''));
+
+                return [
+                    'icon' => $icon !== '' ? $icon : 'icon-Lightning-1',
+                    'text_ru' => $textRu,
+                    'text_by' => $textBy,
+                ];
+            })
+            ->filter(fn (array $item): bool => filled($item['text_ru']) || filled($item['text_by']))
             ->values()
             ->all();
     }

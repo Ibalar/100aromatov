@@ -3,25 +3,36 @@
 @section('title', __('Главная'))
 
 @section('content')
+
+    @php
+        $defaultInfiniteSlideItems = [
+            ['icon' => 'icon-Lightning-1', 'text_ru' => 'Весь наш товар - оригинальный', 'text_by' => 'Увесь наш тавар — арыгінальны'],
+            ['icon' => 'icon-Lightning-1', 'text_ru' => 'Постоянные акции и распродажи', 'text_by' => 'Пастаянныя акцыі і распродажы'],
+            ['icon' => 'icon-Lightning-1', 'text_ru' => 'Профессиональная консультация при выборе или покупке', 'text_by' => 'Прафесійная кансультацыя пры выбары або куплі'],
+            ['icon' => 'icon-Lightning-1', 'text_ru' => 'Выбирайте свой любимый аромат и приходите к нам!', 'text_by' => 'Выбірайце свой любімы водар і прыходзьце да нас!'],
+        ];
+
+        $infiniteSlideItems = collect($siteSettings->infinite_slide_items ?? [])->filter(fn ($item) => is_array($item))->values();
+        if ($infiniteSlideItems->isEmpty()) {
+            $infiniteSlideItems = collect($defaultInfiniteSlideItems);
+        }
+        $locale = app()->getLocale();
+    @endphp
+
     <!-- Infinite Slide -->
     <div class="infiniteSlide-policy style-2 wow fadeInUp ">
         <div class="infiniteSlide infiniteSlide-wrapper" data-clone="3">
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Весь наш товар - оригинальный') }}
-            </p>
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Постоянные акции и распродажи') }}
-            </p>
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Профессиональная консультация при выборе или покупке') }}
-            </p>
-            <i class="icon icon-Lightning-1"></i>
-            <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">
-                {{ __('Выбирайте свой любимый аромат и приходите к нам!') }}
-            </p>
+            @foreach($infiniteSlideItems as $item)
+                @php
+                    $iconClass = trim((string) ($item['icon'] ?? 'icon-Lightning-1'));
+                    $text = $locale === 'by'
+                        ? (trim((string) ($item['text_by'] ?? '')) ?: trim((string) ($item['text_ru'] ?? '')))
+                        : (trim((string) ($item['text_ru'] ?? '')) ?: trim((string) ($item['text_by'] ?? '')));
+                @endphp
+                @continue($text === '')
+                <i class="icon {{ $iconClass !== '' ? $iconClass : 'icon-Lightning-1' }}"></i>
+                <p class="policy-text text-caption-02 lh-20 fw-semibold text-uppercase">{{ $text }}</p>
+            @endforeach
         </div>
     </div>
     <!-- /Infinite Slide -->

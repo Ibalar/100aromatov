@@ -95,6 +95,21 @@ class SettingFormPage extends FormPage
                             ->hint('Дополнительный код счетчиков/метрик'),
                     ]),
                 ]),
+                Tab::make('Бегущая строка', [
+                    Box::make([
+                        Json::make('Пункты бегущей строки', 'infinite_slide_items')
+                            ->fields([
+                                Text::make('Иконка (класс)', 'icon')
+                                    ->hint('Например: icon-Lightning-1')
+                                    ->required(),
+                                Text::make('Текст RU', 'text_ru')
+                                    ->required(),
+                                Text::make('Текст BY', 'text_by')
+                                    ->required(),
+                            ])
+                            ->hint('Каждый пункт выводится как: иконка + текст'),
+                    ]),
+                ]),
             ]),
         ];
     }
@@ -120,6 +135,10 @@ class SettingFormPage extends FormPage
             'yandex_reviews_url' => ['nullable', 'url', 'max:255'],
             'yandex_rating' => ['nullable', 'numeric', 'min:0', 'max:5'],
             'yandex_reviews_count' => ['nullable', 'integer', 'min:0'],
+            'infinite_slide_items' => ['nullable', 'array'],
+            'infinite_slide_items.*.icon' => ['nullable', 'string', 'max:128'],
+            'infinite_slide_items.*.text_ru' => ['nullable', 'string', 'max:255'],
+            'infinite_slide_items.*.text_by' => ['nullable', 'string', 'max:255'],
         ];
     }
 
