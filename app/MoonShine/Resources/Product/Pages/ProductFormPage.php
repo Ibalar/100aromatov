@@ -28,6 +28,8 @@ use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Textarea;
@@ -131,16 +133,30 @@ class ProductFormPage extends FormPage
             ])->vertical(),
 
             HasMany::make('Изображения', 'images', resource: ProductImageResource::class)
-                ->creatable(
-                    button: ActionButton::make('Добавить изображение', '')
-                ),
+                ->fields([
+                    Image::make('Изображение', 'path'),
+                    Number::make('Сортировка', 'sort_order'),
+                ])
+                ->creatable(),
 
             HasMany::make('Варианты', 'variants', resource: ProductVariantResource::class)
-                ->creatable(
-                    button: ActionButton::make('Добавить вариант', '')
-                ),
+                ->fields([
+                    Text::make('SKU', 'sku')->required(),
+                    Text::make('Объём ML', 'volume_ml'),
+                    Number::make('Цена USD', 'price_usd')
+                        ->required()
+                        ->min(0)
+                        ->step(0.01)
+                        ->updateOnPreview(),
+                    Switcher::make('Тестер', 'is_tester')->updateOnPreview(),
+                    Switcher::make('Распив', 'is_raspiv')->updateOnPreview(),
+                    Switcher::make('Отливант', 'is_exclusive')->updateOnPreview(),
+                    Switcher::make('Активен', 'is_active')->updateOnPreview(),
+                ])
+                ->creatable(),
 
             BelongsToMany::make('Характеристики', 'attributeValues', resource: AttributeValueResource::class)
+                ->valuesQuery(static fn ($query) => $query->orderBy('value_ru'))
                 ->creatable(
                     button: ActionButton::make('Добавить характеристику', '')
                 ),

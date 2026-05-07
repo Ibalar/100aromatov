@@ -82,7 +82,7 @@ class Product extends Model
         return $this->belongsToMany(
             AttributeValue::class,
             'product_attribute_value'
-        );
+        )->orderBy('value_ru');
     }
 
     public function reviews(): HasMany

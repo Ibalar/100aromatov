@@ -6,6 +6,7 @@ namespace App\MoonShine\Resources\AttributeValue\Pages;
 
 use App\MoonShine\Resources\Attribute\AttributeResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FormBuilderContract;
@@ -35,9 +36,23 @@ class AttributeValueFormPage extends FormPage
             Box::make([
                 ID::make(),
                 BelongsTo::make('Атрибут', 'attribute', resource: AttributeResource::class),
-                Text::make('Slug'),
-                Text::make('Значение RU', 'value_ru'),
+
+                Text::make('Значение RU', 'value_ru')
+                    ->when(
+                        fn () => $this->getResource()->isCreateFormPage(),
+                        fn (Text $field) => $field->reactive(),
+                        fn (Text $field) => $field
+                    )
+                    ->required(),
                 Text::make('Значение BY', 'value_by'),
+                Slug::make('Slug')
+                    ->unique()
+                    ->locked()
+                    ->when(
+                        fn () => $this->getResource()->isCreateFormPage(),
+                        fn (Slug $field) => $field->from('value_ru')->live(),
+                        fn (Slug $field) => $field->readonly()
+                    ),
             ]),
         ];
     }
