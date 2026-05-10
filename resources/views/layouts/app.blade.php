@@ -11,6 +11,8 @@
     <meta name="author" content="WebArt BY">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="yandex-verification" content="b90f7c03b3af0c48" />
+
     <meta name="description" content="@yield('meta_description', 'Интернет-магазин')">
     <x-seo-meta />
     <x-structured-data-global />
@@ -145,6 +147,8 @@
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/cart.js') }}"></script>
 <script src="{{ asset('assets/js/wishlist.js') }}"></script>
+
+<script src="//code.jivosite.com/widget/XZygJW2tDF" async></script>
 
 <style>
     .cookie-consent {

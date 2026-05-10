@@ -123,6 +123,36 @@ class Setting extends Model
         $this->attributes['infinite_slide_items'] = $items === [] ? null : json_encode($items, JSON_UNESCAPED_UNICODE);
     }
 
+    public function setMetricsHeadCodeAttribute($value): void
+    {
+        $this->attributes['metrics_head_code'] = $this->normalizeMetricsCode($value);
+    }
+
+    public function getMetricsHeadCodeAttribute($value): ?string
+    {
+        return $this->normalizeMetricsCode($value);
+    }
+
+    public function setMetricsBodyStartCodeAttribute($value): void
+    {
+        $this->attributes['metrics_body_start_code'] = $this->normalizeMetricsCode($value);
+    }
+
+    public function getMetricsBodyStartCodeAttribute($value): ?string
+    {
+        return $this->normalizeMetricsCode($value);
+    }
+
+    public function setMetricsBodyEndCodeAttribute($value): void
+    {
+        $this->attributes['metrics_body_end_code'] = $this->normalizeMetricsCode($value);
+    }
+
+    public function getMetricsBodyEndCodeAttribute($value): ?string
+    {
+        return $this->normalizeMetricsCode($value);
+    }
+
     public function getInfiniteSlideItemsAttribute($value): array
     {
         if (blank($value)) {
@@ -208,5 +238,14 @@ class Setting extends Model
             'image/avif' => 'avif',
             default => '',
         };
+    }
+
+    private function normalizeMetricsCode(mixed $value): ?string
+    {
+        if (! filled($value)) {
+            return null;
+        }
+
+        return html_entity_decode((string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 }
