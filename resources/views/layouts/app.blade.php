@@ -148,7 +148,6 @@
 <script src="{{ asset('assets/js/cart.js') }}"></script>
 <script src="{{ asset('assets/js/wishlist.js') }}"></script>
 
-<script src="//code.jivosite.com/widget/XZygJW2tDF" async></script>
 
 <style>
     .cookie-consent {

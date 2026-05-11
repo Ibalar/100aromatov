@@ -17555,6 +17555,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
   justify-content: center;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .section-page-title .breadcrumbs .icon {
   font-size: 12px;
