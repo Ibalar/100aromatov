@@ -114,7 +114,7 @@ class OrderService
             }
 
             $sent = app(TelegramService::class)->send(
-                $this->buildTelegramMessage($order)
+                $this->buildTelegramMessage($order, $itemsData)
             );
 
             if (! $sent) {
@@ -127,10 +127,25 @@ class OrderService
         });
     }
 
-    protected function buildTelegramMessage(Order $order): string
+    protected function buildTelegramMessage(Order $order, array $itemsData = []): string
     {
         if (! $order->relationLoaded('items')) {
             $order->load('items');
+        }
+
+        $itemMetaBySku = [];
+        foreach ($itemsData as $itemData) {
+            $variant = $itemData['variant'] ?? null;
+            if (! $variant instanceof ProductVariant) {
+                continue;
+            }
+
+            $variant->loadMissing(['product.images']);
+            $skuKey = (string) ($variant->sku ?? '');
+
+            $itemMetaBySku[$skuKey] = [
+                'product_url' => $this->getProductUrl($variant),
+            ];
         }
 
         $totalByn = number_format((float) $order->total_byn, 2, ',', ' ');
@@ -177,9 +192,25 @@ class OrderService
             }
             $message .= "\n";
             $message .= "  {$item->qty} x {$price} BYN = {$line} BYN\n";
+
+            $itemMeta = $itemMetaBySku[(string) $item->sku_snapshot] ?? null;
+            if (is_array($itemMeta) && filled($itemMeta['product_url'])) {
+                $message .= "  Ссылка на товар: " . $this->escape($itemMeta['product_url']) . "\n";
+            }
         }
 
         return $message;
+    }
+
+    private function getProductUrl(ProductVariant $variant): ?string
+    {
+        $slug = $variant->product?->slug;
+
+        if (! filled($slug)) {
+            return null;
+        }
+
+        return route('product.show', ['slug' => $slug], true);
     }
 
     private function escape(?string $value): string

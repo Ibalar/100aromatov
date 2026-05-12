@@ -27,19 +27,11 @@ class TelegramService
         }
 
         try {
-            $response = Http::withOptions([
-                'curl' => [
-                    CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-                ],
-            ])
-                ->connectTimeout(15)
-                ->timeout(45)
-                ->retry(4, 1000)
-                ->post("https://api.telegram.org/bot{$this->token}/sendMessage", [
-                    'chat_id' => $this->chatId,
-                    'text' => $message,
-                    'parse_mode' => 'HTML',
-                ]);
+            $response = $this->request('sendMessage', [
+                'chat_id' => $this->chatId,
+                'text' => $message,
+                'parse_mode' => 'HTML',
+            ]);
 
             if (! $response->ok()) {
                 Log::error('Telegram send failed', [
@@ -56,6 +48,19 @@ class TelegramService
             ]);
             return false;
         }
+    }
+
+    private function request(string $method, array $payload)
+    {
+        return Http::withOptions([
+            'curl' => [
+                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+            ],
+        ])
+            ->connectTimeout(15)
+            ->timeout(45)
+            ->retry(4, 1000)
+            ->post("https://api.telegram.org/bot{$this->token}/{$method}", $payload);
     }
 
     private function sanitizeTelegramErrorMessage(string $message): string
