@@ -91,6 +91,62 @@
         if (checkoutTotal) checkoutTotal.textContent = data.total_byn_formatted;
     }
 
+    function formatByn(value) {
+        return Number(value || 0).toLocaleString("ru-RU", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }) + " BYN";
+    }
+
+    function applyCheckoutPromoPreview(data) {
+        const checkoutTotal = document.getElementById("js-checkout-total");
+        const checkoutDiscount = document.getElementById("js-checkout-discount");
+        const promoError = document.getElementById("js-checkout-promo-error");
+        const itemMap = new Map((data.items || []).map((item) => [String(item.variant_id), item]));
+
+        document.querySelectorAll("#js-checkout-items .cart-item").forEach((row) => {
+            const variantId = row.dataset.variantId;
+            const rowData = itemMap.get(String(variantId));
+            if (!rowData) return;
+
+            const priceEl = row.querySelector(".js-cart-item-price");
+            const lineEl = row.querySelector(".js-cart-item-line");
+            if (priceEl) priceEl.textContent = formatByn(rowData.price_byn);
+            if (lineEl) lineEl.textContent = formatByn(rowData.line_byn);
+        });
+
+        if (checkoutTotal) {
+            checkoutTotal.textContent = data.total_byn_formatted || formatByn(data.total_byn);
+        }
+        if (checkoutDiscount) {
+            checkoutDiscount.textContent = data.discount_byn_formatted || formatByn(data.discount_byn);
+        }
+
+        if (promoError) {
+            if (data.promo_error) {
+                promoError.textContent = data.promo_error;
+                promoError.style.display = "";
+            } else {
+                promoError.textContent = "";
+                promoError.style.display = "none";
+            }
+        }
+    }
+
+    async function refreshCheckoutPromoPreview() {
+        const promoInput = document.getElementById("js-checkout-promo-code");
+        const phoneInput = document.querySelector('input[name="phone"]');
+        if (!promoInput) return;
+
+        try {
+            const data = await request("/checkout/promo-summary", "POST", {
+                promo_code: promoInput.value || "",
+                phone: phoneInput ? (phoneInput.value || "") : "",
+            });
+            applyCheckoutPromoPreview(data);
+        } catch (_) { }
+    }
+
     function getSelectedVariantId() {
         return document.getElementById("selected-variant-id")?.value ||
             document.querySelector('input[name="variant_id"]:checked')?.value ||
@@ -102,6 +158,7 @@
         updateCounts(data.count);
         updateMiniCart(data);
         updatePageTotals(data);
+        await refreshCheckoutPromoPreview();
         return data;
     }
 
@@ -229,6 +286,25 @@
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        refreshCart().catch(function () { });
+        refreshCart()
+            .then(refreshCheckoutPromoPreview)
+            .catch(function () { });
+
+        const promoInput = document.getElementById("js-checkout-promo-code");
+        if (promoInput) {
+            let promoTimer = null;
+            promoInput.addEventListener("input", function () {
+                window.clearTimeout(promoTimer);
+                promoTimer = window.setTimeout(refreshCheckoutPromoPreview, 300);
+            });
+
+            const phoneInput = document.querySelector('input[name="phone"]');
+            if (phoneInput) {
+                phoneInput.addEventListener("input", function () {
+                    window.clearTimeout(promoTimer);
+                    promoTimer = window.setTimeout(refreshCheckoutPromoPreview, 300);
+                });
+            }
+        }
     });
 })();

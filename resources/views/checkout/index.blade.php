@@ -53,10 +53,16 @@
                                 </fieldset>
                                 <fieldset class="tf-field mb-16">
                                     <label class="tf-lable fw-medium">{{ __('Промокод') }}</label>
-                                    <input type="text" name="promo_code" value="{{ old('promo_code') }}">
+                                    <input type="text" name="promo_code" id="js-checkout-promo-code" value="{{ old('promo_code') }}">
+                                    <div class="text-caption-01 cl-text-3 mt-1">
+                                        {{ app()->getLocale() === 'by'
+                                            ? 'Скідкі не сумуюцца. Прымяняецца найбольш выгадны для кліента варыянт.'
+                                            : 'Скидки не суммируются. Применяется наиболее выгодный для клиента вариант.' }}
+                                    </div>
                                     @error('promo_code')
                                         <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
+                                    <div class="text-danger mt-1" id="js-checkout-promo-error" style="display:none;"></div>
                                 </fieldset>
                                 <fieldset class="mb-16">
                                     <label class="d-flex align-items-start gap-8">
@@ -82,6 +88,10 @@
                         <div class="d-flex justify-content-between mt-16">
                             <span>{{ __('Товаров') }}: {{ $totalQty }}</span>
                             <strong id="js-checkout-total">{{ number_format($totalByn, 2, ',', ' ') }} BYN</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mt-8">
+                            <span>{{ __('Скидка') }}:</span>
+                            <strong id="js-checkout-discount">0,00 BYN</strong>
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,7 @@
             @if($item['volume_ml'])
                 <div class="text-caption-01 cl-text-3">{{ $item['volume_ml'] }} ml</div>
             @endif
-            <div class="text-caption-01 fw-medium mt-4">{{ number_format($item['price_byn'], 2, ',', ' ') }} BYN</div>
+            <div class="text-caption-01 fw-medium mt-4 js-cart-item-price">{{ number_format($item['price_byn'], 2, ',', ' ') }} BYN</div>
         </div>
         <div class="tf-mini-cart-price">
             <div class="wg-quantity style-2">
@@ -27,7 +27,7 @@
                     <i class="icon icon-plus"></i>
                 </button>
             </div>
-            <div class="fw-semibold mt-8">{{ number_format($item['line_byn'], 2, ',', ' ') }} BYN</div>
+            <div class="fw-semibold mt-8 js-cart-item-line">{{ number_format($item['line_byn'], 2, ',', ' ') }} BYN</div>
             <button type="button" class="tf-btn-line-3 type-primary mt-8 js-cart-remove">
                 <span class="text-caption-01 fw-semibold">{{ __('Удалить') }}</span>
             </button>

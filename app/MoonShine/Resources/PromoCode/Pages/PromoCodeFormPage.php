@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\PromoCode\Pages;
 
+use App\Models\PromoCode;
 use App\MoonShine\Resources\PromoCode\PromoCodeResource;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 
@@ -24,10 +28,17 @@ class PromoCodeFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
-                Text::make('Код', 'code')->required(),
-                Text::make('Тип (percent/fixed)', 'type')
+                Text::make('Код', 'code')
+                    ->default(self::generateUniqueCode())
                     ->required()
-                    ->hint('percent - процент, fixed - фиксированная сумма в USD'),
+                    ->hint('При создании поле заполняется автоматически случайным уникальным кодом. Либо можете удалить случайный код и ввести свой уникальный ПРОМОКОД'),
+                Select::make('Тип', 'type')
+                    ->options([
+                        'percent' => 'Процент',
+                        'fixed' => 'Фиксированная сумма (USD)',
+                    ])
+                    ->default('percent')
+                    ->required(),
                 Number::make('Значение', 'value')->required(),
                 Number::make('Мин. сумма заказа USD', 'min_order_usd')->nullable(),
                 Number::make('Лимит использований (общий)', 'usage_limit')->nullable(),
@@ -47,7 +58,7 @@ class PromoCodeFormPage extends FormPage
         $promoId = $item->getKey();
 
         return [
-            'code' => ['required', 'string', 'max:255', 'unique:promo_codes,code' . ($promoId ? ',' . $promoId : '')],
+            'code' => ['required', 'string', 'max:255', Rule::unique('promo_codes', 'code')->ignore($promoId)],
             'type' => ['required', 'in:percent,fixed'],
             'value' => ['required', 'numeric', 'min:0.01'],
             'min_order_usd' => ['nullable', 'numeric', 'min:0'],
@@ -57,5 +68,14 @@ class PromoCodeFormPage extends FormPage
             'active_to' => ['nullable', 'date', 'after_or_equal:active_from'],
             'is_active' => ['boolean'],
         ];
+    }
+
+    private static function generateUniqueCode(): string
+    {
+        do {
+            $code = Str::upper(Str::random(10));
+        } while (PromoCode::query()->where('code', $code)->exists());
+
+        return $code;
     }
 }

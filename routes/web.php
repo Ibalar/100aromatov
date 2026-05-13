@@ -69,6 +69,7 @@ Route::prefix('/cart')->name('cart.')->group(function () {
 });
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/promo-summary', [CheckoutController::class, 'promoSummary'])->name('checkout.promo-summary');
 Route::post('/checkout', [CheckoutController::class, 'store'])
     ->middleware('throttle:5,10')
     ->name('checkout.store');

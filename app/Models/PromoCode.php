@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class PromoCode extends Model
 {
@@ -27,12 +27,6 @@ class PromoCode extends Model
         'is_active' => 'boolean',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Scopes
-    |--------------------------------------------------------------------------
-    */
-
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('promo_codes.is_active', true)
@@ -45,12 +39,6 @@ class PromoCode extends Model
                     ->orWhere('promo_codes.active_to', '>=', now());
             });
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Logic
-    |--------------------------------------------------------------------------
-    */
 
     public function calculateDiscount(float $amount): float
     {
@@ -66,14 +54,14 @@ class PromoCode extends Model
         return $this->hasMany(PromoCodeUsage::class);
     }
 
-    public function canBeUsedBy(?int $customerId, float $orderAmount): bool
+    public function canBeUsedBy(?int $customerId, ?string $phone, float $orderAmount): bool
     {
-        return $this->getValidationError($customerId, $orderAmount) === null;
+        return $this->getValidationError($customerId, $phone, $orderAmount) === null;
     }
 
-    public function getValidationError(?int $customerId, float $orderAmount): ?string
+    public function getValidationError(?int $customerId, ?string $phone, float $orderAmount): ?string
     {
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return 'Промокод отключен.';
         }
 
@@ -93,12 +81,18 @@ class PromoCode extends Model
             return 'Лимит использований этого промокода исчерпан.';
         }
 
-        if ($this->usage_per_user && $customerId) {
-            $userCount = $this->usages()
-                ->where('customer_id', $customerId)
-                ->count();
+        if ($this->usage_per_user) {
+            $usageQuery = $this->usages();
 
-            if ($userCount >= $this->usage_per_user) {
+            if ($customerId) {
+                $usageQuery->where('customer_id', $customerId);
+            } elseif (filled($phone)) {
+                $usageQuery->where('phone', $phone);
+            } else {
+                $usageQuery = null;
+            }
+
+            if ($usageQuery !== null && $usageQuery->count() >= $this->usage_per_user) {
                 return 'Вы уже использовали этот промокод максимальное количество раз.';
             }
         }

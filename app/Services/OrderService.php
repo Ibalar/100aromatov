@@ -13,94 +13,55 @@ use App\Models\{
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use RuntimeException;
 
 class OrderService
 {
     public function create(array $data): Order
     {
         return DB::transaction(function () use ($data) {
-
-            $settings = Setting::getSettings();
-
-            $totalUsd = 0;
-            $itemsData = [];
-
-            foreach ($data['items'] as $item) {
-
-                $variant = ProductVariant::findOrFail($item['variant_id']);
-
-                $priceUsd = (float) $variant->final_price_usd;
-
-                $totalUsd += $priceUsd * $item['qty'];
-
-                $itemsData[] = [
-                    'variant' => $variant,
-                    'price_usd' => $priceUsd,
-                    'qty' => $item['qty'],
-                ];
-            }
-
-            $discountUsd = 0;
-            $promo = null;
             $customerId = auth('customer')->id();
             $webUserId = auth('web')->id();
 
-            if (!empty($data['promo_code'])) {
-                $promoCode = mb_strtoupper(trim((string) $data['promo_code']));
+            $pricing = $this->calculatePricing(
+                $data['items'],
+                (string) ($data['promo_code'] ?? ''),
+                $customerId,
+                $data['phone'] ?? null,
+                true
+            );
 
-                $promo = PromoCode::query()
-                    ->whereRaw('UPPER(code) = ?', [$promoCode])
-                    ->lockForUpdate()
-                    ->first();
-
-                if (! $promo) {
-                    throw ValidationException::withMessages([
-                        'promo_code' => 'Промокод не найден.',
-                    ]);
-                }
-
-                $promoValidationError = $promo->getValidationError($customerId, $totalUsd);
-
-                if ($promoValidationError === null) {
-                    $discountUsd = $promo->calculateDiscount($totalUsd);
-                } else {
-                    throw ValidationException::withMessages([
-                        'promo_code' => $promoValidationError,
-                    ]);
-                }
-            }
-
-            $totalUsdFinal = max(0, $totalUsd - $discountUsd);
-            $totalByn = $settings->convertUsdToByn($totalUsdFinal);
+            $settings = Setting::getSettings();
+            $totalByn = $settings->convertUsdToByn($pricing['total_usd']);
 
             $order = Order::create([
                 'user_id' => $webUserId,
-                'customer_id' => auth('customer')->id(),
+                'customer_id' => $customerId,
                 'status' => 'new',
-                'total_usd' => $totalUsdFinal,
+                'total_usd' => $pricing['total_usd'],
                 'total_byn' => $totalByn,
-                'promo_code' => $promo?->code,
-                'discount_usd' => $discountUsd,
+                'promo_code' => $pricing['applied_promo_code'],
+                'discount_usd' => $pricing['discount_usd'],
                 'phone' => $data['phone'],
                 'call_preference' => $data['call_preference'] ?? 'call_me',
-                // Keep order creation working even if production schema has email as NOT NULL.
                 'email' => $data['email'] ?? '',
             ]);
 
-            if ($promo) {
-
+            if ($pricing['promo_model']) {
+                /** @var PromoCode $promo */
+                $promo = $pricing['promo_model'];
                 $promo->increment('used_count');
 
                 PromoCodeUsage::create([
                     'promo_code_id' => $promo->id,
                     'user_id' => $webUserId,
                     'customer_id' => $customerId,
+                    'phone' => $data['phone'] ?? null,
                     'order_id' => $order->id,
                 ]);
             }
 
-            foreach ($itemsData as $item) {
-
+            foreach ($pricing['items'] as $item) {
                 $priceByn = $settings->convertUsdToByn($item['price_usd']);
 
                 OrderItem::create([
@@ -114,7 +75,7 @@ class OrderService
             }
 
             $sent = app(TelegramService::class)->send(
-                $this->buildTelegramMessage($order, $itemsData)
+                $this->buildTelegramMessage($order, $pricing['items'])
             );
 
             if (! $sent) {
@@ -125,6 +86,128 @@ class OrderService
 
             return $order;
         });
+    }
+
+    public function calculatePreview(array $items, ?string $promoCode, ?int $customerId, ?string $phone): array
+    {
+        return $this->calculatePricing($items, (string) $promoCode, $customerId, $phone, false);
+    }
+
+    private function calculatePricing(array $items, string $promoCode, ?int $customerId, ?string $phone, bool $throwOnInvalidPromo): array
+    {
+        $itemsData = [];
+        $regularTotalUsd = 0.0;
+        $saleTotalUsd = 0.0;
+
+        foreach ($items as $item) {
+            $variant = ProductVariant::findOrFail((int) $item['variant_id']);
+            $qty = (int) $item['qty'];
+
+            $regularUsd = (float) $variant->price_usd;
+            $saleUsd = (float) $variant->final_price_usd;
+
+            $itemsData[] = [
+                'variant' => $variant,
+                'qty' => $qty,
+                'regular_usd' => $regularUsd,
+                'sale_usd' => $saleUsd,
+                'price_usd' => $saleUsd,
+            ];
+
+            $regularTotalUsd += $regularUsd * $qty;
+            $saleTotalUsd += $saleUsd * $qty;
+        }
+
+        $promo = null;
+        $promoError = null;
+        $discountUsd = 0.0;
+        $totalUsd = $saleTotalUsd;
+
+        $promoCode = mb_strtoupper(trim($promoCode));
+        if ($promoCode !== '') {
+            $promoQuery = PromoCode::query()
+                ->whereRaw('UPPER(code) = ?', [$promoCode]);
+
+            if ($throwOnInvalidPromo) {
+                $promoQuery->lockForUpdate();
+            }
+
+            $promo = $promoQuery->first();
+
+            if (! $promo) {
+                $promoError = 'Промокод не найден.';
+            } else {
+                $promoError = $promo->getValidationError($customerId, $phone, $regularTotalUsd);
+            }
+
+            if ($promoError !== null) {
+                if ($throwOnInvalidPromo) {
+                    throw ValidationException::withMessages([
+                        'promo_code' => $promoError,
+                    ]);
+                }
+
+                return [
+                    'items' => $itemsData,
+                    'total_usd' => $saleTotalUsd,
+                    'discount_usd' => 0.0,
+                    'regular_total_usd' => $regularTotalUsd,
+                    'total_discount_usd' => max(0.0, $regularTotalUsd - $saleTotalUsd),
+                    'applied_promo_code' => null,
+                    'promo_model' => null,
+                    'promo_error' => $promoError,
+                ];
+            }
+
+            if ($regularTotalUsd > 0) {
+                $promoItemsTotalUsd = 0.0;
+                $promoDiscountTotalUsd = $promo->calculateDiscount($regularTotalUsd);
+                $priceFactor = $promo->type === 'percent'
+                    ? max(0.0, 1 - ((float) $promo->value / 100))
+                    : 1.0;
+
+                foreach ($itemsData as &$itemData) {
+                    $regularLineUsd = $itemData['regular_usd'] * $itemData['qty'];
+
+                    if ($promo->type === 'percent') {
+                        $promoLineUsd = $regularLineUsd * $priceFactor;
+                    } elseif ($promo->type === 'fixed') {
+                        $lineShare = $promoDiscountTotalUsd * ($regularLineUsd / $regularTotalUsd);
+                        $promoLineUsd = max(0.0, $regularLineUsd - $lineShare);
+                    } else {
+                        throw new RuntimeException('Unsupported promo type');
+                    }
+
+                    $promoUnitUsd = $itemData['qty'] > 0 ? ($promoLineUsd / $itemData['qty']) : $itemData['regular_usd'];
+                    $effectiveUnitUsd = min($itemData['sale_usd'], $promoUnitUsd);
+                    $itemData['price_usd'] = $effectiveUnitUsd;
+                    $promoItemsTotalUsd += $effectiveUnitUsd * $itemData['qty'];
+                }
+                unset($itemData);
+
+                if ($promoItemsTotalUsd < $saleTotalUsd) {
+                    $discountUsd = $saleTotalUsd - $promoItemsTotalUsd;
+                    $totalUsd = $promoItemsTotalUsd;
+                } else {
+                    $promo = null;
+                    foreach ($itemsData as &$itemData) {
+                        $itemData['price_usd'] = $itemData['sale_usd'];
+                    }
+                    unset($itemData);
+                }
+            }
+        }
+
+        return [
+            'items' => $itemsData,
+            'total_usd' => $totalUsd,
+            'discount_usd' => $discountUsd,
+            'regular_total_usd' => $regularTotalUsd,
+            'total_discount_usd' => max(0.0, $regularTotalUsd - $totalUsd),
+            'applied_promo_code' => $promo?->code,
+            'promo_model' => $promo,
+            'promo_error' => null,
+        ];
     }
 
     protected function buildTelegramMessage(Order $order, array $itemsData = []): string

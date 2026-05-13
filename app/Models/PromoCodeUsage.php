@@ -12,6 +12,7 @@ class PromoCodeUsage extends Model
         'promo_code_id',
         'user_id',
         'customer_id',
+        'phone',
         'order_id',
     ];
 

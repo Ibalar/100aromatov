@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Services\OrderService;
 use App\Services\CartService;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class CheckoutController extends Controller
 {
@@ -94,5 +96,63 @@ class CheckoutController extends Controller
         return redirect()
             ->route('checkout.index')
             ->with('success_order_id', $order->id);
+    }
+
+    public function promoSummary(Request $request, OrderService $service, CartService $cartService): JsonResponse
+    {
+        $data = $request->validate([
+            'promo_code' => 'nullable|string|max:64',
+            'phone' => 'nullable|string',
+        ]);
+
+        $items = $cartService->getItemsForOrderPayload();
+        if (empty($items)) {
+            return response()->json([
+                'success' => true,
+                'items' => [],
+                'total_byn' => 0,
+                'total_byn_formatted' => number_format(0, 2, ',', ' ') . ' BYN',
+                'promo_error' => null,
+            ]);
+        }
+
+        $phone = null;
+        if (filled($data['phone'] ?? null)) {
+            $phone = formatBelarusMobilePhone((string) $data['phone']) ?? trim((string) $data['phone']);
+        }
+
+        $preview = $service->calculatePreview(
+            $items,
+            $data['promo_code'] ?? null,
+            auth('customer')->id(),
+            $phone
+        );
+
+        $settings = Setting::getSettings();
+        $mappedItems = [];
+
+        foreach ($preview['items'] as $item) {
+            $priceByn = $settings->convertUsdToByn($item['price_usd']);
+            $lineByn = round($priceByn * $item['qty'], 2);
+
+            $mappedItems[] = [
+                'variant_id' => (int) $item['variant']->id,
+                'price_byn' => $priceByn,
+                'line_byn' => $lineByn,
+            ];
+        }
+
+        $totalByn = $settings->convertUsdToByn($preview['total_usd']);
+        $discountByn = $settings->convertUsdToByn($preview['total_discount_usd']);
+
+        return response()->json([
+            'success' => true,
+            'items' => $mappedItems,
+            'total_byn' => $totalByn,
+            'total_byn_formatted' => number_format($totalByn, 2, ',', ' ') . ' BYN',
+            'discount_byn' => $discountByn,
+            'discount_byn_formatted' => number_format($discountByn, 2, ',', ' ') . ' BYN',
+            'promo_error' => $preview['promo_error'],
+        ]);
     }
 }
