@@ -37,6 +37,8 @@ class BrandResource extends ModelResource implements HasImportExportContract
     protected int $itemsPerPage = 20;
 
     protected bool $withConfirm = true;
+    
+    protected bool $saveQueryState = true;
 
     protected string $title = 'Бренды';
 

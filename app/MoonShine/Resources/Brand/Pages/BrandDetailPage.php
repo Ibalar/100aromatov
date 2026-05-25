@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Brand\Pages;
 
-use MoonShine\Laravel\Pages\Crud\DetailPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Table\TableBuilder;
-use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\Brand\BrandResource;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\ActionButtonContract;
 use MoonShine\Support\ListOf;
+use MoonShine\Laravel\Pages\Crud\DetailPage;
+use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Text;
 use Throwable;
-
 
 /**
  * @extends DetailPage<BrandResource>
@@ -29,13 +30,19 @@ class BrandDetailPage extends DetailPage
         return [
             ID::make(),
             Image::make('Превью', 'logo'),
-            Text::make('Название', 'name')
+            Text::make('Название', 'name'),
         ];
     }
 
     protected function buttons(): ListOf
     {
-        return parent::buttons();
+        return new ListOf(
+            ActionButtonContract::class,
+            [
+                ActionButton::make('Назад', $this->getResource()->getIndexPageUrl())->secondary(),
+                ...parent::buttons()->toArray(),
+            ]
+        );
     }
 
     /**
@@ -55,7 +62,7 @@ class BrandDetailPage extends DetailPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -66,7 +73,7 @@ class BrandDetailPage extends DetailPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -77,7 +84,7 @@ class BrandDetailPage extends DetailPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
     }
 }

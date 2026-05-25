@@ -12,6 +12,7 @@ use App\Models\ProductVariant;
 use App\MoonShine\Resources\Product\Pages\ProductDetailPage;
 use App\MoonShine\Resources\Product\Pages\ProductFormPage;
 use App\MoonShine\Resources\Product\Pages\ProductIndexPage;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilderContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Http;
@@ -25,6 +26,7 @@ use MoonShine\ImportExport\Contracts\HasImportExportContract;
 use MoonShine\ImportExport\ImportHandler;
 use MoonShine\ImportExport\Traits\ImportExportConcern;
 use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\SortDirection;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
@@ -48,6 +50,10 @@ class ProductResource extends ModelResource implements HasImportExportContract
     protected string $title = 'Товары';
 
     protected string $column = 'name_ru';
+
+    protected string $sortColumn = 'name_ru';
+
+    protected SortDirection $sortDirection = SortDirection::ASC;
 
     protected array $pendingImages = [];
 
@@ -562,5 +568,16 @@ class ProductResource extends ModelResource implements HasImportExportContract
         }
 
         return null;
+    }
+
+    protected function modifyQueryBuilder(EloquentBuilderContract $builder): EloquentBuilderContract
+    {
+        if ($this->isIndexPage()) {
+            $builder->with([
+                'variants' => static fn ($query) => $query->select(['id', 'product_id', 'volume_ml', 'price_usd']),
+            ]);
+        }
+
+        return parent::modifyQueryBuilder($builder);
     }
 }

@@ -4,32 +4,28 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Brand\Pages;
 
-use App\MoonShine\Resources\Category\CategoryResource;
-use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use App\MoonShine\Resources\Brand\BrandResource;
+use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
+use MoonShine\Contracts\UI\ActionButtonContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\FormBuilderContract;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\Contracts\UI\FormBuilderContract;
-use MoonShine\TinyMce\Fields\TinyMce;
-use MoonShine\UI\Components\FormBuilder;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
-use App\MoonShine\Resources\Brand\BrandResource;
 use MoonShine\Support\ListOf;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Image;
-use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Textarea;
 use Throwable;
-
 
 /**
  * @extends FormPage<BrandResource>
@@ -50,9 +46,9 @@ class BrandFormPage extends FormPage
                             [
                                 Text::make('Название', 'name')
                                     ->when(
-                                        fn() => $this->getResource()->isCreateFormPage(),
-                                        fn(Text $field) => $field->reactive(),
-                                        fn(Text $field) => $field
+                                        fn () => $this->getResource()->isCreateFormPage(),
+                                        fn (Text $field) => $field->reactive(),
+                                        fn (Text $field) => $field
                                     )
                                     ->required(),
                             ],
@@ -64,9 +60,9 @@ class BrandFormPage extends FormPage
                                     ->unique()
                                     ->locked()
                                     ->when(
-                                        fn() => $this->getResource()->isCreateFormPage(),
-                                        fn(Slug $field) => $field->from('name')->live(),
-                                        fn(Slug $field) => $field->readonly()
+                                        fn () => $this->getResource()->isCreateFormPage(),
+                                        fn (Slug $field) => $field->from('name')->live(),
+                                        fn (Slug $field) => $field->readonly()
                                     ),
                             ],
                             colSpan: 6,
@@ -95,7 +91,7 @@ class BrandFormPage extends FormPage
                     TinyMce::make('Описание RU', 'description_ru'),
                     TinyMce::make('Апісанне BY', 'description_by'),
                 ]),
-                Tab::make('СЕО', [
+                Tab::make('SEO', [
                     Flex::make([
                         Text::make('SEO Title RU', 'seo_title_ru'),
                         Text::make('SEO Title BY', 'seo_title_by'),
@@ -124,7 +120,24 @@ class BrandFormPage extends FormPage
 
     protected function buttons(): ListOf
     {
-        return parent::buttons();
+        $buttons = [
+            $this->makeCatalogButton(),
+        ];
+
+        if ($this->isItemExists()) {
+            $buttons[] = $this->makeSaveButton();
+            $buttons[] = $this->modifyDetailButton(
+                $this->getResource()->getDetailButton()
+            );
+            $buttons[] = $this->modifyDeleteButton(
+                $this->getResource()->getDeleteButton(
+                    redirectAfterDelete: $this->getResource()->getRedirectAfterDelete(),
+                    isAsync: false,
+                )
+            );
+        }
+
+        return new ListOf(ActionButtonContract::class, $buttons);
     }
 
     protected function formButtons(): ListOf
@@ -137,13 +150,16 @@ class BrandFormPage extends FormPage
         return [];
     }
 
-    /**
-     * @param  FormBuilder  $component
-     *
-     * @return FormBuilder
-     */
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract
     {
+        $component = $component->customAttributes([
+            'id' => $this->getTopSubmitFormId(),
+        ]);
+
+        if ($this->isItemExists()) {
+            return $component->hideSubmit();
+        }
+
         return $component;
     }
 
@@ -154,7 +170,7 @@ class BrandFormPage extends FormPage
     protected function topLayer(): array
     {
         return [
-            ...parent::topLayer()
+            ...parent::topLayer(),
         ];
     }
 
@@ -165,7 +181,7 @@ class BrandFormPage extends FormPage
     protected function mainLayer(): array
     {
         return [
-            ...parent::mainLayer()
+            ...parent::mainLayer(),
         ];
     }
 
@@ -176,7 +192,28 @@ class BrandFormPage extends FormPage
     protected function bottomLayer(): array
     {
         return [
-            ...parent::bottomLayer()
+            ...parent::bottomLayer(),
         ];
+    }
+
+    protected function getTopSubmitFormId(): string
+    {
+        return 'brand-resource-form';
+    }
+
+    protected function makeSaveButton(): ActionButton
+    {
+        return ActionButton::make(__('moonshine::ui.save'))
+            ->primary()
+            ->customAttributes([
+                'type' => 'submit',
+                'form' => $this->getTopSubmitFormId(),
+            ]);
+    }
+
+    protected function makeCatalogButton(): ActionButton
+    {
+        return ActionButton::make('Назад', $this->getResource()->getIndexPageUrl())
+            ->secondary();
     }
 }

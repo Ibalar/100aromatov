@@ -7,6 +7,7 @@ namespace App\MoonShine\Resources\Product\Pages;
 use App\Models\Brand;
 use App\Models\Product;
 use App\MoonShine\Resources\Product\ProductResource;
+use Illuminate\Support\Facades\Cache;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\Contracts\UI\ActionButtonContract;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -21,7 +22,6 @@ use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
-use Illuminate\Support\Facades\Cache;
 use Throwable;
 
 /**
@@ -49,6 +49,23 @@ class ProductIndexPage extends IndexPage
                 )
                 ->withoutTextWrap()
                 ->sortable(),
+            Text::make('Варианты', formatted: static function (Product $product): string {
+                if ($product->variants->isEmpty()) {
+                    return '-';
+                }
+
+                return $product->variants
+                    ->map(static function ($variant): string {
+                        $volume = trim((string) ($variant->volume_ml ?? ''));
+                        $volumeText = $volume !== '' ? $volume . ' мл' : 'без объема';
+                        $price = number_format((float) $variant->price_usd, 2, '.', '');
+
+                        return '$ ' . $price . ' - ' . $volumeText;
+                    })
+                    ->implode('<br>');
+            })
+                ->unescape()
+                ->withoutTextWrap(),
             Switcher::make('Активен', 'is_active'),
         ];
     }
@@ -69,7 +86,7 @@ class ProductIndexPage extends IndexPage
         return [
             Select::make('Бренд', 'brand_id')
                 ->options(
-                    Cache::remember('brand_options', 3600, fn() => Brand::query()
+                    Cache::remember('brand_options', 3600, fn () => Brand::query()
                         ->orderBy('name')
                         ->pluck('name', 'id')
                         ->toArray())
@@ -218,19 +235,41 @@ class ProductIndexPage extends IndexPage
             }
         }
 
-        document.addEventListener('click', function (event) {
-            var button = event.target.closest(buttonSelector);
-            if (!button) {
-                return;
+        function keyFromElement(element) {
+            if (!element) {
+                return null;
             }
 
-            var rowKey = button.getAttribute('data-highlight-row-key');
+            var row = element.closest('tr[data-row-key]');
+            if (!row) {
+                return null;
+            }
+
+            return row.getAttribute('data-row-key');
+        }
+
+        function storeAndApply(rowKey) {
             if (!rowKey) {
                 return;
             }
 
             setStoredKey(rowKey);
             applyHighlight(rowKey);
+        }
+
+        document.addEventListener('click', function (event) {
+            var button = event.target.closest(buttonSelector);
+            if (button) {
+                storeAndApply(button.getAttribute('data-highlight-row-key'));
+                return;
+            }
+
+            var rowKeyFromRow = keyFromElement(event.target);
+            if (!rowKeyFromRow) {
+                return;
+            }
+
+            storeAndApply(rowKeyFromRow);
         });
 
         var observer = new MutationObserver(function () {
@@ -238,6 +277,10 @@ class ProductIndexPage extends IndexPage
         });
 
         observer.observe(document.body, { childList: true, subtree: true });
+
+        window.addEventListener('pageshow', function () {
+            applyHighlight(getStoredKey());
+        });
 
         applyHighlight(getStoredKey());
     })();
