@@ -179,7 +179,9 @@
     }
 
     function formatPrice(price) {
-        return parseFloat(price).toFixed(2).replace('.', ',') + ' BYN';
+        var num = parseFloat(price);
+        if (num === 0) return 'под заказ';
+        return num.toFixed(2).replace('.', ',') + ' BYN';
     }
 
     function closeDropdown() {
