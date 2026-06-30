@@ -15,11 +15,6 @@ enum OrderStatus: string
     case Completed = 'completed';
     case Canceled = 'canceled';
 
-    public function __toString(): string
-    {
-        return $this->value;
-    }
-
     public function label(): string
     {
         return match ($this) {
@@ -73,5 +68,14 @@ enum OrderStatus: string
 
             return $carry;
         }, []);
+    }
+
+    public static function labelFor(mixed $value): string
+    {
+        if ($value instanceof self) {
+            return $value->label();
+        }
+
+        return self::tryFrom((string) $value)?->label() ?? (string) $value;
     }
 }

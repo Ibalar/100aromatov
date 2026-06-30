@@ -28,7 +28,7 @@ class OrderIndexPage extends IndexPage
     {
         return [
             ID::make()->sortable(),
-            Text::make('Статус', 'status', formatted: static fn ($item) => OrderStatus::tryFrom((string) $item->status)?->label() ?? (string) $item->status)
+            Text::make('Статус', 'status', formatted: static fn ($item) => OrderStatus::labelFor($item->status))
                 ->sortable(),
             Text::make('Телефон', 'phone')->sortable(),
             Text::make('Перезвон', 'call_preference'),
