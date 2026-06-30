@@ -555,6 +555,8 @@
         </div>
     </section>
 
+@include('components.recently-viewed')
+
 @endsection
 
 @push('styles')
@@ -771,8 +773,6 @@
     }
 </style>
 @endpush
-
-@include('components.recently-viewed')
 
 @push('scripts')
 <script>
