@@ -210,6 +210,8 @@ class ProductController extends Controller
         // Increment views
         $product->increment('views');
 
+        $this->trackRecentlyViewed($product->id);
+
         return view('products.show', compact('product', 'customerReview'));
     }
 
@@ -399,5 +401,39 @@ class ProductController extends Controller
             'products' => $products,
             'searchQuery' => $searchQuery,
         ]);
+    }
+
+    private function trackRecentlyViewed(int $productId): void
+    {
+        $cookieName = 'recently_viewed';
+        $maxItems = 12;
+        $ttl = 30 * 24 * 60; // 30 days
+
+        $ids = [];
+
+        if (request()->hasCookie($cookieName)) {
+            $raw = request()->cookie($cookieName);
+            $decoded = json_decode((string) $raw, true);
+
+            if (is_array($decoded)) {
+                $ids = array_map('intval', $decoded);
+            }
+        }
+
+        // Remove if already exists, then prepend
+        $ids = array_values(array_diff($ids, [$productId]));
+        array_unshift($ids, $productId);
+
+        // Trim to max
+        $ids = array_slice($ids, 0, $maxItems);
+
+        Log::debug('Recently viewed: updated', [
+            'product_id' => $productId,
+            'count' => count($ids),
+        ]);
+
+        cookie()->queue(
+            cookie($cookieName, json_encode($ids), $ttl, '/', null, false, false)
+        );
     }
 }

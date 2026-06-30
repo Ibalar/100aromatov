@@ -772,6 +772,8 @@
 </style>
 @endpush
 
+@include('components.recently-viewed')
+
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
