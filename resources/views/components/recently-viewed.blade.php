@@ -32,7 +32,8 @@
             ->get()
             ->sortBy(function ($product) use ($ids) {
                 return array_search($product->id, $ids);
-            });
+            })
+            ->take(8);
     }
 @endphp
 
