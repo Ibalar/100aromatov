@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -210,6 +211,8 @@ class ProductController extends Controller
         // Increment views
         $product->increment('views');
 
+        $this->trackRecentlyViewed($product->id);
+
         return view('products.show', compact('product', 'customerReview'));
     }
 
@@ -399,5 +402,36 @@ class ProductController extends Controller
             'products' => $products,
             'searchQuery' => $searchQuery,
         ]);
+    }
+
+    private function trackRecentlyViewed(int $productId): void
+    {
+        $cookieName = 'recently_viewed';
+        $maxItems = 12;
+        $ttl = 30 * 24 * 60;
+
+        $ids = [];
+
+        if (request()->hasCookie($cookieName)) {
+            $raw = request()->cookie($cookieName);
+            $decoded = json_decode((string) $raw, true);
+
+            if (is_array($decoded)) {
+                $ids = array_map('intval', $decoded);
+            }
+        }
+
+        $ids = array_values(array_diff($ids, [$productId]));
+        array_unshift($ids, $productId);
+        $ids = array_slice($ids, 0, $maxItems);
+
+        Log::debug('Recently viewed: updated', [
+            'product_id' => $productId,
+            'count' => count($ids),
+        ]);
+
+        cookie()->queue(
+            cookie($cookieName, json_encode($ids), $ttl, '/', null, false, false)
+        );
     }
 }
