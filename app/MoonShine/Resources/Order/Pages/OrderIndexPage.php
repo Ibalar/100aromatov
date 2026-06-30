@@ -6,11 +6,9 @@ namespace App\MoonShine\Resources\Order\Pages;
 
 use App\Enums\OrderStatus;
 use App\MoonShine\Resources\Order\OrderResource;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
-use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
@@ -49,13 +47,6 @@ class OrderIndexPage extends IndexPage
             Select::make('Статус', 'status')->options(OrderStatus::labels()),
             Text::make('Телефон', 'phone'),
             Text::make('Перезвон', 'call_preference'),
-        ];
-    }
-
-    protected function buttons(): iterable
-    {
-        return [
-            ...parent::buttons(),
         ];
     }
 
