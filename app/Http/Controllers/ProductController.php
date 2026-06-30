@@ -325,15 +325,14 @@ class ProductController extends Controller
         Log::debug('Search suggest', ['q' => $q]);
 
         $settings = \App\Models\Setting::getSettings();
+        $like = '%' . $q . '%';
+        $prefix = $q . '%';
 
         $results = Product::query()
             ->active()
             ->join('brands', 'brands.id', '=', 'products.brand_id')
             ->select('products.*')
-            ->where(function ($query) use ($q) {
-                $like = '%' . $q . '%';
-                $prefix = $q . '%';
-
+            ->where(function ($query) use ($like, $prefix) {
                 $query
                     ->where('products.name_ru', 'like', $like)
                     ->orWhere('products.name_by', 'like', $like)
