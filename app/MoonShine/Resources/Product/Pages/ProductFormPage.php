@@ -160,6 +160,10 @@ class ProductFormPage extends FormPage
                 ->creatable(
                     button: ActionButton::make('Добавить характеристику', '')
                 ),
+
+            BelongsToMany::make('С этим покупают', 'relatedProducts', resource: ProductResource::class)
+                ->valuesQuery(static fn ($query) => $query->orderBy('name_ru'))
+                ->inLine('', false),
         ];
     }
 

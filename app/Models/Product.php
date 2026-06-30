@@ -90,6 +90,16 @@ class Product extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function relatedProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Product::class,
+            'product_related',
+            'product_id',
+            'related_product_id'
+        )->active()->with('brand', 'images', 'variants');
+    }
+
     public function approvedReviews(): HasMany
     {
         return $this->reviews()->where('is_approved', true);

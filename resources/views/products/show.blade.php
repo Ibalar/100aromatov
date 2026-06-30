@@ -555,6 +555,21 @@
         </div>
     </section>
 
+@if ($product->relatedProducts->isNotEmpty())
+<section class="flat-spacing">
+    <div class="container">
+        <div class="heading-section text-center mb-4">
+            <h3>{{ __('С этим покупают') }}</h3>
+        </div>
+        <div class="tf-grid-layout tf-col-6 tf-col-md-4 tf-col-lg-3 tf-col-xl-2">
+            @foreach ($product->relatedProducts as $rp)
+                @include('components.product-card', ['product' => $rp])
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 @endsection
 
 @push('styles')
