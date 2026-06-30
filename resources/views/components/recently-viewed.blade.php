@@ -12,7 +12,7 @@
     $currentProductId = $product->id ?? null;
     $ids = array_values(array_diff($ids, [$currentProductId]));
 
-    $recentlyViewed = [];
+    $recentlyViewed = collect();
     if (!empty($ids)) {
         $recentlyViewed = \App\Models\Product::query()
             ->active()
