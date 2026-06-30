@@ -33,7 +33,7 @@
             ->sortBy(function ($product) use ($ids) {
                 return array_search($product->id, $ids);
             })
-            ->take(8);
+            ->take(6);
     }
 @endphp
 
