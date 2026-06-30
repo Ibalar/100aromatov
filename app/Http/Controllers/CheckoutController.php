@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CheckoutRequest;
+use App\Models\Order;
 use App\Services\OrderService;
 use App\Services\CartService;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
@@ -21,37 +24,11 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function store(Request $request, OrderService $service, CartService $cartService)
+    public function store(CheckoutRequest $request, OrderService $service, CartService $cartService)
     {
-        $request->merge([
-            'email' => filled(trim((string) $request->input('email')))
-                ? trim((string) $request->input('email'))
-                : null,
-        ]);
+        $data = $request->validated();
 
-        $data = $request->validate([
-            'phone' => 'required|string',
-            'call_preference' => 'required|in:call_me,no_call',
-            'email' => 'nullable|email',
-            'promo_code' => 'nullable|string|max:64',
-            'privacy_policy' => 'accepted',
-            'website' => 'nullable|size:0',
-            'form_started_at' => 'required|integer',
-        ]);
-
-        if (now()->timestamp - (int) $data['form_started_at'] < 2) {
-            return back()->withErrors([
-                'phone' => __('Форма отправлена слишком быстро. Попробуйте еще раз.'),
-            ])->withInput();
-        }
-
-        if (! isValidBelarusMobilePhone($data['phone'])) {
-            return back()->withErrors([
-                'phone' => __('Введите корректный номер телефона белорусского оператора.'),
-            ])->withInput();
-        }
-
-        $items = $request->input('items');
+        $items = $data['items'] ?? [];
         if (empty($items)) {
             $items = $cartService->getItemsForOrderPayload();
         }
@@ -69,22 +46,43 @@ class CheckoutController extends Controller
             return back()->withErrors(['cart' => $message]);
         }
 
-        $request->merge(['items' => $items]);
-        $request->validate([
-            'items' => 'required|array|min:1',
-            'items.*.variant_id' => 'required|exists:product_variants,id',
-            'items.*.qty' => 'required|integer|min:1',
-        ]);
+        try {
+            $order = $service->create([
+                'phone' => formatBelarusMobilePhone($data['phone']) ?? $data['phone'],
+                'call_preference' => $data['call_preference'],
+                'email' => $data['email'] ?? null,
+                'promo_code' => $data['promo_code'] ?? null,
+                'items' => $items,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Checkout: order creation failed', [
+                'error' => $e->getMessage(),
+                'phone' => isset($data['phone']) ? normalizeBelarusPhone($data['phone']) : null,
+                'items_count' => count($items),
+            ]);
 
-        $order = $service->create([
-            'phone' => formatBelarusMobilePhone($data['phone']) ?? $data['phone'],
-            'call_preference' => $data['call_preference'],
-            'email' => $data['email'] ?? null,
-            'promo_code' => $data['promo_code'] ?? null,
-            'items' => $items,
-        ]);
+            $message = __('Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте позже.');
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $message,
+                ], 500);
+            }
+
+            return back()
+                ->withErrors(['phone' => $message])
+                ->withInput();
+        }
 
         $cartService->clear();
+
+        session(['last_order_id' => $order->id]);
+
+        Log::info('Checkout: order created', [
+            'order_id' => $order->id,
+            'total_byn' => $order->total_byn,
+        ]);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -94,8 +92,28 @@ class CheckoutController extends Controller
         }
 
         return redirect()
-            ->route('checkout.index')
-            ->with('success_order_id', $order->id);
+            ->route('checkout.success', $order);
+    }
+
+    public function success(Order $order)
+    {
+        $lastOrderId = session('last_order_id');
+
+        if ((int) $lastOrderId !== (int) $order->id) {
+            return redirect()->route('home');
+        }
+        $order->load('items');
+
+        Log::info('Checkout: success page viewed', [
+            'order_id' => $order->id,
+        ]);
+
+        $settings = Setting::getSettings();
+
+        return view('checkout.success', [
+            'order' => $order,
+            'settings' => $settings,
+        ]);
     }
 
     public function promoSummary(Request $request, OrderService $service, CartService $cartService): JsonResponse
