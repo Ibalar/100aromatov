@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
+use RuntimeException;
 use App\Models\Customer;
 
 class Order extends Model
@@ -26,6 +29,7 @@ class Order extends Model
         'total_usd' => 'decimal:2',
         'total_byn' => 'decimal:2',
         'discount_usd' => 'decimal:2',
+        'status' => OrderStatus::class,
     ];
 
     /*
@@ -75,17 +79,88 @@ class Order extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | Helpers
+    | Status Transitions
+    |--------------------------------------------------------------------------
+    */
+
+    public function transitionTo(OrderStatus $newStatus): void
+    {
+        /** @var OrderStatus $currentStatus */
+        $currentStatus = $this->status;
+
+        if (! $currentStatus instanceof OrderStatus) {
+            Log::warning('Order: status is not an OrderStatus instance', [
+                'order_id' => $this->id,
+                'raw' => $this->getRawOriginal('status'),
+            ]);
+
+            $currentStatus = OrderStatus::tryFrom((string) $this->getRawOriginal('status'))
+                ?? OrderStatus::New;
+        }
+
+        if (! $currentStatus->canTransitionTo($newStatus)) {
+            throw new RuntimeException(sprintf(
+                'Недопустимый переход статуса заказа #%d: %s → %s. Разрешённые переходы: %s',
+                $this->id,
+                $currentStatus->label(),
+                $newStatus->label(),
+                implode(', ', array_map(fn (OrderStatus $s) => $s->label(), $currentStatus->allowedTransitions()))
+            ));
+        }
+
+        $oldStatus = $currentStatus;
+
+        $this->status = $newStatus;
+        $this->save();
+
+        Log::info('Order: status changed', [
+            'order_id' => $this->id,
+            'from' => $oldStatus->value,
+            'to' => $newStatus->value,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Status Helpers
     |--------------------------------------------------------------------------
     */
 
     public function isNew(): bool
     {
-        return $this->status === 'new';
+        return $this->status === OrderStatus::New;
     }
 
+    public function isPaid(): bool
+    {
+        return $this->status === OrderStatus::Paid;
+    }
+
+    public function isProcessing(): bool
+    {
+        return $this->status === OrderStatus::Processing;
+    }
+
+    public function isShipped(): bool
+    {
+        return $this->status === OrderStatus::Shipped;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->status === OrderStatus::Completed;
+    }
+
+    public function isCanceled(): bool
+    {
+        return $this->status === OrderStatus::Canceled;
+    }
+
+    /**
+     * @deprecated Use isCompleted() instead. Kept for backward compatibility.
+     */
     public function isConfirmed(): bool
     {
-        return $this->status === 'confirmed';
+        return $this->isCompleted();
     }
 }

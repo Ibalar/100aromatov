@@ -12,6 +12,7 @@ use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
+use App\Enums\OrderStatus;
 
 /**
  * @extends IndexPage<OrderResource>
@@ -27,7 +28,8 @@ class OrderIndexPage extends IndexPage
     {
         return [
             ID::make()->sortable(),
-            Text::make('Статус', 'status')->sortable(),
+            Text::make('Статус', 'status', formatted: static fn ($item) => OrderStatus::tryFrom((string) $item->status)?->label() ?? (string) $item->status)
+                ->sortable(),
             Text::make('Телефон', 'phone')->sortable(),
             Text::make('Перезвон', 'call_preference'),
             Text::make('Email', 'email'),
@@ -54,4 +56,3 @@ class OrderIndexPage extends IndexPage
         return $component;
     }
 }
-

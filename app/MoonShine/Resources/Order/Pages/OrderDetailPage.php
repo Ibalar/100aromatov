@@ -12,6 +12,7 @@ use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Textarea;
 use MoonShine\UI\Fields\Text;
+use App\Enums\OrderStatus;
 use Throwable;
 
 /**
@@ -26,7 +27,7 @@ class OrderDetailPage extends DetailPage
     {
         return [
             ID::make(),
-            Text::make('Статус', 'status'),
+            Text::make('Статус', 'status', formatted: static fn ($item) => OrderStatus::tryFrom((string) $item->status)?->label() ?? (string) $item->status),
             Text::make('Телефон', 'phone'),
             Text::make('Перезвон', 'call_preference'),
             Text::make('Email', 'email'),
@@ -81,4 +82,3 @@ class OrderDetailPage extends DetailPage
         ];
     }
 }
-
