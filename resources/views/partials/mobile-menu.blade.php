@@ -9,7 +9,7 @@
             </span>
         <form action="{{ route('search') }}" method="GET" class="form-search-nav">
             <fieldset>
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="{{ __('Искать на сайте') }}" required>
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="{{ __('Искать на сайте') }}" class="js-search-input" required>
             </fieldset>
             <button type="submit" class="btn-action">
                 <i class="icon icon-MagnifyingGlass"></i>

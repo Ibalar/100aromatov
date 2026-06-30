@@ -146,6 +146,7 @@
 <script src="{{ asset('assets/js/shop.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/cart.js') }}"></script>
+<script src="{{ asset('assets/js/search-autocomplete.js') }}"></script>
 <script src="{{ asset('assets/js/wishlist.js') }}"></script>
 
 
