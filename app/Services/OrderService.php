@@ -10,8 +10,11 @@ use App\Models\{
     PromoCodeUsage,
     Setting
 };
+use App\Mail\NewOrderNotification;
+use App\Mail\OrderConfirmation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
@@ -84,6 +87,8 @@ class OrderService
                 ]);
             }
 
+            $this->sendEmails($order);
+
             return $order;
         });
     }
@@ -91,6 +96,44 @@ class OrderService
     public function calculatePreview(array $items, ?string $promoCode, ?int $customerId, ?string $phone): array
     {
         return $this->calculatePricing($items, (string) $promoCode, $customerId, $phone, false);
+    }
+
+    private function sendEmails(Order $order): void
+    {
+        $order->loadMissing('items');
+
+        if (filled($order->email)) {
+            try {
+                Mail::send(new OrderConfirmation($order));
+                Log::info('OrderService: confirmation email sent to customer', [
+                    'order_id' => $order->id,
+                    'email' => $order->email,
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('OrderService: failed to send confirmation email to customer', [
+                    'order_id' => $order->id,
+                    'email' => $order->email,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        $adminEmail = Setting::getSettings()->email;
+        if (filled($adminEmail)) {
+            try {
+                Mail::send(new NewOrderNotification($order));
+                Log::info('OrderService: new order notification sent to admin', [
+                    'order_id' => $order->id,
+                    'admin_email' => $adminEmail,
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('OrderService: failed to send admin notification email', [
+                    'order_id' => $order->id,
+                    'admin_email' => $adminEmail,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
     }
 
     private function calculatePricing(array $items, string $promoCode, ?int $customerId, ?string $phone, bool $throwOnInvalidPromo): array
