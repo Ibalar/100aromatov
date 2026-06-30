@@ -26,7 +26,24 @@
                                     <strong>#{{ $order->id }}</strong>
                                     <span>{{ $order->created_at->format('d.m.Y H:i') }}</span>
                                 </div>
-                                <div class="mb-2">{{ __('Статус') }}: {{ $order->status }}</div>
+                                <div class="mb-2">
+                                    @php
+                                        $statusLabel = $order->status instanceof \App\Enums\OrderStatus
+                                            ? $order->status->label()
+                                            : (string) $order->status;
+                                        $statusBadge = match ($order->status instanceof \App\Enums\OrderStatus ? $order->status : null) {
+                                            \App\Enums\OrderStatus::New => 'bg-primary',
+                                            \App\Enums\OrderStatus::Paid => 'bg-success',
+                                            \App\Enums\OrderStatus::Processing => 'bg-warning text-dark',
+                                            \App\Enums\OrderStatus::Shipped => 'bg-info text-dark',
+                                            \App\Enums\OrderStatus::Completed => 'bg-secondary',
+                                            \App\Enums\OrderStatus::Canceled => 'bg-danger',
+                                            default => 'bg-light text-dark',
+                                        };
+                                    @endphp
+                                    {{ __('Статус') }}:
+                                    <span class="badge {{ $statusBadge }}">{{ $statusLabel }}</span>
+                                </div>
                                 <div class="mb-2">{{ __('Сумма') }}: {{ number_format((float)$order->total_byn, 2, ',', ' ') }} BYN</div>
                                 @if($order->items->count())
                                     <div class="small cl-text-2">

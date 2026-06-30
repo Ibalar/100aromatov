@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Order\Pages;
 
+use App\Enums\OrderStatus;
 use App\MoonShine\Resources\Order\OrderResource;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
@@ -26,7 +27,7 @@ class OrderDetailPage extends DetailPage
     {
         return [
             ID::make(),
-            Text::make('Статус', 'status'),
+            Text::make('Статус', 'status', formatted: static fn ($item) => OrderStatus::labelFor($item->status)),
             Text::make('Телефон', 'phone'),
             Text::make('Перезвон', 'call_preference'),
             Text::make('Email', 'email'),
@@ -81,4 +82,3 @@ class OrderDetailPage extends DetailPage
         ];
     }
 }
-

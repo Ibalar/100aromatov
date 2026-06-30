@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Order\Pages;
 
+use App\Enums\OrderStatus;
 use App\MoonShine\Resources\Order\OrderResource;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
+use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Text;
 
 /**
@@ -27,7 +31,9 @@ class OrderIndexPage extends IndexPage
     {
         return [
             ID::make()->sortable(),
-            Text::make('Статус', 'status')->sortable(),
+            Select::make('Статус', 'status')
+                ->options(OrderStatus::labels())
+                ->sortable(),
             Text::make('Телефон', 'phone')->sortable(),
             Text::make('Перезвон', 'call_preference'),
             Text::make('Email', 'email'),
@@ -40,9 +46,16 @@ class OrderIndexPage extends IndexPage
     protected function filters(): iterable
     {
         return [
-            Text::make('Статус', 'status'),
+            Select::make('Статус', 'status')->options(OrderStatus::labels()),
             Text::make('Телефон', 'phone'),
             Text::make('Перезвон', 'call_preference'),
+        ];
+    }
+
+    protected function buttons(): iterable
+    {
+        return [
+            ...parent::buttons(),
         ];
     }
 
@@ -54,4 +67,3 @@ class OrderIndexPage extends IndexPage
         return $component;
     }
 }
-
