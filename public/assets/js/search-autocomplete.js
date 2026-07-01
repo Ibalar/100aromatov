@@ -114,36 +114,28 @@
 
         var dropdown = document.createElement('div');
         dropdown.className = 'js-search-dropdown';
-        dropdown.style.cssText = 'position:absolute;z-index:1060;top:100%;left:0;right:0;background:#fff;border:1px solid #dee2e6;border-radius:0 0 6px 6px;box-shadow:0 4px 12px rgba(0,0,0,.1);max-height:360px;overflow-y:auto;';
+        dropdown.style.cssText = 'position:absolute;z-index:1060;top:100%;left:0;right:0;background:#fff;border:1px solid #dee2e6;border-radius:0 0 6px 6px;box-shadow:0 4px 12px rgba(0,0,0,.1);max-height:400px;overflow-y:auto;';
 
         results.forEach(function (item) {
             var link = document.createElement('a');
             link.className = 'js-search-item';
             link.href = '/product/' + item.slug;
-            link.style.cssText = 'display:flex;align-items:center;padding:8px 14px;color:#333;text-decoration:none;border-bottom:1px solid #f0f0f0;';
+            link.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 14px;color:#333;text-decoration:none;border-bottom:1px solid #f0f0f0;';
 
-            var left = document.createElement('div');
-            left.style.cssText = 'flex:1;min-width:0;';
+            if (item.image) {
+                var img = document.createElement('img');
+                img.src = item.image;
+                img.alt = item.name;
+                img.style.cssText = 'width:40px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0;';
+                link.appendChild(img);
+            }
 
             var nameDiv = document.createElement('div');
             nameDiv.className = 'fw-medium';
             nameDiv.innerHTML = highlight(item.name, query);
-            left.appendChild(nameDiv);
+            nameDiv.style.cssText = 'flex:1;min-width:0;';
+            link.appendChild(nameDiv);
 
-            var metaDiv = document.createElement('div');
-            metaDiv.className = 'small text-muted';
-            var meta = [];
-            if (item.brand) meta.push(item.brand);
-            if (item.sku) meta.push('SKU: ' + item.sku);
-            metaDiv.textContent = meta.join(' · ');
-            left.appendChild(metaDiv);
-
-            var price = document.createElement('div');
-            price.className = 'fw-medium ms-3 text-nowrap';
-            price.textContent = formatPrice(item.price_byn);
-
-            link.appendChild(left);
-            link.appendChild(price);
             dropdown.appendChild(link);
 
             link.addEventListener('mouseenter', function () {
@@ -151,6 +143,13 @@
                 link.classList.add('active');
             });
         });
+
+        // "Все результаты" link
+        var allLink = document.createElement('a');
+        allLink.href = '/search?q=' + encodeURIComponent(query);
+        allLink.style.cssText = 'display:block;padding:10px 14px;text-align:center;color:#1a56db;font-weight:500;text-decoration:none;background:#f8f9fa;border-top:1px solid #dee2e6;';
+        allLink.textContent = 'Все результаты';
+        dropdown.appendChild(allLink);
 
         // Insert dropdown AFTER the input without moving the input
         input.parentNode.insertBefore(dropdown, input.nextSibling);

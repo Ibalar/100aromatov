@@ -327,7 +327,6 @@ class ProductController extends Controller
 
         Log::debug('Search suggest', ['q' => $q]);
 
-        $settings = Setting::getSettings();
         $like = '%'.$q.'%';
         $prefix = $q.'%';
 
@@ -372,12 +371,6 @@ class ProductController extends Controller
             ->orderBy('products.name_ru')
             ->limit(8)
             ->with([
-                'brand:id,name,slug',
-                'variants' => function ($query) {
-                    $query->select('id', 'product_id', 'sku', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active')
-                        ->where('is_active', true)
-                        ->orderBy('price_usd');
-                },
                 'images' => function ($query) {
                     $query->select('id', 'product_id', 'path', 'sort_order')
                         ->orderBy('sort_order');
@@ -385,27 +378,14 @@ class ProductController extends Controller
             ])
             ->get();
 
-        $mapped = $results->map(function (Product $product) use ($settings, $q): array {
-            $variant = $product->variants->first();
-            $priceUsd = $variant ? (float) $variant->final_price_usd : 0;
-            $priceByn = $settings->convertUsdToByn($priceUsd);
-
-            $matchedSku = null;
-            if ($variant) {
-                $sku = mb_strtoupper((string) $variant->sku);
-                if (mb_strpos($sku, mb_strtoupper($q)) !== false) {
-                    $matchedSku = $variant->sku;
-                }
-            }
-
+        $mapped = $results->map(function (Product $product): array {
             return [
                 'id' => $product->id,
                 'name' => $product->name_ru,
                 'slug' => $product->slug,
-                'brand' => $product->brand?->name,
-                'sku' => $matchedSku,
-                'price_byn' => round($priceByn, 2),
-                'image' => $product->images->first()?->path,
+                'image' => $product->images->first()?->path
+                    ? asset('storage/' . $product->images->first()->path)
+                    : null,
             ];
         });
 
