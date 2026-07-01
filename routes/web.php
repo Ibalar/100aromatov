@@ -110,7 +110,7 @@ Route::middleware('auth:customer')->group(function () {
 
 Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
 
-$moonshinePrefix = trim((string) env('MOONSHINE_ROUTE_PREFIX', 'admin'), '/');
+$moonshinePrefix = trim((string) config('moonshine.prefix', 'admin'), '/');
 $lfmPrefix = $moonshinePrefix !== ''
     ? $moonshinePrefix . '/laravel-filemanager'
     : 'laravel-filemanager';

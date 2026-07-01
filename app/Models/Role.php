@@ -9,6 +9,8 @@ class Role extends SpatieRole
 {
     use HasMoonShineRolePermissions;
 
+    protected $guarded = [];
+
     protected $with = ['permissions'];
 }
 
