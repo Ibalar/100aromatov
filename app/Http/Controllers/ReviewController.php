@@ -17,8 +17,8 @@ class ReviewController extends Controller
     {
         $reviews = Review::query()
             ->where('is_approved', true)
+            ->whereNull('product_id')
             ->with([
-                'product:id,slug,name_ru,name_by',
                 'user:id,name',
                 'customer:id,first_name,last_name,email',
             ])

@@ -34,7 +34,7 @@
         $activeVariants = $product->variants->where('is_active', true);
         $defaultVariant = $activeVariants->first();
         $defaultVariantIsPreorder = $defaultVariant && (float) $defaultVariant->price_usd <= 0;
-        $approvedReviews = $product->reviews()->where('is_approved', true)->get();
+        $approvedReviews = $product->reviews()->where('is_approved', true)->whereNotNull('product_id')->get();
         $reviewsCount = $approvedReviews->count();
         $averageRating = $reviewsCount > 0 ? round((float) $approvedReviews->avg('rating'), 1) : null;
         $ratingDistribution = collect(range(5, 1))->mapWithKeys(function (int $rating) use ($approvedReviews, $reviewsCount) {
