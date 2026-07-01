@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Intervention\Image\Interfaces\ImageManagerInterface;
 use App\Models\Brand;
@@ -46,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Register observer to keep product min/max prices in sync
         ProductVariant::observe(ProductVariantObserver::class);
+
+        // API/AJAX rate limiting
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
+        RateLimiter::for('search', fn (Request $request) => Limit::perMinute(30)->by($request->ip());
 
         require_once app_path('Support/helpers.php');
 
