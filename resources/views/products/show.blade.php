@@ -555,8 +555,6 @@
         </div>
     </section>
 
-@include('components.recently-viewed')
-
 @if ($product->relatedProducts->isNotEmpty())
 <section class="flat-spacing">
     <div class="container">
@@ -571,6 +569,8 @@
     </div>
 </section>
 @endif
+
+@include('components.recently-viewed')
 
 @endsection
 
