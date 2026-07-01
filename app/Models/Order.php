@@ -28,7 +28,6 @@ class Order extends Model
         'total_usd' => 'decimal:2',
         'total_byn' => 'decimal:2',
         'discount_usd' => 'decimal:2',
-        'status' => OrderStatus::class,
     ];
 
     /*
