@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Order\Pages;
 
 use App\Enums\OrderStatus;
-use App\Enums\OrderStatus;
 use App\MoonShine\Resources\Order\OrderResource;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
