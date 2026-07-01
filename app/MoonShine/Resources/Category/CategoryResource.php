@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Category;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
-use App\MoonShine\Resources\Category\Pages\CategoryIndexPage;
-use App\MoonShine\Resources\Category\Pages\CategoryFormPage;
 use App\MoonShine\Resources\Category\Pages\CategoryDetailPage;
+use App\MoonShine\Resources\Category\Pages\CategoryFormPage;
+use App\MoonShine\Resources\Category\Pages\CategoryIndexPage;
 use Leeto\MoonShineTree\Resources\TreeResource;
-use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Contracts\Core\PageContract;
+use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\Action;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\ListOf;
@@ -25,7 +24,9 @@ class CategoryResource extends TreeResource
     use WithRolePermissions;
 
     protected string $model = Category::class;
+
     protected string $title = 'Категории';
+
     protected string $column = 'name_ru';
 
     protected string $sortColumn = 'sort_order';
@@ -63,12 +64,11 @@ class CategoryResource extends TreeResource
     protected function activeActions(): ListOf
     {
         return parent::activeActions()
-            ->except(Action::VIEW)
-            ;
+            ->except(Action::VIEW);
     }
 
-    public function compactTree(): bool {
+    public function compactTree(): bool
+    {
         return true;
     }
-
 }

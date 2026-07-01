@@ -29,6 +29,7 @@ class SettingFormPage extends FormPage
 {
     /**
      * @return list<ComponentContract|FieldContract>
+     *
      * @throws Throwable
      */
     protected function fields(): iterable
@@ -149,6 +150,7 @@ class SettingFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -160,6 +162,7 @@ class SettingFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -171,6 +174,7 @@ class SettingFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function bottomLayer(): array

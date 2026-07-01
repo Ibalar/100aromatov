@@ -80,11 +80,11 @@ class ReviewController extends Controller
             $product,
             $review,
             $customer->full_name,
-            route('product.show', $product->slug) . '#customer-reviews',
+            route('product.show', $product->slug).'#customer-reviews',
         ));
 
         return redirect()
-            ->to(route('product.show', $product->slug) . '#customer-reviews')
+            ->to(route('product.show', $product->slug).'#customer-reviews')
             ->with('review_success', __('Спасибо. Ваш отзыв отправлен на модерацию.'));
     }
 
@@ -129,14 +129,14 @@ class ReviewController extends Controller
         ));
 
         return redirect()
-            ->to(route('reviews.index') . '#write-store-review')
+            ->to(route('reviews.index').'#write-store-review')
             ->with('review_success', __('Спасибо. Ваш отзыв отправлен на модерацию.'));
     }
 
     private function buildTelegramMessage(?Product $product, Review $review, string $customerName, string $url): string
     {
         $target = $product
-            ? 'Товар: ' . e(localizedField($product, 'name'))
+            ? 'Товар: '.e(localizedField($product, 'name'))
             : 'Тип: Отзыв о магазине';
 
         $author = e($customerName);

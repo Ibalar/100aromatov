@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Brand\Pages;
 
 use App\MoonShine\Resources\Brand\BrandResource;
+use MoonShine\Contracts\UI\ActionButtonContract;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Contracts\UI\ActionButtonContract;
-use MoonShine\Support\ListOf;
 use MoonShine\Laravel\Pages\Crud\DetailPage;
+use MoonShine\Support\ListOf;
 use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\ID;
@@ -47,7 +47,6 @@ class BrandDetailPage extends DetailPage
 
     /**
      * @param  TableBuilder  $component
-     *
      * @return TableBuilder
      */
     protected function modifyDetailComponent(ComponentContract $component): ComponentContract
@@ -57,6 +56,7 @@ class BrandDetailPage extends DetailPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -68,6 +68,7 @@ class BrandDetailPage extends DetailPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -79,6 +80,7 @@ class BrandDetailPage extends DetailPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function bottomLayer(): array

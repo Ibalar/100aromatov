@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class LanguageService
 {
     public const DEFAULT_LOCALE = 'ru';
+
     public const SUPPORTED_LOCALES = ['ru', 'by'];
 
     public function getLocale(?Request $request = null): string

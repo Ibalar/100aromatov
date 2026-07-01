@@ -48,7 +48,7 @@ class FeedExportService
                 $brand = trim((string) ($product->brand?->name ?? ''));
                 $categoryName = trim((string) localizedField($product->category, 'name'));
                 $availability = $priceByn > 0 ? 'in stock' : 'preorder';
-                $offerId = $variant->sku ?: 'PRD-' . $product->id . '-' . $variant->id;
+                $offerId = $variant->sku ?: 'PRD-'.$product->id.'-'.$variant->id;
 
                 $items[] = [
                     'id' => $offerId,
@@ -57,7 +57,7 @@ class FeedExportService
                     'link' => $link,
                     'image_link' => $image,
                     'availability' => $availability,
-                    'price' => number_format($priceByn, 2, '.', '') . ' ' . $currency,
+                    'price' => number_format($priceByn, 2, '.', '').' '.$currency,
                     'brand' => $brand,
                     'condition' => 'new',
                     'product_type' => $categoryName,
@@ -76,7 +76,7 @@ class FeedExportService
                 $lines[] = "      <g:{$key}>{$tagValue}</g:{$key}>";
             }
 
-            return "    <item>\n" . implode("\n", $lines) . "\n    </item>";
+            return "    <item>\n".implode("\n", $lines)."\n    </item>";
         })->implode("\n");
 
         $title = htmlspecialchars($shopName, ENT_XML1);
@@ -133,7 +133,7 @@ XML;
                     continue;
                 }
 
-                $offerId = htmlspecialchars((string) ($variant->sku ?: 'PRD-' . $product->id . '-' . $variant->id), ENT_XML1);
+                $offerId = htmlspecialchars((string) ($variant->sku ?: 'PRD-'.$product->id.'-'.$variant->id), ENT_XML1);
                 $available = $priceByn > 0 ? 'true' : 'false';
                 $url = htmlspecialchars(route('product.show', $product->slug), ENT_XML1);
                 $price = number_format($priceByn, 2, '.', '');
@@ -263,7 +263,7 @@ XML;
     {
         $path = $product->images->sortBy('sort_order')->first()?->path;
 
-        return $path ? asset('storage/' . $path) : asset('assets/images/logo/logo.png');
+        return $path ? asset('storage/'.$path) : asset('assets/images/logo/logo.png');
     }
 
     private function productTitle(Product $product, $variant, string $locale): string
@@ -275,7 +275,7 @@ XML;
             return trim((string) $name);
         }
 
-        return trim((string) $name) . ' ' . $volume . ' ml';
+        return trim((string) $name).' '.$volume.' ml';
     }
 
     private function cleanDescription(string $value): string

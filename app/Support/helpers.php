@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Setting;
+
 if (! function_exists('localizedField')) {
     function localizedField($model, string $field): mixed
     {
@@ -37,19 +39,19 @@ if (! function_exists('formatPriceByn')) {
     function formatPriceByn(float $usdPrice, ?float $usdRate = null): string
     {
         if ($usdRate === null) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
         }
 
         $bynPrice = round($usdPrice * $usdRate, 2);
 
-        return number_format($bynPrice, 2, ',', ' ') . ' BYN';
+        return number_format($bynPrice, 2, ',', ' ').' BYN';
     }
 }
 
 if (! function_exists('formatPriceUsd')) {
     function formatPriceUsd(float $usdPrice): string
     {
-        return '$' . number_format($usdPrice, 2, '.', '');
+        return '$'.number_format($usdPrice, 2, '.', '');
     }
 }
 
@@ -57,7 +59,7 @@ if (! function_exists('getPriceInByn')) {
     function getPriceInByn(float $usdPrice, ?float $usdRate = null): float
     {
         if ($usdRate === null) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
         }
 
         return round($usdPrice * $usdRate, 2);
@@ -75,7 +77,7 @@ if (! function_exists('phoneHref')) {
 
         $normalized = preg_replace('/(?!^\+)[^\d]/', '', $phone) ?? $phone;
 
-        return 'tel:' . $normalized;
+        return 'tel:'.$normalized;
     }
 }
 
@@ -92,7 +94,7 @@ if (! function_exists('settingPhoneIconUrl')) {
             return $path;
         }
 
-        return asset('storage/' . ltrim($path, '/'));
+        return asset('storage/'.ltrim($path, '/'));
     }
 }
 
@@ -106,9 +108,9 @@ if (! function_exists('normalizeBelarusPhone')) {
         }
 
         if (str_starts_with($digits, '80') && strlen($digits) === 11) {
-            $digits = '375' . substr($digits, 2);
+            $digits = '375'.substr($digits, 2);
         } elseif (strlen($digits) === 9) {
-            $digits = '375' . $digits;
+            $digits = '375'.$digits;
         }
 
         return $digits;

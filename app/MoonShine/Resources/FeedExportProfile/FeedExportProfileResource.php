@@ -8,7 +8,6 @@ use App\Models\FeedExportProfile;
 use App\MoonShine\Resources\FeedExportProfile\Pages\FeedExportProfileDetailPage;
 use App\MoonShine\Resources\FeedExportProfile\Pages\FeedExportProfileFormPage;
 use App\MoonShine\Resources\FeedExportProfile\Pages\FeedExportProfileIndexPage;
-use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Laravel\Resources\ModelResource;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 

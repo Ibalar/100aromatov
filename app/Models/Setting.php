@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Psr\Http\Message\UploadedFileInterface;
@@ -55,7 +56,7 @@ class Setting extends Model
             return static::$instance;
         }
 
-        static::$instance = \Illuminate\Support\Facades\Cache::remember('settings', 86400, function () {
+        static::$instance = Cache::remember('settings', 86400, function () {
             return static::firstOrCreate([]);
         });
 
@@ -65,12 +66,12 @@ class Setting extends Model
     protected static function booted(): void
     {
         static::saved(function () {
-            \Illuminate\Support\Facades\Cache::forget('settings');
+            Cache::forget('settings');
             static::$instance = null;
         });
 
         static::deleted(function () {
-            \Illuminate\Support\Facades\Cache::forget('settings');
+            Cache::forget('settings');
             static::$instance = null;
         });
     }
@@ -221,7 +222,7 @@ class Setting extends Model
             $clientFilename = (string) $icon->getClientFilename();
             $extension = pathinfo($clientFilename, PATHINFO_EXTENSION);
             $extension = $extension !== '' ? strtolower($extension) : $this->guessExtensionFromMimeType($icon->getClientMediaType());
-            $path = 'settings/phones/' . Str::uuid() . ($extension ? '.' . $extension : '');
+            $path = 'settings/phones/'.Str::uuid().($extension ? '.'.$extension : '');
 
             Storage::disk('public')->put($path, $icon->getStream()->getContents());
 

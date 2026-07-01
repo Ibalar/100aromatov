@@ -8,12 +8,13 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Support\Facades\Cache;
 use App\MoonShine\Resources\Brand\BrandResource;
 use App\MoonShine\Resources\Category\CategoryResource;
 use App\MoonShine\Resources\Product\ProductResource;
-use MoonShine\Laravel\Pages\Page;
+use Illuminate\Support\Facades\Cache;
 use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Laravel\Pages\Page;
+use MoonShine\MenuManager\Attributes\SkipMenu;
 use MoonShine\Support\Enums\Color;
 use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Heading;
@@ -22,7 +23,7 @@ use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Components\Metrics\Wrapped\ValueMetric;
 
-#[\MoonShine\MenuManager\Attributes\SkipMenu]
+#[SkipMenu]
 
 class Dashboard extends Page
 {
@@ -32,7 +33,7 @@ class Dashboard extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            '#' => $this->getTitle()
+            '#' => $this->getTitle(),
         ];
     }
 
@@ -50,39 +51,39 @@ class Dashboard extends Page
             Box::make('Ключевые метрики', [
                 Grid::make([
                     ValueMetric::make('Товары')
-                        ->value(Cache::remember('dash_product_count', 3600, fn() => Product::query()->count()))
+                        ->value(Cache::remember('dash_product_count', 3600, fn () => Product::query()->count()))
                         ->icon('shopping-bag')
                         ->iconColor(Color::PRIMARY)
                         ->columnSpan(4, 6),
                     ValueMetric::make('Активные товары')
-                        ->value(Cache::remember('dash_product_active_count', 3600, fn() => Product::query()->where('is_active', true)->count()))
+                        ->value(Cache::remember('dash_product_active_count', 3600, fn () => Product::query()->where('is_active', true)->count()))
                         ->icon('check-circle')
                         ->iconColor(Color::SUCCESS)
                         ->columnSpan(4, 6),
                     ValueMetric::make('Категории')
-                        ->value(Cache::remember('dash_category_count', 3600, fn() => Category::query()->count()))
+                        ->value(Cache::remember('dash_category_count', 3600, fn () => Category::query()->count()))
                         ->icon('squares-2x2')
                         ->iconColor(Color::INFO)
                         ->columnSpan(4, 6),
                     ValueMetric::make('Бренды')
-                        ->value(Cache::remember('dash_brand_count', 3600, fn() => Brand::query()->count()))
+                        ->value(Cache::remember('dash_brand_count', 3600, fn () => Brand::query()->count()))
                         ->icon('building-storefront')
                         ->iconColor(Color::PURPLE)
                         ->columnSpan(4, 6),
                     ValueMetric::make('Заказы за 30 дней')
-                        ->value(Cache::remember('dash_order_count_30', 3600, fn() => Order::query()->where('created_at', '>=', now()->subDays(30))->count()))
+                        ->value(Cache::remember('dash_order_count_30', 3600, fn () => Order::query()->where('created_at', '>=', now()->subDays(30))->count()))
                         ->icon('shopping-cart')
                         ->iconColor(Color::WARNING)
                         ->columnSpan(4, 6),
                     ValueMetric::make('Выручка за 30 дней')
-                        ->value(Cache::remember('dash_order_sum_30', 3600, fn() => number_format(
+                        ->value(Cache::remember('dash_order_sum_30', 3600, fn () => number_format(
                             (float) Order::query()
                                 ->where('created_at', '>=', now()->subDays(30))
                                 ->sum('total_byn'),
                             2,
                             ',',
                             ' '
-                        ) . ' BYN'))
+                        ).' BYN'))
                         ->icon('banknotes')
                         ->iconColor(Color::GREEN)
                         ->columnSpan(4, 6),

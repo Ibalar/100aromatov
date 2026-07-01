@@ -12,11 +12,11 @@ class AdminFeedExportController extends Controller
     {
         $xml = $service->generate($profile);
         $ext = $profile->platform === 'google' ? 'xml' : 'yml';
-        $filename = 'feed-' . $profile->platform . '-' . $profile->id . '.' . $ext;
+        $filename = 'feed-'.$profile->platform.'-'.$profile->id.'.'.$ext;
 
         return response($xml, 200, [
             'Content-Type' => 'application/xml; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 }

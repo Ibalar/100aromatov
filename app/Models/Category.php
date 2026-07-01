@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 
 class Category extends Model
@@ -118,7 +118,6 @@ class Category extends Model
         return $this->gatherDescendantIds($this->id);
     }
 
-
     private function gatherDescendantIds(int $categoryId): array
     {
         $ids = [$categoryId];
@@ -143,9 +142,9 @@ class Category extends Model
                     ->where('product_variants.is_active', true)
                     ->whereRaw('CAST(product_variants.volume_ml AS DECIMAL) <= 10');
             })
-            ->whereHas('category', function ($q) {
-                $q->where('is_active', true);
-            });
+                ->whereHas('category', function ($q) {
+                    $q->where('is_active', true);
+                });
         } else {
             $categoryIds = $this->getDescendantIds();
             $query->whereIn('products.category_id', $categoryIds);

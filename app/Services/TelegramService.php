@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 class TelegramService
 {
     protected ?string $token;
+
     protected ?string $chatId;
 
     public function __construct()
@@ -23,6 +24,7 @@ class TelegramService
     {
         if (! filled($this->token) || ! filled($this->chatId)) {
             Log::warning('Telegram settings are not configured');
+
             return false;
         }
 
@@ -38,6 +40,7 @@ class TelegramService
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
+
                 return false;
             }
 
@@ -46,6 +49,7 @@ class TelegramService
             Log::error('Telegram send exception', [
                 'message' => $this->sanitizeTelegramErrorMessage($e->getMessage()),
             ]);
+
             return false;
         }
     }

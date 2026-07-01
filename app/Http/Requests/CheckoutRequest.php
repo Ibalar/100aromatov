@@ -92,6 +92,6 @@ class CheckoutRequest extends FormRequest
             return '***';
         }
 
-        return substr($normalized, 0, 5) . '***' . substr($normalized, -2);
+        return substr($normalized, 0, 5).'***'.substr($normalized, -2);
     }
 }

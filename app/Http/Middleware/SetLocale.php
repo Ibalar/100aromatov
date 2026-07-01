@@ -9,9 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
 {
-    public function __construct(private readonly LanguageService $languageService)
-    {
-    }
+    public function __construct(private readonly LanguageService $languageService) {}
 
     public function handle(Request $request, Closure $next): Response
     {

@@ -8,7 +8,6 @@ use App\Models\Review;
 use App\MoonShine\Resources\Review\Pages\ReviewDetailPage;
 use App\MoonShine\Resources\Review\Pages\ReviewFormPage;
 use App\MoonShine\Resources\Review\Pages\ReviewIndexPage;
-use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Laravel\Resources\ModelResource;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 

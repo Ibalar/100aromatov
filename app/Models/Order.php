@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
-use App\Models\Customer;
 
 class Order extends Model
 {
@@ -71,7 +70,7 @@ class Order extends Model
                 $item->sku_snapshot ? "SKU: {$item->sku_snapshot}" : null,
                 $volume ? "Объем: {$volume}" : null,
             ]);
-            $variantSummary = $variantMeta !== [] ? ' | ' . implode(' | ', $variantMeta) : '';
+            $variantSummary = $variantMeta !== [] ? ' | '.implode(' | ', $variantMeta) : '';
 
             return "{$item->name_snapshot}{$variantSummary} | {$item->qty} x {$price} BYN = {$lineTotal} BYN";
         })->implode("\n");

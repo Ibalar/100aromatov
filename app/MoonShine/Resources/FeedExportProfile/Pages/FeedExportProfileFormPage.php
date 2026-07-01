@@ -27,7 +27,7 @@ class FeedExportProfileFormPage extends FormPage
             ->orderBy('name_ru')
             ->get()
             ->mapWithKeys(static fn (Category $category): array => [
-                $category->slug => localizedField($category, 'name') . ' [' . $category->slug . ']',
+                $category->slug => localizedField($category, 'name').' ['.$category->slug.']',
             ])
             ->toArray();
 
@@ -35,7 +35,7 @@ class FeedExportProfileFormPage extends FormPage
             ->orderBy('name')
             ->get()
             ->mapWithKeys(static fn (Brand $brand): array => [
-                $brand->slug => $brand->name . ' [' . $brand->slug . ']',
+                $brand->slug => $brand->name.' ['.$brand->slug.']',
             ])
             ->toArray();
 

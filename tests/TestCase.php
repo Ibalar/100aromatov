@@ -25,9 +25,9 @@ abstract class TestCase extends BaseTestCase
 
         // Safety net: never allow tests to run against non-sqlite DB.
         $connection = (string) config('database.default');
-        $database = (string) config('database.connections.' . $connection . '.database');
+        $database = (string) config('database.connections.'.$connection.'.database');
 
-        if ($connection !== 'sqlite' || !str_contains(str_replace('\\', '/', $database), 'database/testing.sqlite')) {
+        if ($connection !== 'sqlite' || ! str_contains(str_replace('\\', '/', $database), 'database/testing.sqlite')) {
             throw new RuntimeException(
                 sprintf(
                     'Unsafe test database configuration detected: connection=%s, database=%s',

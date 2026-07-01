@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\ProductVariant;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\ProductVariant;
-use App\MoonShine\Resources\ProductVariant\Pages\ProductVariantIndexPage;
-use App\MoonShine\Resources\ProductVariant\Pages\ProductVariantFormPage;
 use App\MoonShine\Resources\ProductVariant\Pages\ProductVariantDetailPage;
-
-use MoonShine\Laravel\Resources\ModelResource;
+use App\MoonShine\Resources\ProductVariant\Pages\ProductVariantFormPage;
+use App\MoonShine\Resources\ProductVariant\Pages\ProductVariantIndexPage;
 use MoonShine\Contracts\Core\PageContract;
+use MoonShine\Laravel\Resources\ModelResource;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**

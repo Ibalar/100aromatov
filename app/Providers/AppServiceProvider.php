@@ -2,14 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use Intervention\Image\Interfaces\ImageManagerInterface;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Page;
@@ -19,7 +11,15 @@ use App\Observers\ProductVariantObserver;
 use App\Services\CartService;
 use App\Services\LfmImageService;
 use App\Services\WishlistService;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+use Intervention\Image\Interfaces\ImageManagerInterface;
 use UniSharp\LaravelFilemanager\Services\ImageService as BaseLfmImageService;
 
 class AppServiceProvider extends ServiceProvider
@@ -107,6 +107,7 @@ class AppServiceProvider extends ServiceProvider
                     if ($index === $brandColumns->count() - 1) {
                         return $column->take(9);
                     }
+
                     return $column;
                 });
 

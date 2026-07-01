@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Setting;
 
 use App\Models\Setting;
-use App\MoonShine\Resources\Setting\Pages\SettingIndexPage;
-use App\MoonShine\Resources\Setting\Pages\SettingFormPage;
 use App\MoonShine\Resources\Setting\Pages\SettingDetailPage;
-
-use MoonShine\Laravel\Resources\ModelResource;
+use App\MoonShine\Resources\Setting\Pages\SettingFormPage;
+use App\MoonShine\Resources\Setting\Pages\SettingIndexPage;
 use MoonShine\Contracts\Core\PageContract;
+use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\Ability;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 

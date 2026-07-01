@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class WishlistService
 {
     private const SESSION_KEY = 'wishlist.product_ids';
+
     private const SESSION_SYNCED_KEY = 'wishlist.synced_with_customer';
 
     private ?array $cachedIds = null;

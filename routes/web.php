@@ -1,21 +1,21 @@
 <?php
 
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\CustomerAuthController;
-use App\Http\Controllers\CustomerAccountController;
+use App\Http\Controllers\AdminFeedExportController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CustomerAccountController;
+use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductAvailabilityInquiryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\AdminFeedExportController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use MoonShine\Laravel\Http\Middleware\Authenticate as MoonShineAuthenticate;
 use UniSharp\LaravelFilemanager\Lfm;
@@ -112,7 +112,7 @@ Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show')
 
 $moonshinePrefix = trim((string) config('moonshine.prefix', 'admin'), '/');
 $lfmPrefix = $moonshinePrefix !== ''
-    ? $moonshinePrefix . '/laravel-filemanager'
+    ? $moonshinePrefix.'/laravel-filemanager'
     : 'laravel-filemanager';
 
 Route::middleware(['moonshine', MoonShineAuthenticate::class])
@@ -122,26 +122,26 @@ Route::middleware(['moonshine', MoonShineAuthenticate::class])
     });
 
 Route::prefix($moonshinePrefix)->group(function () use ($moonshinePrefix): void {
-    $base = '/' . trim($moonshinePrefix, '/');
+    $base = '/'.trim($moonshinePrefix, '/');
 
     Route::redirect(
         '/resource/moon-shine-user-resource/moon-shine-user-index-page',
-        $base . '/resource/user-resource/index-page',
+        $base.'/resource/user-resource/index-page',
         301
     );
     Route::redirect(
         '/resource/moon-shine-user-role-resource/moon-shine-user-role-index-page',
-        $base . '/resource/role-resource/index-page',
+        $base.'/resource/role-resource/index-page',
         301
     );
     Route::redirect(
         '/resource/moon-shine-user-resource/moon-shine-user-form-page/{resourceItem}',
-        $base . '/resource/user-resource/form-page/{resourceItem}',
+        $base.'/resource/user-resource/form-page/{resourceItem}',
         301
     );
     Route::redirect(
         '/resource/moon-shine-user-role-resource/moon-shine-user-role-form-page/{resourceItem}',
-        $base . '/resource/role-resource/form-page/{resourceItem}',
+        $base.'/resource/role-resource/form-page/{resourceItem}',
         301
     );
 

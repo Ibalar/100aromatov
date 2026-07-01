@@ -30,6 +30,7 @@ class CustomerAccountController extends Controller
     public function profile()
     {
         $customer = Auth::guard('customer')->user();
+
         return view('customer.account.profile', compact('customer'));
     }
 
@@ -41,7 +42,7 @@ class CustomerAccountController extends Controller
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:50',
-            'email' => 'required|email|unique:customers,email,' . $customer->id,
+            'email' => 'required|email|unique:customers,email,'.$customer->id,
         ]);
 
         if (filled($data['phone'] ?? null) && ! isValidBelarusMobilePhone($data['phone'])) {
@@ -62,6 +63,7 @@ class CustomerAccountController extends Controller
     public function security()
     {
         $customer = Auth::guard('customer')->user();
+
         return view('customer.account.security', compact('customer'));
     }
 
@@ -86,6 +88,7 @@ class CustomerAccountController extends Controller
     public function addresses()
     {
         $customer = Auth::guard('customer')->user();
+
         return view('customer.account.addresses', compact('customer'));
     }
 }

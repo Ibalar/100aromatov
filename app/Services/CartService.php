@@ -11,6 +11,7 @@ class CartService
     private const SESSION_KEY = 'cart.items';
 
     private ?Collection $cachedItems = null;
+
     private ?array $cachedSummary = null;
 
     public function getRaw(): array

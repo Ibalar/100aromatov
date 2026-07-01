@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Brand;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Brand;
-use App\MoonShine\Resources\Brand\Pages\BrandIndexPage;
-use App\MoonShine\Resources\Brand\Pages\BrandFormPage;
 use App\MoonShine\Resources\Brand\Pages\BrandDetailPage;
-
-use MoonShine\ImportExport\ImportHandler;
-use MoonShine\Laravel\Fields\Slug;
-use MoonShine\Laravel\Resources\ModelResource;
+use App\MoonShine\Resources\Brand\Pages\BrandFormPage;
+use App\MoonShine\Resources\Brand\Pages\BrandIndexPage;
 use MoonShine\Contracts\Core\PageContract;
-use MoonShine\Support\Enums\Action;
-use MoonShine\Support\Enums\PageType;
-use MoonShine\Support\ListOf;
 use MoonShine\ImportExport\Contracts\HasImportExportContract;
 use MoonShine\ImportExport\Traits\ImportExportConcern;
-use MoonShine\UI\Components\ActionButton;
+use MoonShine\Laravel\Fields\Slug;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\Action;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\Enums\SortDirection;
+use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
-use MoonShine\Support\Enums\SortDirection;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**
@@ -37,7 +33,7 @@ class BrandResource extends ModelResource implements HasImportExportContract
     protected int $itemsPerPage = 20;
 
     protected bool $withConfirm = true;
-    
+
     protected bool $saveQueryState = true;
 
     protected string $title = 'Бренды';
@@ -47,8 +43,6 @@ class BrandResource extends ModelResource implements HasImportExportContract
     protected string $sortColumn = 'name';
 
     protected SortDirection $sortDirection = SortDirection::ASC;
-
-
 
     protected ?PageType $redirectAfterSave = PageType::INDEX;
 
@@ -78,8 +72,6 @@ class BrandResource extends ModelResource implements HasImportExportContract
     protected function activeActions(): ListOf
     {
         return parent::activeActions()
-            ->except(Action::VIEW)
-            ;
+            ->except(Action::VIEW);
     }
-
 }

@@ -36,11 +36,11 @@ use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
  */
 class ProductResource extends ModelResource implements HasImportExportContract
 {
-    use WithRolePermissions;
     use ImportExportConcern;
+    use WithRolePermissions;
 
     protected string $model = Product::class;
-    
+
     protected int $itemsPerPage = 20;
 
     protected bool $withConfirm = true;
@@ -474,11 +474,11 @@ class ProductResource extends ModelResource implements HasImportExportContract
     protected function getImportImageKey(array $data): ?string
     {
         if (! empty($data['id'])) {
-            return 'id:' . $data['id'];
+            return 'id:'.$data['id'];
         }
 
         if (! empty($data['slug'])) {
-            return 'slug:' . $data['slug'];
+            return 'slug:'.$data['slug'];
         }
 
         return null;
@@ -510,7 +510,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
     {
         $path = parse_url($oldUrl, PHP_URL_PATH) ?: $oldUrl;
 
-        return '/' . ltrim($path, '/');
+        return '/'.ltrim($path, '/');
     }
 
     protected function importImage(Product $product, string $source): ?string
@@ -560,8 +560,8 @@ class ProductResource extends ModelResource implements HasImportExportContract
         $normalizedSource = ltrim(str_replace('\\', '/', $source), '/');
 
         $candidates = [
-            storage_path('app/imports/' . $normalizedSource),
-            storage_path('app/public/' . $normalizedSource),
+            storage_path('app/imports/'.$normalizedSource),
+            storage_path('app/public/'.$normalizedSource),
             public_path($normalizedSource),
         ];
 

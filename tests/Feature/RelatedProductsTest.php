@@ -67,14 +67,14 @@ class RelatedProductsTest extends TestCase
     private function createProduct(array $overrides = []): Product
     {
         $brand = Brand::create([
-            'slug' => 'brand-' . Str::lower(Str::random(6)),
-            'name' => 'Brand ' . Str::random(4),
+            'slug' => 'brand-'.Str::lower(Str::random(6)),
+            'name' => 'Brand '.Str::random(4),
             'is_active' => true,
             'logo' => 'brands/logo.png',
         ]);
 
         $category = Category::create([
-            'slug' => 'category-' . Str::lower(Str::random(6)),
+            'slug' => 'category-'.Str::lower(Str::random(6)),
             'name_ru' => 'Категория',
             'name_by' => 'Катэгорыя',
             'is_active' => true,
@@ -83,7 +83,7 @@ class RelatedProductsTest extends TestCase
         $product = Product::create(array_merge([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
-            'slug' => 'product-' . Str::lower(Str::random(6)),
+            'slug' => 'product-'.Str::lower(Str::random(6)),
             'name_ru' => 'Test Product',
             'name_by' => 'Test Product',
             'description_ru' => 'Описание',
@@ -101,7 +101,7 @@ class RelatedProductsTest extends TestCase
 
         ProductVariant::create([
             'product_id' => $product->id,
-            'sku' => 'SKU-' . Str::upper(Str::random(8)),
+            'sku' => 'SKU-'.Str::upper(Str::random(8)),
             'volume_ml' => '50',
             'price_usd' => 100,
             'is_active' => true,

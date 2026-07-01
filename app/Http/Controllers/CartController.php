@@ -28,7 +28,7 @@ class CartController extends Controller
             'items' => $summary['items']->values()->all(),
             'count' => $summary['total_qty'],
             'total_byn' => $summary['total_byn'],
-            'total_byn_formatted' => number_format($summary['total_byn'], 2, ',', ' ') . ' BYN',
+            'total_byn_formatted' => number_format($summary['total_byn'], 2, ',', ' ').' BYN',
             'items_html' => view('partials.cart.items', ['items' => $summary['items']])->render(),
         ]);
     }

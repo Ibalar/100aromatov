@@ -6,6 +6,7 @@ use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class BrandController extends Controller
             ->where('is_active', true);
 
         if ($search) {
-            $query->where('name', 'like', '%' . $search . '%');
+            $query->where('name', 'like', '%'.$search.'%');
         }
 
         $brands = $query
@@ -61,7 +62,7 @@ class BrandController extends Controller
         $maxPrice = $request->get('max_price');
 
         if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
             if ($request->has('min_price_byn')) {
                 $minPrice = $request->get('min_price_byn') / $usdRate;
             }
@@ -198,8 +199,8 @@ class BrandController extends Controller
     {
         $query->orderByRaw('CASE WHEN COALESCE(products.max_price, 0) <= 0 THEN 1 ELSE 0 END');
 
-        $minPositivePriceSql = "(SELECT MIN(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
-        $maxPositivePriceSql = "(SELECT MAX(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
+        $minPositivePriceSql = '(SELECT MIN(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)';
+        $maxPositivePriceSql = '(SELECT MAX(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)';
 
         switch ($sort) {
             case 'a-z':

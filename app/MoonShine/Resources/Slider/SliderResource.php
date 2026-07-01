@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources\Slider;
 
 use App\Models\Slider;
-use App\MoonShine\Resources\Slider\Pages\SliderIndexPage;
-use App\MoonShine\Resources\Slider\Pages\SliderFormPage;
 use App\MoonShine\Resources\Slider\Pages\SliderDetailPage;
-use MoonShine\Laravel\Resources\ModelResource;
+use App\MoonShine\Resources\Slider\Pages\SliderFormPage;
+use App\MoonShine\Resources\Slider\Pages\SliderIndexPage;
 use MoonShine\Contracts\Core\PageContract;
+use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Enums\SortDirection;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 

@@ -65,14 +65,14 @@ class OrderConfirmationMailTest extends TestCase
     private function createOrderWithItem(): Order
     {
         $brand = Brand::create([
-            'slug' => 'brand-' . Str::lower(Str::random(6)),
+            'slug' => 'brand-'.Str::lower(Str::random(6)),
             'name' => 'Test Brand',
             'is_active' => true,
             'logo' => 'brands/logo.png',
         ]);
 
         $category = Category::create([
-            'slug' => 'category-' . Str::lower(Str::random(6)),
+            'slug' => 'category-'.Str::lower(Str::random(6)),
             'name_ru' => 'Тестовая категория',
             'name_by' => 'Тэставая катэгорыя',
             'is_active' => true,
@@ -81,7 +81,7 @@ class OrderConfirmationMailTest extends TestCase
         $product = Product::create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
-            'slug' => 'product-' . Str::lower(Str::random(6)),
+            'slug' => 'product-'.Str::lower(Str::random(6)),
             'name_ru' => 'Тестовый товар',
             'name_by' => 'Тэставы тавар',
             'description_ru' => 'Описание',
@@ -99,7 +99,7 @@ class OrderConfirmationMailTest extends TestCase
 
         $variant = ProductVariant::create([
             'product_id' => $product->id,
-            'sku' => 'SKU-' . Str::upper(Str::random(8)),
+            'sku' => 'SKU-'.Str::upper(Str::random(8)),
             'volume_ml' => '50',
             'price_usd' => 100,
             'is_active' => true,

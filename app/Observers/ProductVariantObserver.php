@@ -58,7 +58,7 @@ class ProductVariantObserver
                         $category->descendants()->pluck('id')
                     );
                 }
-                Cache::forget('price_range_category_' . $ids->sort()->implode('_'));
+                Cache::forget('price_range_category_'.$ids->sort()->implode('_'));
             }
         }
     }

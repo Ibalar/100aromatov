@@ -13,7 +13,6 @@ use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Support\ListOf;
 use MoonShine\TinyMce\Fields\TinyMce;
-use MoonShine\UI\Components\FormBuilder;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;
@@ -39,9 +38,9 @@ class PageFormPage extends FormPage
                     ID::make(),
                     Text::make('Название RU', 'name_ru')
                         ->when(
-                            fn() => $this->getResource()->isCreateFormPage(),
-                            fn(Text $field) => $field->reactive(),
-                            fn(Text $field) => $field
+                            fn () => $this->getResource()->isCreateFormPage(),
+                            fn (Text $field) => $field->reactive(),
+                            fn (Text $field) => $field
                         )
                         ->required(),
                     Text::make('Назва BY', 'name_by')->required(),
@@ -49,9 +48,9 @@ class PageFormPage extends FormPage
                         ->unique()
                         ->locked()
                         ->when(
-                            fn() => $this->getResource()->isCreateFormPage(),
-                            fn(Slug $field) => $field->from('name_ru')->live(),
-                            fn(Slug $field) => $field->readonly()
+                            fn () => $this->getResource()->isCreateFormPage(),
+                            fn (Slug $field) => $field->from('name_ru')->live(),
+                            fn (Slug $field) => $field->readonly()
                         ),
                     Number::make('Порядок сортировки', 'sort_order')
                         ->default(0)
@@ -95,6 +94,7 @@ class PageFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -106,6 +106,7 @@ class PageFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -117,6 +118,7 @@ class PageFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function bottomLayer(): array

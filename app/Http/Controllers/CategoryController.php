@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attribute;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\FilterPage;
+use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Models\FilterPage;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Attribute;
 
 class CategoryController extends Controller
 {
@@ -28,7 +29,7 @@ class CategoryController extends Controller
         $maxPrice = $request->get('max_price');
 
         if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
             if ($request->has('min_price_byn')) {
                 $minPrice = $request->get('min_price_byn') / $usdRate;
             }
@@ -194,6 +195,7 @@ class CategoryController extends Controller
             $cats->each(function ($category) {
                 $category->setAttribute('products_count', $category->products_count);
             });
+
             return $cats;
         });
 
@@ -205,7 +207,7 @@ class CategoryController extends Controller
         $maxPrice = $request->get('max_price');
 
         if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
             if ($request->has('min_price_byn')) {
                 $minPrice = $request->get('min_price_byn') / $usdRate;
             }
@@ -242,11 +244,11 @@ class CategoryController extends Controller
                     );
             });
         }
-        if (!empty($brandFilter)) {
+        if (! empty($brandFilter)) {
             $query->whereIn('products.brand_id', $brandFilter);
         }
 
-        if (!empty($attributeFilters)) {
+        if (! empty($attributeFilters)) {
             foreach ($attributeFilters as $attributeId => $values) {
                 if (empty($values) || in_array('all', $values) || in_array('', $values)) {
                     continue;
@@ -282,7 +284,7 @@ class CategoryController extends Controller
                     $q->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
                         ->orderBy('sort_order')
                         ->limit(2);
-                }
+                },
             ])
             ->withCount([
                 'reviews' => fn ($query) => $query->where('is_approved', true),
@@ -336,8 +338,8 @@ class CategoryController extends Controller
     public function show($slug, Request $request)
     {
         $category = Category::with(['parent', 'children' => function ($query) {
-                $query->visible();
-            }])
+            $query->visible();
+        }])
             ->where('slug', $slug)
             ->active()
             ->firstOrFail();
@@ -351,7 +353,7 @@ class CategoryController extends Controller
 
         // Конвертация BYN в USD, если передан BYN
         if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
             if ($request->has('min_price_byn')) {
                 $minPrice = $request->get('min_price_byn') / $usdRate;
             }
@@ -365,11 +367,11 @@ class CategoryController extends Controller
         $sort = $request->get('sort', 'a-z');
 
         sort($categoryIds);
-        $cacheKey = 'price_range_category_' . ($category->is_miniature ? 'mini_' : '') . implode('_', $categoryIds);
+        $cacheKey = 'price_range_category_'.($category->is_miniature ? 'mini_' : '').implode('_', $categoryIds);
         $priceRangeForInput = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                     $q->whereIn('products.category_id', $categoryIds);
                 })
                 ->when($category->is_miniature, function ($q) {
@@ -409,7 +411,7 @@ class CategoryController extends Controller
         // Основной запрос продуктов
         $query = Product::query()
             ->where('products.is_active', true)
-            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+            ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                 $q->whereIn('products.category_id', $categoryIds);
             })
             ->when($category->is_miniature, function ($q) {
@@ -471,14 +473,16 @@ class CategoryController extends Controller
                     );
             });
         }
-        if (!empty($brandFilter)) {
+        if (! empty($brandFilter)) {
             $query->whereIn('products.brand_id', $brandFilter);
         }
 
         // Фильтр по атрибутам
-        if (!empty($attributeFilters)) {
+        if (! empty($attributeFilters)) {
             foreach ($attributeFilters as $attributeId => $values) {
-                if (empty($values) || in_array('all', $values)) continue;
+                if (empty($values) || in_array('all', $values)) {
+                    continue;
+                }
 
                 $query->whereExists(function ($sub) use ($attributeId, $values) {
                     $sub->selectRaw(1)
@@ -498,7 +502,7 @@ class CategoryController extends Controller
             ->with([
                 'brand:id,name',
                 'variants' => function ($q) use ($category) {
-                    $q->select('id','product_id','volume_ml','price_usd','sale_price_usd','is_active')
+                    $q->select('id', 'product_id', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active')
                         ->where('is_active', true)
                         ->when($category->is_miniature, function ($q) {
                             $q->whereRaw('CAST(volume_ml AS DECIMAL) <= 10');
@@ -506,10 +510,10 @@ class CategoryController extends Controller
                         ->orderBy('price_usd');
                 },
                 'images' => function ($q) {
-                    $q->select('id','product_id','path','alt_ru','alt_by','sort_order')
+                    $q->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
                         ->orderBy('sort_order')
                         ->limit(2);
-                }
+                },
             ])
             ->withCount([
                 'reviews' => fn ($query) => $query->where('is_approved', true),
@@ -520,18 +524,20 @@ class CategoryController extends Controller
         // Атрибуты для фильтров
         $filterableAttributes = Cache::remember('filterable_attributes_alpha_v1', 3600, function () {
             return Attribute::where('is_filterable', true)
-                ->with(['values' => function ($q) { $q->orderBy('value_ru'); }])
+                ->with(['values' => function ($q) {
+                    $q->orderBy('value_ru');
+                }])
                 ->orderBy('name_ru')
                 ->get();
         });
 
         // Диапазон цен по категории (для слайдера фильтра)
         sort($categoryIds);
-        $cacheKey = "price_range_category_" . ($category->is_miniature ? 'mini_' : '') . implode('_', $categoryIds);
+        $cacheKey = 'price_range_category_'.($category->is_miniature ? 'mini_' : '').implode('_', $categoryIds);
         $priceRange = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                     $q->whereIn('products.category_id', $categoryIds);
                 })
                 ->when($category->is_miniature, function ($q) {
@@ -563,7 +569,7 @@ class CategoryController extends Controller
             })
             ->where('brands.is_active', true)
             ->where('products.is_active', true)
-            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+            ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                 $q->whereIn('products.category_id', $categoryIds);
             })
             ->when($category->is_miniature, function ($q) {
@@ -598,8 +604,8 @@ class CategoryController extends Controller
     public function showFilter($slug, $filterSlug, Request $request)
     {
         $category = Category::with(['parent', 'children' => function ($query) {
-                $query->visible();
-            }])
+            $query->visible();
+        }])
             ->where('slug', $slug)
             ->active()
             ->firstOrFail();
@@ -636,7 +642,7 @@ class CategoryController extends Controller
         $maxPrice = $request->get('max_price');
 
         if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
             if ($request->has('min_price_byn')) {
                 $minPrice = $request->get('min_price_byn') / $usdRate;
             }
@@ -666,11 +672,11 @@ class CategoryController extends Controller
         $sort = $request->get('sort', 'a-z');
 
         sort($categoryIds);
-        $cacheKey = 'price_range_category_' . ($category->is_miniature ? 'mini_' : '') . implode('_', $categoryIds);
+        $cacheKey = 'price_range_category_'.($category->is_miniature ? 'mini_' : '').implode('_', $categoryIds);
         $priceRangeForInput = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                     $q->whereIn('products.category_id', $categoryIds);
                 })
                 ->when($category->is_miniature, function ($q) {
@@ -709,7 +715,7 @@ class CategoryController extends Controller
 
         $query = Product::query()
             ->where('products.is_active', true)
-            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+            ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                 $q->whereIn('products.category_id', $categoryIds);
             })
             ->when($category->is_miniature, function ($q) {
@@ -798,7 +804,7 @@ class CategoryController extends Controller
             ->with([
                 'brand:id,name',
                 'variants' => function ($q) use ($category) {
-                    $q->select('id','product_id','volume_ml','price_usd','sale_price_usd','is_active')
+                    $q->select('id', 'product_id', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active')
                         ->where('is_active', true)
                         ->when($category->is_miniature, function ($q) {
                             $q->whereRaw('CAST(volume_ml AS DECIMAL) <= 10');
@@ -806,10 +812,10 @@ class CategoryController extends Controller
                         ->orderBy('price_usd');
                 },
                 'images' => function ($q) {
-                    $q->select('id','product_id','path','alt_ru','alt_by','sort_order')
+                    $q->select('id', 'product_id', 'path', 'alt_ru', 'alt_by', 'sort_order')
                         ->orderBy('sort_order')
                         ->limit(2);
-                }
+                },
             ])
             ->withCount([
                 'reviews' => fn ($query) => $query->where('is_approved', true),
@@ -819,17 +825,19 @@ class CategoryController extends Controller
 
         $filterableAttributes = Cache::remember('filterable_attributes_alpha_v1', 3600, function () {
             return Attribute::where('is_filterable', true)
-                ->with(['values' => function ($q) { $q->orderBy('value_ru'); }])
+                ->with(['values' => function ($q) {
+                    $q->orderBy('value_ru');
+                }])
                 ->orderBy('name_ru')
                 ->get();
         });
 
         sort($categoryIds);
-        $cacheKey = "price_range_category_" . ($category->is_miniature ? 'mini_' : '') . implode('_', $categoryIds);
+        $cacheKey = 'price_range_category_'.($category->is_miniature ? 'mini_' : '').implode('_', $categoryIds);
         $priceRange = Cache::remember($cacheKey, 3600, function () use ($categoryIds, $category) {
             return DB::table('product_variants')
                 ->join('products', 'products.id', '=', 'product_variants.product_id')
-                ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+                ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                     $q->whereIn('products.category_id', $categoryIds);
                 })
                 ->when($category->is_miniature, function ($q) {
@@ -861,7 +869,7 @@ class CategoryController extends Controller
             })
             ->where('brands.is_active', true)
             ->where('products.is_active', true)
-            ->when(!$category->is_miniature, function ($q) use ($categoryIds) {
+            ->when(! $category->is_miniature, function ($q) use ($categoryIds) {
                 $q->whereIn('products.category_id', $categoryIds);
             })
             ->when($category->is_miniature, function ($q) {
@@ -946,8 +954,8 @@ class CategoryController extends Controller
     {
         $query->orderByRaw('CASE WHEN COALESCE(products.max_price, 0) <= 0 THEN 1 ELSE 0 END');
 
-        $minPositivePriceSql = "(SELECT MIN(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
-        $maxPositivePriceSql = "(SELECT MAX(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)";
+        $minPositivePriceSql = '(SELECT MIN(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)';
+        $maxPositivePriceSql = '(SELECT MAX(pv.price_usd) FROM product_variants pv WHERE pv.product_id = products.id AND pv.is_active = 1 AND pv.price_usd > 0)';
 
         switch ($sort) {
             case 'a-z':

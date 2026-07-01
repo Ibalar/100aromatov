@@ -39,18 +39,18 @@ class FilterPageFormPage extends FormPage
      */
     protected function fields(): iterable
     {
-        $brandOptions = Cache::remember('brand_options', 3600, fn() => Brand::query()
+        $brandOptions = Cache::remember('brand_options', 3600, fn () => Brand::query()
             ->orderBy('name')
             ->pluck('name', 'id')
             ->toArray());
 
-        $attributeOptions = Cache::remember('attribute_options', 3600, fn() => Attribute::query()
+        $attributeOptions = Cache::remember('attribute_options', 3600, fn () => Attribute::query()
             ->orderBy('sort_order')
             ->orderBy('name_ru')
             ->pluck('name_ru', 'id')
             ->toArray());
 
-        $attributeValueOptions = Cache::remember('attribute_value_options', 3600, fn() => AttributeValue::query()
+        $attributeValueOptions = Cache::remember('attribute_value_options', 3600, fn () => AttributeValue::query()
             ->with('attribute:id,name_ru')
             ->orderBy('sort_order')
             ->get()
@@ -134,7 +134,7 @@ class FilterPageFormPage extends FormPage
     {
         return [
             'category_id' => ['required', 'exists:categories,id'],
-            'slug' => ['required', 'max:255', 'unique:filter_pages,slug,' . ($item->getKey() ?? 'null')],
+            'slug' => ['required', 'max:255', 'unique:filter_pages,slug,'.($item->getKey() ?? 'null')],
             'filter_data' => ['required', 'array'],
             'filter_data.brand' => ['nullable', 'array'],
             'filter_data.brand.*' => ['integer', 'exists:brands,id'],
@@ -158,6 +158,7 @@ class FilterPageFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -169,6 +170,7 @@ class FilterPageFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -180,6 +182,7 @@ class FilterPageFormPage extends FormPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function bottomLayer(): array

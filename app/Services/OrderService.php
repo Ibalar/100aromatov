@@ -2,16 +2,14 @@
 
 namespace App\Services;
 
-use App\Models\{
-    Order,
-    OrderItem,
-    ProductVariant,
-    PromoCode,
-    PromoCodeUsage,
-    Setting
-};
 use App\Mail\NewOrderNotification;
 use App\Mail\OrderConfirmation;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\ProductVariant;
+use App\Models\PromoCode;
+use App\Models\PromoCodeUsage;
+use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -23,7 +21,7 @@ class OrderService
     public function create(array $data): Order
     {
         Log::debug('OrderService: creating order', [
-            'phone' => isset($data['phone']) ? substr((string) normalizeBelarusPhone($data['phone']), 0, 5) . '***' : null,
+            'phone' => isset($data['phone']) ? substr((string) normalizeBelarusPhone($data['phone']), 0, 5).'***' : null,
             'items_count' => count($data['items'] ?? []),
             'has_promo' => filled($data['promo_code'] ?? null),
         ]);
@@ -289,19 +287,19 @@ class OrderService
 
         $totalByn = number_format((float) $order->total_byn, 2, ',', ' ');
         $message = "<b>Новый заказ #{$order->id}</b>\n";
-        $message .= "Телефон: " . $this->escape($order->phone) . "\n";
+        $message .= 'Телефон: '.$this->escape($order->phone)."\n";
 
         $callPreference = $order->call_preference === 'no_call'
             ? 'Перезванивать не нужно'
             : 'Перезвоните';
-        $message .= "Перезвон: " . $this->escape($callPreference) . "\n";
+        $message .= 'Перезвон: '.$this->escape($callPreference)."\n";
 
         if ($order->email) {
-            $message .= "Email: " . $this->escape($order->email) . "\n";
+            $message .= 'Email: '.$this->escape($order->email)."\n";
         }
 
         if ($order->promo_code) {
-            $message .= "Промокод: " . $this->escape($order->promo_code) . "\n";
+            $message .= 'Промокод: '.$this->escape($order->promo_code)."\n";
         }
 
         $message .= "Сумма: {$totalByn} BYN\n\n";
@@ -311,7 +309,7 @@ class OrderService
             $name = $this->escape($item->name_snapshot);
             $sku = $this->escape($item->sku_snapshot);
             $volume = filled($item->volume_ml_snapshot)
-                ? $this->escape((string) $item->volume_ml_snapshot) . ' ml'
+                ? $this->escape((string) $item->volume_ml_snapshot).' ml'
                 : null;
             $price = number_format((float) $item->price_byn_snapshot, 2, ',', ' ');
             $line = number_format((float) $item->price_byn_snapshot * $item->qty, 2, ',', ' ');
@@ -327,14 +325,14 @@ class OrderService
 
             $message .= "• {$name}";
             if ($variantMeta !== []) {
-                $message .= ' (' . implode(', ', $variantMeta) . ')';
+                $message .= ' ('.implode(', ', $variantMeta).')';
             }
             $message .= "\n";
             $message .= "  {$item->qty} x {$price} BYN = {$line} BYN\n";
 
             $itemMeta = $itemMetaBySku[(string) $item->sku_snapshot] ?? null;
             if (is_array($itemMeta) && filled($itemMeta['product_url'])) {
-                $message .= "  Ссылка на товар: " . $this->escape($itemMeta['product_url']) . "\n";
+                $message .= '  Ссылка на товар: '.$this->escape($itemMeta['product_url'])."\n";
             }
         }
 

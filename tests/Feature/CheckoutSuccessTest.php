@@ -129,14 +129,14 @@ class CheckoutSuccessTest extends TestCase
         $category = $this->createCategory();
 
         $nameSuffix = Str::lower(Str::random(6));
-        $slug = $productOverrides['slug'] ?? ('product-' . $nameSuffix);
+        $slug = $productOverrides['slug'] ?? ('product-'.$nameSuffix);
 
         $product = Product::create(array_merge([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'slug' => $slug,
-            'name_ru' => 'Товар ' . $nameSuffix,
-            'name_by' => 'Тавар ' . $nameSuffix,
+            'name_ru' => 'Товар '.$nameSuffix,
+            'name_by' => 'Тавар '.$nameSuffix,
             'description_ru' => 'Описание',
             'description_by' => 'Апісанне',
             'country' => 'France',
@@ -152,7 +152,7 @@ class CheckoutSuccessTest extends TestCase
 
         $variant = ProductVariant::create(array_merge([
             'product_id' => $product->id,
-            'sku' => 'SKU-' . Str::upper(Str::random(8)),
+            'sku' => 'SKU-'.Str::upper(Str::random(8)),
             'volume_ml' => '50',
             'price_usd' => 100,
             'sale_price_usd' => null,
@@ -175,8 +175,8 @@ class CheckoutSuccessTest extends TestCase
         $suffix = Str::lower(Str::random(6));
 
         return Brand::create(array_merge([
-            'slug' => 'brand-' . $suffix,
-            'name' => 'Brand ' . $suffix,
+            'slug' => 'brand-'.$suffix,
+            'name' => 'Brand '.$suffix,
             'is_active' => true,
             'logo' => 'brands/logo.png',
         ], $overrides));
@@ -187,9 +187,9 @@ class CheckoutSuccessTest extends TestCase
         $suffix = Str::lower(Str::random(6));
 
         return Category::create(array_merge([
-            'slug' => 'category-' . $suffix,
-            'name_ru' => 'Категория ' . $suffix,
-            'name_by' => 'Катэгорыя ' . $suffix,
+            'slug' => 'category-'.$suffix,
+            'name_ru' => 'Категория '.$suffix,
+            'name_by' => 'Катэгорыя '.$suffix,
             'is_active' => true,
         ], $overrides));
     }

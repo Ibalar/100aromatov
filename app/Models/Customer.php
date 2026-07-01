@@ -3,11 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Wishlist;
-use App\Models\Review;
 
 class Customer extends Authenticatable
 {
@@ -63,7 +61,8 @@ class Customer extends Authenticatable
 
     public function getFullNameAttribute(): string
     {
-        $name = trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
+        $name = trim(($this->first_name ?? '').' '.($this->last_name ?? ''));
+
         return $name !== '' ? $name : $this->email;
     }
 }

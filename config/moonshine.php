@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\ForceHttpsForMoonShine;
+use App\Models\User;
+use App\MoonShine\Layouts\MoonShineLayout;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -7,16 +10,12 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Http\Middleware\ForceHttpsForMoonShine;
 use MoonShine\ColorManager\Palettes\PurplePalette;
 use MoonShine\Crud\Forms\FiltersForm;
 use MoonShine\Crud\Forms\LoginForm;
 use MoonShine\Laravel\Exceptions\MoonShineNotFoundException;
 use MoonShine\Laravel\Http\Middleware\Authenticate;
 use MoonShine\Laravel\Http\Middleware\ChangeLocale;
-use MoonShine\Laravel\Layouts\AppLayout;
-use App\Models\User;
-use MoonShine\Laravel\Pages\Dashboard;
 use MoonShine\Laravel\Pages\ErrorPage;
 use MoonShine\Laravel\Pages\LoginPage;
 use MoonShine\Laravel\Pages\ProfilePage;
@@ -88,8 +87,8 @@ return [
     ],
 
     // Layout, palette, pages, forms
-    'layout' => App\MoonShine\Layouts\MoonShineLayout::class,
-    'palette' => MoonShine\ColorManager\Palettes\PurplePalette::class,
+    'layout' => MoonShineLayout::class,
+    'palette' => PurplePalette::class,
 
     'forms' => [
         'login' => LoginForm::class,

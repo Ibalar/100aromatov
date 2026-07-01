@@ -1,0 +1,2753 @@
+{
+    "uuid": "6fbbfb7d-c0fb-49b4-894e-8ecfc3cb3f9c",
+    "critical_count": 25,
+    "error_count": 2,
+    "warning_count": 97,
+    "info_count": 13,
+    "issues_count": 137,
+    "pattern_count": 20,
+    "duration_seconds": 63.14362096786499,
+    "payload": {
+        "summary": {
+            "critical": 25,
+            "error": 2,
+            "warning": 97,
+            "info": 13
+        },
+        "durationSeconds": 63.14362096786499,
+        "tools": [
+            {
+                "tool": "pint",
+                "available": true,
+                "exitCode": 1
+            },
+            {
+                "tool": "phpstan",
+                "available": false,
+                "exitCode": 127
+            }
+        ],
+        "issues": [
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 82
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 90
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 116
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 159
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 168
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 199
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 212
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 215
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 47
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 58
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 65
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 74
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 103
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 144
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 163
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 223
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 231
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 256
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 313
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 370
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 377
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 386
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 417
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 424
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 429
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 434
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 439
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 444
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 449
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 457
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 462
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 484
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 504
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 532
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 539
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 548
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 554
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 561
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 571
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 671
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 678
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 687
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 717
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 724
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 729
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 734
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 739
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 744
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 749
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 756
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 761
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 785
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 804
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 830
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 837
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 846
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 852
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 859
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 869
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 947
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 960
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 963
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 41
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 49
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 70
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 149
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 333
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 344
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 430
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 446
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Models/Category.php",
+                    "line": 100
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Models/Category.php",
+                    "line": 100
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Models/Category.php",
+                    "line": 140
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "critical",
+                "title": "Raw SQL usage requires review",
+                "message": "Raw SQL can bypass query binding and increase SQL injection risk when user input is interpolated.",
+                "location": {
+                    "file": "app/Models/Category.php",
+                    "line": 140
+                },
+                "recommendation": "Prefer query builder bindings, parameterized expressions, or narrowly review this raw SQL statement.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Models/Product.php",
+                    "line": 70
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.raw-sql",
+                "category": "security",
+                "severity": "warning",
+                "title": "Static raw SQL usage",
+                "message": "This statement uses a fixed raw SQL fragment. Review it, but it does not appear to interpolate runtime input.",
+                "location": {
+                    "file": "app/Services/OrderService.php",
+                    "line": 184
+                },
+                "recommendation": "Prefer query builder helpers when possible, or document why this static raw SQL fragment is required.",
+                "metadata": []
+            },
+            {
+                "ruleId": "security.mass-assignment",
+                "category": "security",
+                "severity": "warning",
+                "title": "Model has no mass assignment policy",
+                "message": "Neither $fillable nor $guarded is defined, so mass-assignment protection is implicit and easy to miss during review.",
+                "location": {
+                    "file": "app/Models/Role.php",
+                    "line": 1
+                },
+                "recommendation": "Add an explicit $fillable list for request-driven writes, or define $guarded when the model never receives mass-assigned input.",
+                "metadata": []
+            },
+            {
+                "ruleId": "reliability.env-access-outside-config",
+                "category": "reliability",
+                "severity": "error",
+                "title": "env() used outside config",
+                "message": "Laravel configuration caching can make env() unavailable outside config files.",
+                "location": {
+                    "file": "routes/web.php",
+                    "line": 113
+                },
+                "recommendation": "Move environment reads into config files and use config() throughout application code.",
+                "metadata": []
+            },
+            {
+                "ruleId": "reliability.global-variables",
+                "category": "reliability",
+                "severity": "warning",
+                "title": "Superglobal access detected",
+                "message": "Direct superglobal access bypasses Laravel request abstraction and complicates testing.",
+                "location": {
+                    "file": "tests/TestCase.php",
+                    "line": 20
+                },
+                "recommendation": "Use Illuminate\\Http\\Request, request(), or typed route parameters instead of superglobals.",
+                "metadata": []
+            },
+            {
+                "ruleId": "reliability.global-variables",
+                "category": "reliability",
+                "severity": "warning",
+                "title": "Superglobal access detected",
+                "message": "Direct superglobal access bypasses Laravel request abstraction and complicates testing.",
+                "location": {
+                    "file": "tests/TestCase.php",
+                    "line": 21
+                },
+                "recommendation": "Use Illuminate\\Http\\Request, request(), or typed route parameters instead of superglobals.",
+                "metadata": []
+            },
+            {
+                "ruleId": "reliability.global-variables",
+                "category": "reliability",
+                "severity": "warning",
+                "title": "Superglobal access detected",
+                "message": "Direct superglobal access bypasses Laravel request abstraction and complicates testing.",
+                "location": {
+                    "file": "tests/TestCase.php",
+                    "line": 22
+                },
+                "recommendation": "Use Illuminate\\Http\\Request, request(), or typed route parameters instead of superglobals.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CartController.php",
+                    "line": 38
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CartController.php",
+                    "line": 71
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CartController.php",
+                    "line": 83
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CheckoutController.php",
+                    "line": 121
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAccountController.php",
+                    "line": 40
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAccountController.php",
+                    "line": 72
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAuthController.php",
+                    "line": 20
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAuthController.php",
+                    "line": 51
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/ReviewController.php",
+                    "line": 48
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/ReviewController.php",
+                    "line": 93
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.missing-form-request",
+                "category": "best-practices",
+                "severity": "info",
+                "title": "Inline validation in controller",
+                "message": "Validation inside controllers couples HTTP validation details to action orchestration.",
+                "location": {
+                    "file": "app/Http/Controllers/WishlistController.php",
+                    "line": 30
+                },
+                "recommendation": "Move reusable validation and authorization to a FormRequest when the rules are non-trivial.",
+                "metadata": []
+            },
+            {
+                "ruleId": "best-practices.logic-in-routes",
+                "category": "best-practices",
+                "severity": "warning",
+                "title": "Business logic in route closure",
+                "message": "Route closure spans 29 lines and likely mixes routing with application logic.",
+                "location": {
+                    "file": "routes/web.php",
+                    "line": 124
+                },
+                "recommendation": "Move the workflow into a controller action or invokable class to preserve MVC separation.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method show has 142 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 54
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method sale has 172 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 16
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method index has 146 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 189
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method show has 261 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 336
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method showFilter has 304 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 598
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method store has 70 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/CheckoutController.php",
+                    "line": 27
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method index has 149 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 19
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method quickView has 85 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 232
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method suggest has 100 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 318
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method search has 89 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 419
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method index has 128 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/SitemapController.php",
+                    "line": 14
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method components has 73 lines.",
+                "location": {
+                    "file": "app/MoonShine/Pages/Dashboard.php",
+                    "line": 47
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method fields has 82 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Brand/Pages/BrandFormPage.php",
+                    "line": 38
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method rowHighlightAssets has 107 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Brand/Pages/BrandIndexPage.php",
+                    "line": 146
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method fields has 94 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Category/Pages/CategoryFormPage.php",
+                    "line": 41
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method fields has 66 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/FeedExportProfile/Pages/FeedExportProfileFormPage.php",
+                    "line": 24
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method fields has 82 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/FilterPage/Pages/FilterPageFormPage.php",
+                    "line": 40
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method fields has 125 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/Pages/ProductFormPage.php",
+                    "line": 46
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method rowHighlightAssets has 107 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/Pages/ProductIndexPage.php",
+                    "line": 183
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method beforeImportFilling has 64 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/ProductResource.php",
+                    "line": 168
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method afterImported has 65 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/ProductResource.php",
+                    "line": 246
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method importVariant has 91 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/ProductResource.php",
+                    "line": 312
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method parseVariantsColumn has 66 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/ProductResource.php",
+                    "line": 407
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method fields has 82 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Setting/Pages/SettingFormPage.php",
+                    "line": 34
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method boot has 90 lines.",
+                "location": {
+                    "file": "app/Providers/AppServiceProvider.php",
+                    "line": 45
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method getItems has 66 lines.",
+                "location": {
+                    "file": "app/Services/CartService.php",
+                    "line": 79
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method generateGoogleXml has 78 lines.",
+                "location": {
+                    "file": "app/Services/FeedExportService.php",
+                    "line": 20
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method generateYandexXml has 88 lines.",
+                "location": {
+                    "file": "app/Services/FeedExportService.php",
+                    "line": 99
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method collectProducts has 73 lines.",
+                "location": {
+                    "file": "app/Services/FeedExportService.php",
+                    "line": 188
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method create has 85 lines.",
+                "location": {
+                    "file": "app/Services/OrderService.php",
+                    "line": 23
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method calculatePricing has 116 lines.",
+                "location": {
+                    "file": "app/Services/OrderService.php",
+                    "line": 152
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method buildTelegramMessage has 74 lines.",
+                "location": {
+                    "file": "app/Services/OrderService.php",
+                    "line": 269
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method up has 109 lines.",
+                "location": {
+                    "file": "database/migrations/2026_04_27_190930_create_permission_tables.php",
+                    "line": 12
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method createOrderWithItem has 71 lines.",
+                "location": {
+                    "file": "tests/Feature/OrderConfirmationMailTest.php",
+                    "line": 65
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.long-method",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Method is long",
+                "message": "Method createOrder has 60 lines.",
+                "location": {
+                    "file": "tests/Feature/OrderStatusTransitionTest.php",
+                    "line": 189
+                },
+                "recommendation": "Extract cohesive private methods, actions, query objects, or domain services when the method has multiple responsibilities.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.large-class",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Class is large",
+                "message": "Class CategoryController has 959 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 14
+                },
+                "recommendation": "Split unrelated responsibilities into smaller collaborators that match Laravel boundaries.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.large-class",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Class is large",
+                "message": "Class ProductController has 526 lines.",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 17
+                },
+                "recommendation": "Split unrelated responsibilities into smaller collaborators that match Laravel boundaries.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.large-class",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Class is large",
+                "message": "Class ProductResource has 563 lines.",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/ProductResource.php",
+                    "line": 37
+                },
+                "recommendation": "Split unrelated responsibilities into smaller collaborators that match Laravel boundaries.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.large-class",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Class is large",
+                "message": "Class FeedExportService has 313 lines.",
+                "location": {
+                    "file": "app/Services/FeedExportService.php",
+                    "line": 11
+                },
+                "recommendation": "Split unrelated responsibilities into smaller collaborators that match Laravel boundaries.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.large-class",
+                "category": "code-quality",
+                "severity": "warning",
+                "title": "Class is large",
+                "message": "Class OrderService has 339 lines.",
+                "location": {
+                    "file": "app/Services/OrderService.php",
+                    "line": 21
+                },
+                "recommendation": "Split unrelated responsibilities into smaller collaborators that match Laravel boundaries.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.redundant-type-guard",
+                "category": "code-quality",
+                "severity": "info",
+                "title": "Redundant type guard candidate",
+                "message": "Variable $decoded comes from json_decode(..., true) and is checked again with is_array().",
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 521
+                },
+                "recommendation": "Prefer ?? [] or an explicit exception on invalid JSON instead of a redundant is_array() guard.",
+                "metadata": []
+            },
+            {
+                "ruleId": "code-quality.redundant-type-guard",
+                "category": "code-quality",
+                "severity": "info",
+                "title": "Redundant type guard candidate",
+                "message": "Variable $decoded comes from json_decode(..., true) and is checked again with is_array().",
+                "location": {
+                    "file": "app/MoonShine/Resources/Product/ProductResource.php",
+                    "line": 420
+                },
+                "recommendation": "Prefer ?? [] or an explicit exception on invalid JSON instead of a redundant is_array() guard.",
+                "metadata": []
+            },
+            {
+                "ruleId": "tooling.pint",
+                "category": "tooling",
+                "severity": "warning",
+                "title": "Pint style violations found",
+                "message": "Laravel Pint reported code style differences.",
+                "location": {
+                    "file": "composer.json",
+                    "line": 1
+                },
+                "recommendation": "Run vendor/bin/pint locally and commit the resulting formatting changes.",
+                "metadata": {
+                    "output": ".\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f..\u2a2f....\u2a2f\u2a2f\u2a2f..\u2a2f\u2a2f\u2a2f.....\u2a2f\u2a2f...\u2a2f...\u2a2f...\u2a2f..\u2a2f\u2a2f\u2a2f\u2a2f.\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f.\u2a2f..\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f.\u2a2f\u2a2f\u2a2f.\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f.......\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\r\n  \u2a2f\u2a2f.\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f.\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f.\u2a2f.\u2a2f\u2a2f..\u2a2f..\u2a2f\u2a2f\u2a2f...\u2a2f...\u2a2f\u2a2f........................\u2a2f\u2a2f\u2a2f....................\u2a2f\u2a2f...................\u2a2f.\u2a2f\u2a2f.\u2a2f\u2a2f\u2a2f\u2a2f\u2a2f\r\n  \u2a2f\u2a2f\u2a2f\u2a2f..\n\n  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 Laravel  \n    FAIL   ............................................................................... 238 files, 119 style issues  \r\n  \u2a2f app\\Http\\Controllers\\AdminFeedExportController.php                                                    concat_space  \r\n  \u2a2f app\\Http\\Controllers\\BrandController.php single_quote, fully_qualified_strict_types, concat_space, unary_operator\u2026  \r\n  \u2a2f app\\Http\\Controllers\\CartController.php     concat_space, unary_operator_spaces, not_operator_with_successor_space  \r\n  \u2a2f app\\Http\\Controllers\\CategoryController.php method_argument_space, single_quote, fully_qualified_strict_types, co\u2026  \r\n  \u2a2f app\\Http\\Controllers\\CheckoutController.php                                          concat_space, ordered_imports  \r\n  \u2a2f app\\Http\\Controllers\\CustomerAccountController.php concat_space, unary_operator_spaces, not_operator_with_success\u2026  \r\n  \u2a2f app\\Http\\Controllers\\ProductAvailabilityInquiryController.php concat_space, unary_operator_spaces, not_operator_w\u2026  \r\n  \u2a2f app\\Http\\Controllers\\ProductController.php single_quote, fully_qualified_strict_types, concat_space, unary_operat\u2026  \r\n  \u2a2f app\\Http\\Controllers\\ReviewController.php                                                             concat_space  \r\n  \u2a2f app\\Http\\Middleware\\ForceHttpsForMoonShine.php unary_operator_spaces, not_operator_with_successor_space, single_b\u2026  \r\n  \u2a2f app\\Http\\Middleware\\SetLocale.php                                                           single_line_empty_body  \r\n  \u2a2f app\\Http\\Requests\\CheckoutRequest.php       concat_space, unary_operator_spaces, not_operator_with_successor_space  \r\n  \u2a2f app\\Models\\Category.php                  class_attributes_separation, method_chaining_indentation, ordered_imports  \r\n  \u2a2f app\\Models\\Customer.php              concat_space, no_unused_imports, blank_line_before_statement, ordered_imports  \r\n  \u2a2f app\\Models\\Order.php     concat_space, unary_operator_spaces, no_unused_imports, not_operator_with_successor_space  \r\n  \u2a2f app\\Models\\Product.php                                                       function_declaration, ordered_imports  \r\n  \u2a2f app\\Models\\PromoCodeUsage.php                                                                    no_unused_imports  \r\n  \u2a2f app\\Models\\Role.php                                                                       single_blank_line_at_eof  \r\n  \u2a2f app\\Models\\Setting.php fully_qualified_strict_types, concat_space, unary_operator_spaces, not_operator_with_succe\u2026  \r\n  \u2a2f app\\Models\\Slider.php class_attributes_separation, concat_space, not_operator_with_successor_space, blank_line_be\u2026  \r\n  \u2a2f app\\Models\\User.php     class_attributes_separation, fully_qualified_strict_types, ordered_traits, ordered_imports  \r\n  \u2a2f app\\MoonShine\\Layouts\\MoonShineLayout.php                                                             phpdoc_align  \r\n  \u2a2f app\\MoonShine\\Pages\\Dashboard.php function_declaration, fully_qualified_strict_types, concat_space, trailing_comm\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\AttributeValue\\AttributeValueResource.php class_attributes_separation, no_unused_imports,\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\AttributeValue\\Pages\\AttributeValueDetailPage.php trailing_comma_in_multiline, phpdoc_sep\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\AttributeValue\\Pages\\AttributeValueFormPage.php trailing_comma_in_multiline, phpdoc_separ\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\AttributeValue\\Pages\\AttributeValueIndexPage.php                         phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\Attribute\\AttributeResource.php   no_unused_imports, no_extra_blank_lines, ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Attribute\\Pages\\AttributeDetailPage.php trailing_comma_in_multiline, phpdoc_separation, s\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Attribute\\Pages\\AttributeFormPage.php trailing_comma_in_multiline, phpdoc_separation, sin\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Attribute\\Pages\\AttributeIndexPage.php                                   phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\Brand\\BrandResource.php class_attributes_separation, multiline_whitespace_before_semicolo\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Brand\\Pages\\BrandDetailPage.php                         phpdoc_separation, ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Brand\\Pages\\BrandFormPage.php                                            phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\Brand\\Pages\\BrandIndexPage.php                        phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Category\\CategoryResource.php class_attributes_separation, multiline_whitespace_before_se\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Category\\Pages\\CategoryDetailPage.php trailing_comma_in_multiline, phpdoc_separation, sin\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Category\\Pages\\CategoryFormPage.php function_declaration, trailing_comma_in_multiline, ph\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Category\\Pages\\CategoryIndexPage.php class_attributes_separation, no_unused_imports, sing\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\FeedExportProfile\\FeedExportProfileResource.php                          no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\FeedExportProfile\\Pages\\FeedExportProfileFormPage.php                         concat_space  \r\n  \u2a2f app\\MoonShine\\Resources\\FilterPage\\Pages\\FilterPageDetailPage.php             phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\FilterPage\\Pages\\FilterPageFormPage.php function_declaration, concat_space, phpdoc_separa\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\FilterPage\\Pages\\FilterPageIndexPage.php              phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\MoonShineUserRole\\MoonShineUserRoleResource.php                            ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\MoonShineUserRole\\Pages\\MoonShineUserRoleFormPage.php                      ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\MoonShineUserRole\\Pages\\MoonShineUserRoleIndexPage.php                     ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\MoonShineUser\\MoonShineUserResource.php                                    ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\MoonShineUser\\Pages\\MoonShineUserFormPage.php single_quote, fully_qualified_strict_types,\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\MoonShineUser\\Pages\\MoonShineUserIndexPage.php  single_quote, no_superfluous_phpdoc_tags,\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Order\\Pages\\OrderDetailPage.php trailing_comma_in_multiline, phpdoc_separation, ordered_i\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Order\\Pages\\OrderFormPage.php concat_space, trailing_comma_in_multiline, phpdoc_separatio\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Order\\Pages\\OrderIndexPage.php                                                phpdoc_align  \r\n  \u2a2f app\\MoonShine\\Resources\\Page\\Pages\\PageDetailPage.php                         phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Page\\Pages\\PageFormPage.php     function_declaration, phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Page\\Pages\\PageIndexPage.php         phpdoc_separation, no_unused_imports, ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductImage\\Pages\\ProductImageDetailPage.php trailing_comma_in_multiline, phpdoc_separat\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductImage\\Pages\\ProductImageFormPage.php trailing_comma_in_multiline, phpdoc_separatio\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductImage\\Pages\\ProductImageIndexPage.php trailing_comma_in_multiline, phpdoc_separati\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductImage\\ProductImageResource.php no_unused_imports, no_extra_blank_lines, ordered_im\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductVariant\\Pages\\ProductVariantDetailPage.php trailing_comma_in_multiline, phpdoc_sep\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductVariant\\Pages\\ProductVariantFormPage.php                          phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductVariant\\Pages\\ProductVariantIndexPage.php      phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\ProductVariant\\ProductVariantResource.php no_unused_imports, no_extra_blank_lines, ordere\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Product\\Pages\\ProductDetailPage.php trailing_comma_in_multiline, phpdoc_separation, singl\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Product\\Pages\\ProductFormPage.php                                        phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\Product\\Pages\\ProductIndexPage.php                         concat_space, phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\Product\\ProductResource.php concat_space, ordered_traits, unary_operator_spaces, not_oper\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Review\\ReviewResource.php                                                no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Setting\\Pages\\SettingDetailPage.php trailing_comma_in_multiline, phpdoc_separation, singl\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Setting\\Pages\\SettingFormPage.php                                        phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\Setting\\Pages\\SettingIndexPage.php          trailing_comma_in_multiline, phpdoc_separation  \r\n  \u2a2f app\\MoonShine\\Resources\\Setting\\SettingResource.php unary_operator_spaces, not_operator_with_successor_space, no_\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Slider\\Pages\\SliderDetailPage.php trailing_comma_in_multiline, phpdoc_separation, no_unus\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Slider\\Pages\\SliderFormPage.php function_declaration, trailing_comma_in_multiline, phpdoc\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Slider\\Pages\\SliderIndexPage.php trailing_comma_in_multiline, phpdoc_separation, no_unuse\u2026  \r\n  \u2a2f app\\MoonShine\\Resources\\Slider\\SliderResource.php                                                  ordered_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Wishlist\\Pages\\WishlistDetailPage.php                 phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Wishlist\\Pages\\WishlistFormPage.php                   phpdoc_separation, no_unused_imports  \r\n  \u2a2f app\\MoonShine\\Resources\\Wishlist\\Pages\\WishlistIndexPage.php                                     phpdoc_separation  \r\n  \u2a2f app\\Observers\\ProductVariantObserver.php                                                              concat_space  \r\n  \u2a2f app\\Providers\\AppServiceProvider.php                                  blank_line_before_statement, ordered_imports  \r\n  \u2a2f app\\Providers\\MoonShineServiceProvider.php multiline_whitespace_before_semicolons, no_unused_imports, ordered_imp\u2026  \r\n  \u2a2f app\\Services\\CartService.php class_attributes_separation, unary_operator_spaces, not_operator_with_successor_spac\u2026  \r\n  \u2a2f app\\Services\\FeedExportService.php          concat_space, unary_operator_spaces, not_operator_with_successor_space  \r\n  \u2a2f app\\Services\\LanguageService.php                                                       class_attributes_separation  \r\n  \u2a2f app\\Services\\OrderService.php single_quote, single_import_per_statement, concat_space, unary_operator_spaces, not\u2026  \r\n  \u2a2f app\\Services\\TelegramService.php class_attributes_separation, unary_operator_spaces, not_operator_with_successor_\u2026  \r\n  \u2a2f app\\Services\\WishlistService.php class_attributes_separation, unary_operator_spaces, not_operator_with_successor_\u2026  \r\n  \u2a2f app\\Support\\helpers.php fully_qualified_strict_types, concat_space, unary_operator_spaces, not_operator_with_succ\u2026  \r\n  \u2a2f bootstrap\\app.php                                                    fully_qualified_strict_types, ordered_imports  \r\n  \u2a2f bootstrap\\providers.php                       fully_qualified_strict_types, line_ending, single_line_after_imports  \r\n  \u2a2f config\\auth.php                                            fully_qualified_strict_types, single_line_after_imports  \r\n  \u2a2f config\\database.php                                                                   fully_qualified_strict_types  \r\n  \u2a2f config\\debugbar.php                                            single_line_comment_spacing, binary_operator_spaces  \r\n  \u2a2f config\\lfm.php fully_qualified_strict_types, single_line_comment_spacing, whitespace_after_comma_in_array, single\u2026  \r\n  \u2a2f config\\moonshine.php                              fully_qualified_strict_types, no_unused_imports, ordered_imports  \r\n  \u2a2f config\\moonshine_tinymce.php                                             concat_space, trailing_comma_in_multiline  \r\n  \u2a2f config\\permission.php                                      fully_qualified_strict_types, single_line_after_imports  \r\n  \u2a2f database\\factories\\UserFactory.php                                   fully_qualified_strict_types, ordered_imports  \r\n  \u2a2f database\\migrations\\2020_10_04_115514_create_moonshine_roles_table.php new_with_parentheses, class_definition, br\u2026  \r\n  \u2a2f database\\migrations\\2020_10_05_173148_create_moonshine_tables.php new_with_parentheses, class_definition, braces_\u2026  \r\n  \u2a2f database\\migrations\\2026_03_06_000002_add_min_max_price_to_products.php class_definition, braces_position, ordere\u2026  \r\n  \u2a2f database\\migrations\\2026_04_07_120000_create_customers_table.php class_definition, braces_position, single_blank_\u2026  \r\n  \u2a2f database\\migrations\\2026_04_07_120100_add_customer_id_to_orders_table.php class_definition, braces_position, sing\u2026  \r\n  \u2a2f database\\migrations\\2026_04_28_180000_add_call_preference_to_orders_table.php  class_definition, braces_position,\u2026  \r\n  \u2a2f database\\migrations\\2026_04_30_170000_add_volume_ml_snapshot_to_order_items_table.php class_definition, braces_po\u2026  \r\n  \u2a2f routes\\web.php                                                                       concat_space, ordered_imports  \r\n  \u2a2f tests\\Feature\\CheckoutRequestTest.php                                              concat_space, no_unused_imports  \r\n  \u2a2f tests\\Feature\\CheckoutSuccessTest.php                                                                 concat_space  \r\n  \u2a2f tests\\Feature\\OrderConfirmationMailTest.php                                                           concat_space  \r\n  \u2a2f tests\\Feature\\OrderEmailNotificationTest.php                                                          concat_space  \r\n  \u2a2f tests\\Feature\\OrderStatusTransitionTest.php                                                           concat_space  \r\n  \u2a2f tests\\Feature\\PromoCodeCheckoutTest.php                                                               concat_space  \r\n  \u2a2f tests\\Feature\\RecentlyViewedTest.php                                                                  concat_space  \r\n  \u2a2f tests\\Feature\\RelatedProductsTest.php                                                                 concat_space  \r\n  \u2a2f tests\\Feature\\SearchSuggestTest.php                                                                   concat_space  \r\n  \u2a2f tests\\Feature\\SiteMainFlowsTest.php                                                                   concat_space  \r\n  \u2a2f tests\\TestCase.php                                                 concat_space, not_operator_with_successor_space"
+                }
+            },
+            {
+                "ruleId": "tooling.phpstan.runner",
+                "category": "tooling",
+                "severity": "error",
+                "title": "Phpstan is not available",
+                "message": "Phpstan binary was not found at vendor/bin/phpstan.",
+                "location": {
+                    "file": "composer.json",
+                    "line": 1
+                },
+                "recommendation": "Install the tool with Composer dev dependencies or disable it in laravel-audit config.",
+                "metadata": []
+            }
+        ],
+        "patternSuggestions": [
+            {
+                "hypothesisKey": "action:app/Http/Controllers/CategoryController.php::index",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.988,
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 189,
+                    "class": "CategoryController",
+                    "method": "index"
+                },
+                "features": {
+                    "lines": 146,
+                    "nesting_depth": 3,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 26,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 0,
+                    "return_statements": 5,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 1,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 3,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "form_request:app/Http/Controllers/CartController.php::remove",
+                "pattern": "form_request",
+                "title": "Form Request",
+                "description": "Move inline validation into a dedicated Form Request class.",
+                "recommendation": "Create a Form Request with rules() and authorize() instead of validating inside the controller.",
+                "confidence": 0.987,
+                "location": {
+                    "file": "app/Http/Controllers/CartController.php",
+                    "line": 81,
+                    "class": "CartController",
+                    "method": "remove"
+                },
+                "features": {
+                    "lines": 10,
+                    "nesting_depth": 0,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 0,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 2,
+                    "return_statements": 1,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 1,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 1
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "form_request:app/Http/Controllers/CartController.php::update",
+                "pattern": "form_request",
+                "title": "Form Request",
+                "description": "Move inline validation into a dedicated Form Request class.",
+                "recommendation": "Create a Form Request with rules() and authorize() instead of validating inside the controller.",
+                "confidence": 0.987,
+                "location": {
+                    "file": "app/Http/Controllers/CartController.php",
+                    "line": 69,
+                    "class": "CartController",
+                    "method": "update"
+                },
+                "features": {
+                    "lines": 11,
+                    "nesting_depth": 0,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 0,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 2,
+                    "return_statements": 1,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 1,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 1
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/CategoryController.php::sale",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.987,
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 16,
+                    "class": "CategoryController",
+                    "method": "sale"
+                },
+                "features": {
+                    "lines": 172,
+                    "nesting_depth": 3,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 44,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 4,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 1,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 2,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "code-quality.long-method",
+                    "code-quality.large-class"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/CategoryController.php::show",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.987,
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 336,
+                    "class": "CategoryController",
+                    "method": "show"
+                },
+                "features": {
+                    "lines": 261,
+                    "nesting_depth": 3,
+                    "switch_branches": 0,
+                    "elseif_chain": 1,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 47,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 2,
+                    "return_statements": 4,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 1,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 2,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "security.raw-sql",
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/CategoryController.php::showFilter",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.987,
+                "location": {
+                    "file": "app/Http/Controllers/CategoryController.php",
+                    "line": 598,
+                    "class": "CategoryController",
+                    "method": "showFilter"
+                },
+                "features": {
+                    "lines": 304,
+                    "nesting_depth": 3,
+                    "switch_branches": 0,
+                    "elseif_chain": 1,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 51,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 3,
+                    "return_statements": 4,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 2,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 2,
+                    "direct_model_returns": 2,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/ProductController.php::index",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.987,
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 19,
+                    "class": "ProductController",
+                    "method": "index"
+                },
+                "features": {
+                    "lines": 149,
+                    "nesting_depth": 2,
+                    "switch_branches": 0,
+                    "elseif_chain": 1,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 28,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 4,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 1,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 2,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "security.raw-sql",
+                    "code-quality.long-method",
+                    "code-quality.large-class"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "form_request:app/Http/Controllers/CustomerAuthController.php::register",
+                "pattern": "form_request",
+                "title": "Form Request",
+                "description": "Move inline validation into a dedicated Form Request class.",
+                "recommendation": "Create a Form Request with rules() and authorize() instead of validating inside the controller.",
+                "confidence": 0.986,
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAuthController.php",
+                    "line": 49,
+                    "class": "CustomerAuthController",
+                    "method": "register"
+                },
+                "features": {
+                    "lines": 19,
+                    "nesting_depth": 0,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 1,
+                    "manual_instantiations": 0,
+                    "db_calls": 0,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 1,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 1
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/BrandController.php::show",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.985,
+                "location": {
+                    "file": "app/Http/Controllers/BrandController.php",
+                    "line": 54,
+                    "class": "BrandController",
+                    "method": "show"
+                },
+                "features": {
+                    "lines": 142,
+                    "nesting_depth": 3,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 32,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 2,
+                    "return_statements": 3,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 1,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 1,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/SitemapController.php::index",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.984,
+                "location": {
+                    "file": "app/Http/Controllers/SitemapController.php",
+                    "line": 14,
+                    "class": "SitemapController",
+                    "method": "index"
+                },
+                "features": {
+                    "lines": 128,
+                    "nesting_depth": 0,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 6,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 0,
+                    "return_statements": 2,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 1,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "form_request:app/Http/Controllers/CustomerAccountController.php::updatePassword",
+                "pattern": "form_request",
+                "title": "Form Request",
+                "description": "Move inline validation into a dedicated Form Request class.",
+                "recommendation": "Create a Form Request with rules() and authorize() instead of validating inside the controller.",
+                "confidence": 0.981,
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAccountController.php",
+                    "line": 68,
+                    "class": "CustomerAccountController",
+                    "method": "updatePassword"
+                },
+                "features": {
+                    "lines": 17,
+                    "nesting_depth": 1,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 1,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 2,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 1,
+                    "simple_form_handler": 1
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/ProductController.php::suggest",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.98,
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 318,
+                    "class": "ProductController",
+                    "method": "suggest"
+                },
+                "features": {
+                    "lines": 100,
+                    "nesting_depth": 1,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 13,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 3,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 3,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "security.raw-sql",
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "form_request:app/Http/Controllers/CustomerAccountController.php::updateProfile",
+                "pattern": "form_request",
+                "title": "Form Request",
+                "description": "Move inline validation into a dedicated Form Request class.",
+                "recommendation": "Create a Form Request with rules() and authorize() instead of validating inside the controller.",
+                "confidence": 0.979,
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAccountController.php",
+                    "line": 36,
+                    "class": "CustomerAccountController",
+                    "method": "updateProfile"
+                },
+                "features": {
+                    "lines": 25,
+                    "nesting_depth": 1,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 1,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 2,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 1,
+                    "simple_form_handler": 1
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "form_request:app/Http/Controllers/CustomerAuthController.php::login",
+                "pattern": "form_request",
+                "title": "Form Request",
+                "description": "Move inline validation into a dedicated Form Request class.",
+                "recommendation": "Create a Form Request with rules() and authorize() instead of validating inside the controller.",
+                "confidence": 0.979,
+                "location": {
+                    "file": "app/Http/Controllers/CustomerAuthController.php",
+                    "line": 18,
+                    "class": "CustomerAuthController",
+                    "method": "login"
+                },
+                "features": {
+                    "lines": 25,
+                    "nesting_depth": 1,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 1,
+                    "manual_instantiations": 0,
+                    "db_calls": 0,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 2,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 1,
+                    "simple_form_handler": 1
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/ReviewController.php::store",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.973,
+                "location": {
+                    "file": "app/Http/Controllers/ReviewController.php",
+                    "line": 41,
+                    "class": "ReviewController",
+                    "method": "store"
+                },
+                "features": {
+                    "lines": 49,
+                    "nesting_depth": 2,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 2,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 3,
+                    "return_statements": 1,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 2,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/ProductController.php::search",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.972,
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 419,
+                    "class": "ProductController",
+                    "method": "search"
+                },
+                "features": {
+                    "lines": 89,
+                    "nesting_depth": 1,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 11,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 1,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 1,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "security.raw-sql",
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/ProductController.php::show",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.971,
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 169,
+                    "class": "ProductController",
+                    "method": "show"
+                },
+                "features": {
+                    "lines": 50,
+                    "nesting_depth": 1,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 8,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 1,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 1,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "security.raw-sql"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/ProductController.php::quickView",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.969,
+                "location": {
+                    "file": "app/Http/Controllers/ProductController.php",
+                    "line": 232,
+                    "class": "ProductController",
+                    "method": "quickView"
+                },
+                "features": {
+                    "lines": 85,
+                    "nesting_depth": 0,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 5,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 1,
+                    "return_statements": 3,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 3,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 0,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/ReviewController.php::storeStore",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.964,
+                "location": {
+                    "file": "app/Http/Controllers/ReviewController.php",
+                    "line": 91,
+                    "class": "ReviewController",
+                    "method": "storeStore"
+                },
+                "features": {
+                    "lines": 44,
+                    "nesting_depth": 2,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 1,
+                    "validate_calls": 1,
+                    "inline_request_validate": 1,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 0,
+                    "parameter_count": 2,
+                    "return_statements": 1,
+                    "try_catch_blocks": 0,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 0,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 2,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "best-practices.missing-form-request"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            },
+            {
+                "hypothesisKey": "action:app/Http/Controllers/CheckoutController.php::store",
+                "pattern": "action",
+                "title": "Action / Use Case",
+                "description": "Move orchestration out of the controller into a single-purpose action class.",
+                "recommendation": "Create an invokable action or use-case class and keep the controller thin.",
+                "confidence": 0.958,
+                "location": {
+                    "file": "app/Http/Controllers/CheckoutController.php",
+                    "line": 27,
+                    "class": "CheckoutController",
+                    "method": "store"
+                },
+                "features": {
+                    "lines": 70,
+                    "nesting_depth": 2,
+                    "switch_branches": 0,
+                    "elseif_chain": 0,
+                    "instanceof_checks": 0,
+                    "app_resolver_calls": 0,
+                    "manual_instantiations": 0,
+                    "db_calls": 1,
+                    "validate_calls": 0,
+                    "inline_request_validate": 0,
+                    "auth_guard_validate": 0,
+                    "typed_form_request": 1,
+                    "parameter_count": 3,
+                    "return_statements": 6,
+                    "try_catch_blocks": 1,
+                    "foreach_loops": 0,
+                    "is_controller_method": 1,
+                    "authorize_calls": 0,
+                    "pipeline_usages": 0,
+                    "magic_string_comparisons": 0,
+                    "direct_model_returns": 3,
+                    "resource_wrapped_returns": 0,
+                    "inertia_renders": 0,
+                    "mutating_db_calls": 1,
+                    "simple_form_handler": 0
+                },
+                "signals": [
+                    "code-quality.long-method"
+                ],
+                "llmRationale": null,
+                "source": "heuristic"
+            }
+        ]
+    },
+    "options": {
+        "categories": [],
+        "no_tools": false,
+        "patterns": true,
+        "llm": true,
+        "llm_hypothesis_keys": [],
+        "fail_on": "error"
+    },
+    "created_at": "2026-07-01T12:01:24+03:00"
+}

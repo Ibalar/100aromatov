@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutRequest;
 use App\Models\Order;
-use App\Services\OrderService;
-use App\Services\CartService;
 use App\Models\Setting;
-use Illuminate\Http\Request;
+use App\Services\CartService;
+use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
@@ -129,7 +129,7 @@ class CheckoutController extends Controller
                 'success' => true,
                 'items' => [],
                 'total_byn' => 0,
-                'total_byn_formatted' => number_format(0, 2, ',', ' ') . ' BYN',
+                'total_byn_formatted' => number_format(0, 2, ',', ' ').' BYN',
                 'promo_error' => null,
             ]);
         }
@@ -167,9 +167,9 @@ class CheckoutController extends Controller
             'success' => true,
             'items' => $mappedItems,
             'total_byn' => $totalByn,
-            'total_byn_formatted' => number_format($totalByn, 2, ',', ' ') . ' BYN',
+            'total_byn_formatted' => number_format($totalByn, 2, ',', ' ').' BYN',
             'discount_byn' => $discountByn,
-            'discount_byn_formatted' => number_format($discountByn, 2, ',', ' ') . ' BYN',
+            'discount_byn_formatted' => number_format($discountByn, 2, ',', ' ').' BYN',
             'promo_error' => $preview['promo_error'],
         ]);
     }

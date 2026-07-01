@@ -51,7 +51,7 @@ class OrderIndexPage extends IndexPage
     }
 
     /**
-     * @param TableBuilder $component
+     * @param  TableBuilder  $component
      */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {

@@ -63,19 +63,19 @@ class ProductAvailabilityInquiryController extends Controller
         $message .= "Товар: {$productName}\n";
 
         if ($variant) {
-            $variantLabel = trim(($variant->volume_ml ? $variant->volume_ml . ' ml' : '') ?: ($variant->sku ?: ''));
+            $variantLabel = trim(($variant->volume_ml ? $variant->volume_ml.' ml' : '') ?: ($variant->sku ?: ''));
             if ($variantLabel !== '') {
-                $message .= 'Вариант: ' . htmlspecialchars($variantLabel, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "\n";
+                $message .= 'Вариант: '.htmlspecialchars($variantLabel, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')."\n";
             }
 
             if ($variant->sku) {
-                $message .= 'SKU: ' . htmlspecialchars($variant->sku, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "\n";
+                $message .= 'SKU: '.htmlspecialchars($variant->sku, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')."\n";
             }
         }
 
         $message .= "Имя: {$name}\n";
         $message .= "Телефон: {$phone}\n";
-        $message .= 'Ссылка: ' . route('product.show', $product->slug) . "\n";
+        $message .= 'Ссылка: '.route('product.show', $product->slug)."\n";
 
         if ($comment !== '') {
             $message .= "\nКомментарий:\n{$comment}";

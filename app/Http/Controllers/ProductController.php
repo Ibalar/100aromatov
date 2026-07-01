@@ -6,6 +6,7 @@ use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\Setting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class ProductController extends Controller
 
         // Convert BYN to USD if BYN inputs are provided
         if ($request->has('min_price_byn') || $request->has('max_price_byn')) {
-            $usdRate = \App\Models\Setting::getSettings()->usd_rate ?? 1;
+            $usdRate = Setting::getSettings()->usd_rate ?? 1;
             if ($request->has('min_price_byn')) {
                 $minPrice = $request->get('min_price_byn') / $usdRate;
             }
@@ -219,7 +220,7 @@ class ProductController extends Controller
 
     public function redirectByOldUrl(Request $request, ?string $path = null): RedirectResponse
     {
-        $normalizedPath = '/' . ltrim((string) $path, '/');
+        $normalizedPath = '/'.ltrim((string) $path, '/');
 
         $product = Product::query()
             ->active()
@@ -283,16 +284,16 @@ class ProductController extends Controller
                 'gender' => localizedField($product, 'gender'),
                 'images' => $product->images->map(function ($image) use ($product) {
                     return [
-                        'src' => asset('storage/' . $image->path),
+                        'src' => asset('storage/'.$image->path),
                         'alt' => localizedField($image, 'alt') ?: localizedField($product, 'name'),
                     ];
                 })->values(),
                 'variants' => $product->variants->map(function ($variant) {
                     return [
                         'id' => $variant->id,
-                        'sku' => $variant->sku ?: ('PRD-' . $variant->id),
+                        'sku' => $variant->sku ?: ('PRD-'.$variant->id),
                         'volume_ml' => $variant->volume_ml,
-                        'label' => trim(($variant->volume_ml ? $variant->volume_ml . ' ml' : '') ?: __('Вариант')),
+                        'label' => trim(($variant->volume_ml ? $variant->volume_ml.' ml' : '') ?: __('Вариант')),
                         'price_formatted' => (float) $variant->price_usd <= 0 ? __('Под заказ') : formatPriceByn($variant->final_price_usd),
                         'original_price_formatted' => ((float) $variant->price_usd <= 0 || ! $variant->sale_price_usd) ? null : formatPriceByn($variant->price_usd),
                         'price_value' => (float) $variant->final_price_usd,
@@ -310,7 +311,7 @@ class ProductController extends Controller
                 'default_variant_id' => $defaultVariant?->id,
                 'default_price_formatted' => $defaultVariant ? ((float) $defaultVariant->price_usd <= 0 ? __('Под заказ') : formatPriceByn($defaultVariant->final_price_usd)) : __('Цена по запросу'),
                 'default_original_price_formatted' => $defaultVariant && $defaultVariant->sale_price_usd && (float) $defaultVariant->price_usd > 0 ? formatPriceByn($defaultVariant->price_usd) : null,
-                'default_sku' => $defaultVariant?->sku ?: ($defaultVariant ? 'PRD-' . $defaultVariant->id : null),
+                'default_sku' => $defaultVariant?->sku ?: ($defaultVariant ? 'PRD-'.$defaultVariant->id : null),
             ],
         ]);
     }
@@ -326,9 +327,9 @@ class ProductController extends Controller
 
         Log::debug('Search suggest', ['q' => $q]);
 
-        $settings = \App\Models\Setting::getSettings();
-        $like = '%' . $q . '%';
-        $prefix = $q . '%';
+        $settings = Setting::getSettings();
+        $like = '%'.$q.'%';
+        $prefix = $q.'%';
 
         $results = Product::query()
             ->active()
@@ -354,7 +355,7 @@ class ProductController extends Controller
                     });
             })
             ->orderByRaw(
-                "CASE
+                'CASE
                     WHEN products.name_ru LIKE ? THEN 0
                     WHEN products.name_by LIKE ? THEN 0
                     WHEN brands.name LIKE ? THEN 1
@@ -365,7 +366,7 @@ class ProductController extends Controller
                           AND product_variants.sku LIKE ?
                     ) THEN 2
                     ELSE 3
-                END",
+                END',
                 [$prefix, $prefix, $prefix, $prefix]
             )
             ->orderBy('products.name_ru')
@@ -433,8 +434,8 @@ class ProductController extends Controller
                 ->select('products.*')
                 ->where(function ($query) use ($tokens) {
                     foreach ($tokens as $token) {
-                        $like = '%' . $token . '%';
-                        $prefix = $token . '%';
+                        $like = '%'.$token.'%';
+                        $prefix = $token.'%';
 
                         $query->where(function ($subQuery) use ($like, $prefix) {
                             $subQuery
@@ -458,7 +459,7 @@ class ProductController extends Controller
                     }
                 })
                 ->orderByRaw(
-                    "CASE
+                    'CASE
                         WHEN products.slug = ? THEN 100
                         WHEN products.name_ru = ? OR products.name_by = ? THEN 90
                         WHEN products.name_ru LIKE ? OR products.name_by LIKE ? THEN 80
@@ -471,15 +472,15 @@ class ProductController extends Controller
                               AND product_variants.sku LIKE ?
                         ) THEN 60
                         ELSE 10
-                    END DESC",
+                    END DESC',
                     [
                         $searchQuery,
                         $searchQuery,
                         $searchQuery,
-                        $searchQuery . '%',
-                        $searchQuery . '%',
-                        $searchQuery . '%',
-                        $searchQuery . '%',
+                        $searchQuery.'%',
+                        $searchQuery.'%',
+                        $searchQuery.'%',
+                        $searchQuery.'%',
                     ]
                 )
                 ->orderBy('products.name_ru')

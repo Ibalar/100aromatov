@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 class Slider extends Model
 {
     const TYPE_SLIDE = 'slide';
+
     const TYPE_BANNER = 'banner';
 
     protected $fillable = [
@@ -32,21 +33,23 @@ class Slider extends Model
     public function getTitleAttribute(): ?string
     {
         $locale = app()->getLocale();
-        $field = 'title_' . $locale;
+        $field = 'title_'.$locale;
+
         return $this->$field ?? $this->title_ru;
     }
 
     public function getSubtitleAttribute(): ?string
     {
         $locale = app()->getLocale();
-        $field = 'subtitle_' . $locale;
+        $field = 'subtitle_'.$locale;
+
         return $this->$field ?? $this->subtitle_ru;
     }
 
     // Проверка наличия кнопки
     public function hasButton(): bool
     {
-        return !empty(trim((string) $this->button_link));
+        return ! empty(trim((string) $this->button_link));
     }
 
     public function getButtonUrlAttribute(): ?string
@@ -67,7 +70,7 @@ class Slider extends Model
     // Получение URL изображения
     public function getImageUrlAttribute(): string
     {
-        return $this->background_image ? asset('storage/' . $this->background_image) : '';
+        return $this->background_image ? asset('storage/'.$this->background_image) : '';
     }
 
     public function scopeSlides($query)

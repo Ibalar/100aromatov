@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Page\Pages;
 
-use App\MoonShine\Resources\Page\PageResource;
 use App\Models\Page;
+use App\MoonShine\Resources\Page\PageResource;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
-use MoonShine\Laravel\QueryTags\QueryTag;
 use MoonShine\Support\ListOf;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
-use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
@@ -68,6 +65,7 @@ class PageIndexPage extends IndexPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -79,6 +77,7 @@ class PageIndexPage extends IndexPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -90,6 +89,7 @@ class PageIndexPage extends IndexPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function bottomLayer(): array

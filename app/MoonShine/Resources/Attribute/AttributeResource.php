@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Attribute;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Attribute;
-use App\MoonShine\Resources\Attribute\Pages\AttributeIndexPage;
-use App\MoonShine\Resources\Attribute\Pages\AttributeFormPage;
 use App\MoonShine\Resources\Attribute\Pages\AttributeDetailPage;
-
-use MoonShine\Laravel\Resources\ModelResource;
+use App\MoonShine\Resources\Attribute\Pages\AttributeFormPage;
+use App\MoonShine\Resources\Attribute\Pages\AttributeIndexPage;
 use MoonShine\Contracts\Core\PageContract;
+use MoonShine\Laravel\Resources\ModelResource;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
 /**

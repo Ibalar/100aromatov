@@ -57,10 +57,10 @@ class ProductIndexPage extends IndexPage
                 return $product->variants
                     ->map(static function ($variant): string {
                         $volume = trim((string) ($variant->volume_ml ?? ''));
-                        $volumeText = $volume !== '' ? $volume . ' мл' : 'без объема';
+                        $volumeText = $volume !== '' ? $volume.' мл' : 'без объема';
                         $price = number_format((float) $variant->price_usd, 2, '.', '');
 
-                        return '$ ' . $price . ' - ' . $volumeText;
+                        return '$ '.$price.' - '.$volumeText;
                     })
                     ->implode('<br>');
             })
@@ -117,7 +117,6 @@ class ProductIndexPage extends IndexPage
 
     /**
      * @param  TableBuilder  $component
-     *
      * @return TableBuilder
      */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
@@ -148,6 +147,7 @@ class ProductIndexPage extends IndexPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function topLayer(): array
@@ -159,6 +159,7 @@ class ProductIndexPage extends IndexPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function mainLayer(): array
@@ -170,6 +171,7 @@ class ProductIndexPage extends IndexPage
 
     /**
      * @return list<ComponentContract>
+     *
      * @throws Throwable
      */
     protected function bottomLayer(): array
