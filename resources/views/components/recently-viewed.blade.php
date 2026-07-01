@@ -38,9 +38,9 @@
 @endphp
 
 @if ($recentlyViewed->isNotEmpty())
-<section class="flat-spacing">
+<section class="flat-spacing pt-0">
     <div class="container">
-        <div class="heading-section text-center mb-4">
+        <div class="heading-section text-center mb-20">
             <h3>{{ __('Недавно просмотренные') }}</h3>
         </div>
         <div class="tf-grid-layout tf-col-6 tf-col-md-4 tf-col-lg-3 tf-col-xl-2">
