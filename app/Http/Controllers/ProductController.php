@@ -524,7 +524,7 @@ class ProductController extends Controller
         $products = collect();
 
         if (! empty($ids)) {
-            $products = Product::query()
+            $query = Product::query()
                 ->active()
                 ->whereIn('id', $ids)
                 ->with([
@@ -538,21 +538,29 @@ class ProductController extends Controller
                         $query->select('id', 'product_id', 'path', 'sort_order')
                             ->orderBy('sort_order');
                     },
-                ])
-                ->get()
-                ->sortBy(fn (Product $product) => array_search($product->id, $ids))
-                ->values();
+                ]);
 
-            $products = new \Illuminate\Pagination\LengthAwarePaginator(
-                $products->forPage((int) $request->get('page', 1), 24),
-                $products->count(),
-                24,
-                (int) $request->get('page', 1),
-                ['path' => route('products.viewed')]
-            );
+            $sort = $request->get('sort', 'best-selling');
+
+            if ($sort === 'a-z') {
+                $query->orderBy('name_ru');
+            } elseif ($sort === 'z-a') {
+                $query->orderByDesc('name_ru');
+            } elseif ($sort === 'price-low-high') {
+                $query->orderBy('min_price');
+            } elseif ($sort === 'price-high-low') {
+                $query->orderByDesc('min_price');
+            } else {
+                $idsStr = implode(',', $ids);
+                $query->orderByRaw("FIELD(id, {$idsStr})");
+            }
+
+            $products = $query->paginate(24)->withQueryString();
         }
 
-        return view('products.viewed', compact('products'));
+        $sort = $request->get('sort', 'best-selling');
+
+        return view('products.viewed', compact('products', 'sort'));
     }
 
     private function trackRecentlyViewed(int $productId): void
