@@ -17,7 +17,7 @@
                 <div class="col-xl-8 col-lg-10">
                     <form action="{{ route('search') }}" method="GET" class="form-search-nav style-3 mb-4">
                         <fieldset>
-                            <input type="text" name="q" value="{{ $searchQuery }}" placeholder="{{ __('Искать по названию, бренду или артикулу') }}" required>
+                            <input type="text" name="q" value="{{ $searchQuery }}" placeholder="{{ __('Искать по названию, бренду или артикулу') }}" class="js-search-input" required>
                         </fieldset>
                         <button type="submit" class="btn-action">
                             <i class="icon icon-MagnifyingGlass"></i>

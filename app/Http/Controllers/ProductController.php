@@ -6,6 +6,7 @@ use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Review;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -312,6 +313,107 @@ class ProductController extends Controller
                 'default_sku' => $defaultVariant?->sku ?: ($defaultVariant ? 'PRD-' . $defaultVariant->id : null),
             ],
         ]);
+    }
+
+    public function suggest(Request $request): JsonResponse
+    {
+        $q = trim((string) $request->string('q'));
+        $q = mb_substr($q, 0, 100);
+
+        if (mb_strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        Log::debug('Search suggest', ['q' => $q]);
+
+        $settings = \App\Models\Setting::getSettings();
+        $like = '%' . $q . '%';
+        $prefix = $q . '%';
+
+        $results = Product::query()
+            ->active()
+            ->join('brands', 'brands.id', '=', 'products.brand_id')
+            ->select('products.*')
+            ->where(function ($query) use ($like, $prefix) {
+                $query
+                    ->where('products.name_ru', 'like', $like)
+                    ->orWhere('products.name_by', 'like', $like)
+                    ->orWhere('products.slug', 'like', $prefix)
+                    ->orWhere('brands.name', 'like', $like)
+                    ->orWhereExists(function ($variantQuery) use ($like, $prefix) {
+                        $variantQuery
+                            ->selectRaw('1')
+                            ->from('product_variants')
+                            ->whereColumn('product_variants.product_id', 'products.id')
+                            ->where('product_variants.is_active', true)
+                            ->where(function ($skuQuery) use ($like, $prefix) {
+                                $skuQuery
+                                    ->where('product_variants.sku', 'like', $prefix)
+                                    ->orWhere('product_variants.sku', 'like', $like);
+                            });
+                    });
+            })
+            ->orderByRaw(
+                "CASE
+                    WHEN products.name_ru LIKE ? THEN 0
+                    WHEN products.name_by LIKE ? THEN 0
+                    WHEN brands.name LIKE ? THEN 1
+                    WHEN EXISTS (
+                        SELECT 1 FROM product_variants
+                        WHERE product_variants.product_id = products.id
+                          AND product_variants.is_active = 1
+                          AND product_variants.sku LIKE ?
+                    ) THEN 2
+                    ELSE 3
+                END",
+                [$prefix, $prefix, $prefix, $prefix]
+            )
+            ->orderBy('products.name_ru')
+            ->limit(8)
+            ->with([
+                'brand:id,name,slug',
+                'variants' => function ($query) {
+                    $query->select('id', 'product_id', 'sku', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active')
+                        ->where('is_active', true)
+                        ->orderBy('price_usd');
+                },
+                'images' => function ($query) {
+                    $query->select('id', 'product_id', 'path', 'sort_order')
+                        ->orderBy('sort_order');
+                },
+            ])
+            ->get();
+
+        $mapped = $results->map(function (Product $product) use ($settings, $q): array {
+            $variant = $product->variants->first();
+            $priceUsd = $variant ? (float) $variant->final_price_usd : 0;
+            $priceByn = $settings->convertUsdToByn($priceUsd);
+
+            $matchedSku = null;
+            if ($variant) {
+                $sku = mb_strtoupper((string) $variant->sku);
+                if (mb_strpos($sku, mb_strtoupper($q)) !== false) {
+                    $matchedSku = $variant->sku;
+                }
+            }
+
+            return [
+                'id' => $product->id,
+                'name' => $product->name_ru,
+                'slug' => $product->slug,
+                'brand' => $product->brand?->name,
+                'sku' => $matchedSku,
+                'price_byn' => round($priceByn, 2),
+                'image' => $product->images->first()?->path,
+            ];
+        });
+
+        Log::debug('Search suggest results', [
+            'q' => $q,
+            'count' => $mapped->count(),
+        ]);
+
+        return response()->json($mapped->values());
     }
 
     public function search(Request $request)

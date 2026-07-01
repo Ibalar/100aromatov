@@ -42,6 +42,7 @@ Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('categ
 
 // Products
 Route::get('/search', [ProductController::class, 'search'])->name('search');
+Route::get('/search/suggest', [ProductController::class, 'suggest'])->name('search.suggest');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::get('/product/{product}/quick-view', [ProductController::class, 'quickView'])
     ->whereNumber('product')
