@@ -162,7 +162,8 @@ class ProductFormPage extends FormPage
                 ),
 
             BelongsToMany::make('С этим покупают', 'relatedProducts', resource: ProductResource::class)
-                ->valuesQuery(static fn ($query) => $query->orderBy('name_ru'))
+                ->selectMode()
+                ->asyncSearch('name_ru', limit: 20)
                 ->inLine('', false),
         ];
     }
