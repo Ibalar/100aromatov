@@ -14,8 +14,10 @@ use MoonShine\Support\ListOf;
 use MoonShine\UI\Components\FormBuilder;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Textarea;
 use MoonShine\UI\Fields\Text;
+use App\Enums\OrderStatus;
 use Throwable;
 
 /**
@@ -31,7 +33,8 @@ class OrderFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
-                Text::make('Статус', 'status'),
+                Select::make('Статус', 'status')
+                    ->options(OrderStatus::labels()),
                 Text::make('Телефон', 'phone'),
                 Text::make('Перезвон', 'call_preference'),
                 Text::make('Email', 'email'),
@@ -56,7 +59,9 @@ class OrderFormPage extends FormPage
 
     protected function rules(DataWrapperContract $item): array
     {
-        return [];
+        return [
+            'status' => ['required', 'string', 'in:' . implode(',', array_column(OrderStatus::cases(), 'value'))],
+        ];
     }
 
     protected function modifyFormComponent(FormBuilderContract $component): FormBuilderContract
@@ -97,4 +102,3 @@ class OrderFormPage extends FormPage
         ];
     }
 }
-
