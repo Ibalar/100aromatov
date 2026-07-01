@@ -19,6 +19,12 @@ class OrderService
 {
     public function create(array $data): Order
     {
+        Log::debug('OrderService: creating order', [
+            'phone' => isset($data['phone']) ? substr((string) normalizeBelarusPhone($data['phone']), 0, 5) . '***' : null,
+            'items_count' => count($data['items'] ?? []),
+            'has_promo' => filled($data['promo_code'] ?? null),
+        ]);
+
         return DB::transaction(function () use ($data) {
             $customerId = auth('customer')->id();
             $webUserId = auth('web')->id();
@@ -83,6 +89,13 @@ class OrderService
                     'order_id' => $order->id,
                 ]);
             }
+
+            Log::info('OrderService: order created successfully', [
+                'order_id' => $order->id,
+                'total_byn' => $order->total_byn,
+                'items_count' => $order->items()->count(),
+                'has_promo' => filled($order->promo_code),
+            ]);
 
             return $order;
         });
