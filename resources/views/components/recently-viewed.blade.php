@@ -48,6 +48,11 @@
                 @include('components.product-card', ['product' => $rvProduct])
             @endforeach
         </div>
+        <div class="text-center mt-4">
+            <a href="{{ route('products.viewed') }}" class="tf-btn btn-fill">
+                {{ __('Все просмотренные') }}
+            </a>
+        </div>
     </div>
 </section>
 @endif

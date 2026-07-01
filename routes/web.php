@@ -41,6 +41,7 @@ Route::get('/category/{slug}/filter/{filterSlug}', [CategoryController::class, '
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
 // Products
+Route::get('/viewed', [ProductController::class, 'viewed'])->name('products.viewed');
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/search/suggest', [ProductController::class, 'suggest'])->name('search.suggest');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');

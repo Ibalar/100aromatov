@@ -507,6 +507,54 @@ class ProductController extends Controller
         ]);
     }
 
+    public function viewed(Request $request)
+    {
+        $ids = [];
+        $cookieName = 'recently_viewed';
+
+        if ($request->hasCookie($cookieName)) {
+            $raw = $request->cookie($cookieName);
+            $decoded = json_decode((string) $raw, true);
+
+            if (is_array($decoded)) {
+                $ids = array_map('intval', $decoded);
+            }
+        }
+
+        $products = collect();
+
+        if (! empty($ids)) {
+            $products = Product::query()
+                ->active()
+                ->whereIn('id', $ids)
+                ->with([
+                    'brand:id,name,slug',
+                    'variants' => function ($query) {
+                        $query->select('id', 'product_id', 'sku', 'volume_ml', 'price_usd', 'sale_price_usd', 'is_active')
+                            ->where('is_active', true)
+                            ->orderBy('price_usd');
+                    },
+                    'images' => function ($query) {
+                        $query->select('id', 'product_id', 'path', 'sort_order')
+                            ->orderBy('sort_order');
+                    },
+                ])
+                ->get()
+                ->sortBy(fn (Product $product) => array_search($product->id, $ids))
+                ->values();
+
+            $products = new \Illuminate\Pagination\LengthAwarePaginator(
+                $products->forPage((int) $request->get('page', 1), 24),
+                $products->count(),
+                24,
+                (int) $request->get('page', 1),
+                ['path' => route('products.viewed')]
+            );
+        }
+
+        return view('products.viewed', compact('products'));
+    }
+
     private function trackRecentlyViewed(int $productId): void
     {
         $cookieName = 'recently_viewed';
