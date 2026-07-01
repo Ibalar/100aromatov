@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class Brand extends Model
 {
@@ -35,5 +36,22 @@ class Brand extends Model
     public function scopeActive($query)
     {
         return $query->where('brands.is_active', true);
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            Cache::forget('menu_brands');
+            Cache::forget('brands_with_visible_product_counts');
+            Cache::forget('brand_options');
+            Cache::forget('home_brands');
+        });
+
+        static::deleted(function () {
+            Cache::forget('menu_brands');
+            Cache::forget('brands_with_visible_product_counts');
+            Cache::forget('brand_options');
+            Cache::forget('home_brands');
+        });
     }
 }

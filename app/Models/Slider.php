@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Slider extends Model
 {
@@ -77,5 +78,18 @@ class Slider extends Model
     public function scopeBanners($query)
     {
         return $query->where('type', self::TYPE_BANNER);
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            Cache::forget('home_slides');
+            Cache::forget('home_banners');
+        });
+
+        static::deleted(function () {
+            Cache::forget('home_slides');
+            Cache::forget('home_banners');
+        });
     }
 }

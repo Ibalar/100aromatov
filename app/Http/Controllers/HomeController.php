@@ -5,26 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Slider;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     public function index(): View
     {
-        // Получаем активные слайды для главной страницы
-        $slides = Slider::query()
+        $slides = Cache::remember('home_slides', 3600, fn () => Slider::query()
             ->where('is_active', true)
             ->slides()
             ->orderBy('sort_order')
-            ->get();
+            ->get());
 
-        $banners = Slider::query()
+        $banners = Cache::remember('home_banners', 3600, fn () => Slider::query()
             ->where('is_active', true)
             ->banners()
             ->orderBy('sort_order')
-            ->get();
+            ->get());
 
-        $featuredProducts = Product::query()
+        $featuredProducts = Cache::remember('home_featured_products', 600, fn () => Product::query()
             ->active()
             ->where('is_featured', true)
             ->whereHas('variants', fn ($query) => $query->where('is_active', true))
@@ -38,9 +38,9 @@ class HomeController extends Controller
             ])
             ->orderByDesc('id')
             ->limit(8)
-            ->get();
+            ->get());
 
-        $saleProducts = Product::query()
+        $saleProducts = Cache::remember('home_sale_products', 600, fn () => Product::query()
             ->active()
             ->whereHas('variants', function ($query) {
                 $query->where('is_active', true)
@@ -57,15 +57,15 @@ class HomeController extends Controller
             ])
             ->orderByDesc('id')
             ->limit(8)
-            ->get();
+            ->get());
 
-        $homeBrands = Brand::query()
+        $homeBrands = Cache::remember('home_brands', 3600, fn () => Brand::query()
             ->active()
             ->whereNotNull('logo')
             ->where('logo', '!=', '')
             ->inRandomOrder()
             ->limit(10)
-            ->get(['id', 'slug', 'name', 'logo']);
+            ->get(['id', 'slug', 'name', 'logo']));
 
         return view('home', compact('slides', 'banners', 'featuredProducts', 'saleProducts', 'homeBrands'));
     }

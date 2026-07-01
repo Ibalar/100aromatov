@@ -51,11 +51,28 @@ class Setting extends Model
 
     public static function getSettings(): self
     {
-        if (static::$instance === null) {
-            static::$instance = static::firstOrCreate([]);
+        if (static::$instance !== null) {
+            return static::$instance;
         }
 
+        static::$instance = \Illuminate\Support\Facades\Cache::remember('settings', 86400, function () {
+            return static::firstOrCreate([]);
+        });
+
         return static::$instance;
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('settings');
+            static::$instance = null;
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('settings');
+            static::$instance = null;
+        });
     }
 
     public function setPhonesAttribute($value): void

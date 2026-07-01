@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Cache;
 
 class Product extends Model
 {
@@ -161,5 +162,20 @@ class Product extends Model
         }
 
         return html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            Cache::forget('home_featured_products');
+            Cache::forget('home_sale_products');
+            Cache::forget('brands_with_visible_product_counts');
+        });
+
+        static::deleted(function () {
+            Cache::forget('home_featured_products');
+            Cache::forget('home_sale_products');
+            Cache::forget('brands_with_visible_product_counts');
+        });
     }
 }
