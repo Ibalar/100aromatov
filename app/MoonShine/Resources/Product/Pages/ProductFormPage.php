@@ -163,7 +163,7 @@ class ProductFormPage extends FormPage
 
             BelongsToMany::make('С этим покупают', 'relatedProducts', resource: ProductResource::class)
                 ->selectMode()
-                ->asyncSearch('name_ru', limit: 20)
+                ->asyncSearch('name_ru', formatted: fn (Product $p) => $p->name_ru, limit: 20)
                 ->hint('Начните вводить название товара для поиска и выбора связанных товаров')
                 ->inLine('', false),
         ];
