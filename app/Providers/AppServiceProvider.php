@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
 
         // API/AJAX rate limiting
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
-        RateLimiter::for('search', fn (Request $request) => Limit::perMinute(30)->by($request->ip());
+        RateLimiter::for('search', fn (Request $request) => Limit::perMinute(30)->by($request->ip()));
 
         require_once app_path('Support/helpers.php');
 
