@@ -34,10 +34,11 @@
         $activeVariants = $product->variants->where('is_active', true);
         $defaultVariant = $activeVariants->first();
         $defaultVariantIsPreorder = $defaultVariant && (float) $defaultVariant->price_usd <= 0;
-        $reviewsCount = $product->reviews->count();
-        $averageRating = $reviewsCount > 0 ? round((float) $product->reviews->avg('rating'), 1) : null;
-        $ratingDistribution = collect(range(5, 1))->mapWithKeys(function (int $rating) use ($product, $reviewsCount) {
-            $count = $product->reviews->where('rating', $rating)->count();
+        $approvedReviews = $product->reviews()->where('is_approved', true)->get();
+        $reviewsCount = $approvedReviews->count();
+        $averageRating = $reviewsCount > 0 ? round((float) $approvedReviews->avg('rating'), 1) : null;
+        $ratingDistribution = collect(range(5, 1))->mapWithKeys(function (int $rating) use ($approvedReviews, $reviewsCount) {
+            $count = $approvedReviews->where('rating', $rating)->count();
             $percent = $reviewsCount > 0 ? (int) round(($count / $reviewsCount) * 100) : 0;
 
             return [$rating => [
@@ -351,7 +352,7 @@
 
                         <div class="wg-comment">
                             <div class="comment-list">
-                                @forelse($product->reviews as $review)
+                                @forelse($approvedReviews as $review)
                                     <div class="box-comment">
                                         <div class="comment_info">
                                             <div class="info_image">
