@@ -82,6 +82,20 @@ class ProductResource extends ModelResource implements HasImportExportContract
             ->delimiter(',');
     }
 
+    protected function importRules(): array
+    {
+        return [
+            'name_ru' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'gender' => ['nullable', 'string', 'max:50'],
+            'concentration' => ['nullable', 'string', 'max:100'],
+            'country' => ['nullable', 'string', 'max:100'],
+            'description_ru' => ['nullable', 'string'],
+            'price_usd' => ['nullable', 'numeric', 'min:0'],
+            'volume_ml' => ['nullable', 'numeric', 'min:0'],
+        ];
+    }
+
     /**
      * @return list<FieldContract>
      */
@@ -234,6 +248,8 @@ class ProductResource extends ModelResource implements HasImportExportContract
         if (! $item instanceof Product) {
             return $item;
         }
+
+        $this->importStats['imported'] = ($this->importStats['imported'] ?? 0) + 1;
 
         $importKey = $this->getImportImageKey([
             'id' => $item->id,
