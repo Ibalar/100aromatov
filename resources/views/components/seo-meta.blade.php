@@ -11,6 +11,9 @@
     $image = $image ?? trim($__env->yieldContent('meta_image', asset('assets/images/logo/logo.png')));
 @endphp
 
+{{-- Canonical --}}
+<link rel="canonical" href="{{ request()->url() }}">
+
 {{-- Open Graph --}}
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $description }}">

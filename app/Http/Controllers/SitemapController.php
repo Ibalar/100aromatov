@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\FilterPage;
 use App\Models\Page;
 use App\Models\Product;
 use Illuminate\Http\Response;
@@ -91,11 +92,26 @@ class SitemapController extends Controller
                 'priority' => '0.6',
             ]);
 
+        $filterPages = FilterPage::query()
+            ->where('is_indexable', true)
+            ->with('category:id,slug')
+            ->get(['id', 'category_id', 'slug', 'updated_at'])
+            ->map(static fn (FilterPage $filterPage): array => [
+                'loc' => route('category.filter', [
+                    'slug' => optional($filterPage->category)->slug,
+                    'filterSlug' => $filterPage->slug,
+                ]),
+                'lastmod' => optional($filterPage->updated_at)->toDateString() ?? now()->toDateString(),
+                'changefreq' => 'weekly',
+                'priority' => '0.7',
+            ]);
+
         $urls = $urls
             ->merge($categories)
             ->merge($brands)
             ->merge($products)
             ->merge($pages)
+            ->merge($filterPages)
             ->values();
 
         $xmlItems = $urls->map(static function (array $url): string {
