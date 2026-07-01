@@ -28,10 +28,9 @@
                                 </div>
                                 <div class="mb-2">
                                     @php
-                                        $statusLabel = $order->status instanceof \App\Enums\OrderStatus
-                                            ? $order->status->label()
-                                            : (string) $order->status;
-                                        $statusBadge = match ($order->status instanceof \App\Enums\OrderStatus ? $order->status : null) {
+                                        $statusEnum = \App\Enums\OrderStatus::tryFrom((string) $order->status);
+                                        $statusLabel = $statusEnum?->label() ?? (string) $order->status;
+                                        $statusBadge = match ($statusEnum) {
                                             \App\Enums\OrderStatus::New => 'bg-primary',
                                             \App\Enums\OrderStatus::Paid => 'bg-success',
                                             \App\Enums\OrderStatus::Processing => 'bg-warning text-dark',

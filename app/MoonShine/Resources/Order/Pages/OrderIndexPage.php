@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Order\Pages;
 
+use App\Enums\OrderStatus;
 use App\MoonShine\Resources\Order\OrderResource;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
@@ -11,8 +12,8 @@ use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Text;
-use App\Enums\OrderStatus;
 
 /**
  * @extends IndexPage<OrderResource>
@@ -28,7 +29,8 @@ class OrderIndexPage extends IndexPage
     {
         return [
             ID::make()->sortable(),
-            Text::make('Статус', 'status', formatted: static fn ($item) => OrderStatus::labelFor($item->status))
+            Select::make('Статус', 'status')
+                ->options(OrderStatus::labels())
                 ->sortable(),
             Text::make('Телефон', 'phone')->sortable(),
             Text::make('Перезвон', 'call_preference'),
@@ -42,7 +44,7 @@ class OrderIndexPage extends IndexPage
     protected function filters(): iterable
     {
         return [
-            Text::make('Статус', 'status'),
+            Select::make('Статус', 'status')->options(OrderStatus::labels()),
             Text::make('Телефон', 'phone'),
             Text::make('Перезвон', 'call_preference'),
         ];
