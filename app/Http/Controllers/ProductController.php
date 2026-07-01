@@ -510,7 +510,7 @@ class ProductController extends Controller
     {
         $cookieName = 'recently_viewed';
         $maxItems = 12;
-        $ttl = 30 * 24 * 60;
+        $ttl = 30 * 24 * 60; // 30 days
 
         $ids = [];
 
@@ -523,8 +523,11 @@ class ProductController extends Controller
             }
         }
 
+        // Remove if already exists, then prepend
         $ids = array_values(array_diff($ids, [$productId]));
         array_unshift($ids, $productId);
+
+        // Trim to max
         $ids = array_slice($ids, 0, $maxItems);
 
         Log::debug('Recently viewed: updated', [
