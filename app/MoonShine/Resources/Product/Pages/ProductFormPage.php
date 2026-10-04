@@ -22,7 +22,7 @@ use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Support\ListOf;
-use MoonShine\TinyMce\Fields\TinyMce;
+use App\MoonShine\Fields\TinyMce;
 use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\UI\Components\Tabs;

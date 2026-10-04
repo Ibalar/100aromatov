@@ -12,7 +12,7 @@ use MoonShine\Contracts\UI\FormBuilderContract;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Support\ListOf;
-use MoonShine\TinyMce\Fields\TinyMce;
+use App\MoonShine\Fields\TinyMce;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\ID;

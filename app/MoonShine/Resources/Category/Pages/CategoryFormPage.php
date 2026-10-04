@@ -13,7 +13,7 @@ use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Fields\Slug;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Support\ListOf;
-use MoonShine\TinyMce\Fields\TinyMce;
+use App\MoonShine\Fields\TinyMce;
 use MoonShine\UI\Components\FormBuilder;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Flex;
