@@ -51,7 +51,10 @@ class ProductVariantIndexPage extends IndexPage
      */
     protected function filters(): iterable
     {
-        return [];
+        return [
+            Text::make('SKU', 'sku')
+                ->placeholder('Поиск по SKU'),
+        ];
     }
 
     /**

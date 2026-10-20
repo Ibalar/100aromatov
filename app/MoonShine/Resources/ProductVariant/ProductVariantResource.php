@@ -27,6 +27,16 @@ class ProductVariantResource extends ModelResource
 
     protected string $title = 'Варианты товара';
 
+    protected string $column = 'sku';
+
+    protected function search(): array
+    {
+        return [
+            'id',
+            'sku',
+        ];
+    }
+
     /**
      * @return list<class-string<PageContract>>
      */

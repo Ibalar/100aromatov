@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Category;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Cache;
 
@@ -52,14 +53,40 @@ class ProductVariantObserver
 
             if ($product->category_id) {
                 $category = $product->category;
-                $ids = collect([$product->category_id]);
                 if ($category) {
-                    $ids = $ids->merge(
-                        $category->descendants()->pluck('id')
-                    );
+                    $this->forgetCategoryPriceRange($category);
+
+                    // Цена варианта влияет и на все родительские категории,
+                    // т.к. их страницы включают товары потомков.
+                    $parentId = $category->parent_id;
+                    while ($parentId) {
+                        $parent = Category::query()->find($parentId);
+                        if (! $parent) {
+                            break;
+                        }
+                        $this->forgetCategoryPriceRange($parent);
+                        $parentId = $parent->parent_id;
+                    }
                 }
-                Cache::forget('price_range_category_'.$ids->sort()->implode('_'));
+
+                // Миниатюрные категории показывают все варианты с объёмом <= 10 мл
+                // вне зависимости от категории товара — инвалидируем их тоже.
+                if ((float) $variant->volume_ml <= 10) {
+                    foreach (Category::query()->where('is_miniature', true)->get(['id', 'parent_id']) as $miniCategory) {
+                        $this->forgetCategoryPriceRange($miniCategory);
+                    }
+                }
             }
         }
+    }
+
+    private function forgetCategoryPriceRange(Category $category): void
+    {
+        // getDescendantIds() уже включает сам id категории.
+        $categoryIds = array_unique($category->getDescendantIds());
+        sort($categoryIds);
+
+        Cache::forget('price_range_category_'.implode('_', $categoryIds));
+        Cache::forget('price_range_category_mini_'.implode('_', $categoryIds));
     }
 }
