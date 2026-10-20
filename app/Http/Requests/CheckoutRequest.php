@@ -20,9 +20,9 @@ class CheckoutRequest extends FormRequest
             'privacy_policy' => ['accepted'],
             'website' => ['nullable', 'size:0'],
             'form_started_at' => ['required', 'integer', 'min:0'],
-            'items' => ['required', 'array', 'min:1'],
-            'items.*.variant_id' => ['required', 'exists:product_variants,id'],
-            'items.*.qty' => ['required', 'integer', 'min:1'],
+            'items' => ['nullable', 'array', 'min:1'],
+            'items.*.variant_id' => ['required_with:items', 'exists:product_variants,id'],
+            'items.*.qty' => ['required_with:items', 'integer', 'min:1'],
         ];
     }
 
@@ -55,7 +55,7 @@ class CheckoutRequest extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            $data = $this->validated();
+            $data = $validator->getData();
 
             if (now()->timestamp - (int) ($data['form_started_at'] ?? 0) < 2) {
                 $validator->errors()->add(
@@ -80,7 +80,7 @@ class CheckoutRequest extends FormRequest
             'call_preference' => $this->validated('call_preference'),
             'has_email' => filled($this->validated('email')),
             'has_promo' => filled($this->validated('promo_code')),
-            'items_count' => count($this->validated('items')),
+            'items_count' => count($this->validated('items') ?? []),
         ]);
     }
 

@@ -54,6 +54,8 @@ class CheckoutController extends Controller
                 'promo_code' => $data['promo_code'] ?? null,
                 'items' => $items,
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
         } catch (\Throwable $e) {
             Log::error('Checkout: order creation failed', [
                 'error' => $e->getMessage(),

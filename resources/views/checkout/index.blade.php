@@ -24,6 +24,10 @@
                 <div class="alert alert-danger mb-24">{{ $errors->first('cart') }}</div>
             @endif
 
+            @if($errors->has('items'))
+                <div class="alert alert-danger mb-24">{{ $errors->first('items') }}</div>
+            @endif
+
             <div class="row">
                 <div class="col-lg-7">
                     <div class="checkout-box">
